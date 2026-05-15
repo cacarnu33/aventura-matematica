@@ -1,0 +1,4018 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aventura Matemática</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-mid: #9FE1CB;
+    --green-dark: #085041;
+    --amber: #EF9F27;
+    --amber-light: #FAEEDA;
+    --amber-dark: #633806;
+    --coral: #D85A30;
+    --coral-light: #FAECE7;
+    --blue: #378ADD;
+    --blue-light: #E6F1FB;
+    --bg: #FFF9F0;
+    --surface: #FFFFFF;
+    --border: #E8E0D5;
+    --text: #2C2416;
+    --text-mid: #7A6A58;
+    --text-light: #B0A090;
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  h1, h2, .display-num { font-family: 'Baloo 2', cursive; }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header h1 { font-size: 1.6rem; color: var(--green-dark); letter-spacing: -0.5px; }
+  .header h1 span { color: var(--amber); }
+
+  .coin-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--amber-light);
+    border: 2px solid var(--amber);
+    border-radius: 999px;
+    padding: 6px 18px 6px 12px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .coin-pill:hover { transform: scale(1.04); }
+  .coin-icon { font-size: 1.4rem; }
+  .coin-val { font-family: 'Baloo 2', cursive; font-size: 1.5rem; font-weight: 700; color: var(--amber-dark); line-height: 1; }
+  .coin-lbl { font-size: 0.7rem; font-weight: 600; color: #A06020; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* ── NAV ── */
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 1rem;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+  }
+  .nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 6px 8px;
+    border-radius: 16px;
+    border: 2.5px solid var(--border);
+    background: var(--bg);
+    color: var(--text-mid);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+    line-height: 1.2;
+  }
+  .nav-btn .icon {
+    font-size: 2rem;
+    line-height: 1;
+    display: block;
+  }
+  .nav-btn .nav-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-light);
+    margin-top: 1px;
+  }
+  .nav-btn .nav-op {
+    display: block;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-mid);
+    line-height: 1;
+  }
+  .nav-btn:hover { border-color: var(--green); background: var(--green-light); }
+  .nav-btn:hover .nav-label,
+  .nav-btn:hover .nav-op { color: var(--green-dark); }
+  .nav-btn.active { background: var(--green); border-color: var(--green); }
+  .nav-btn.active .nav-label,
+  .nav-btn.active .nav-op { color: rgba(255,255,255,0.85); }
+  .nav-btn.prizes-btn.active { background: var(--amber); border-color: var(--amber); }
+
+  /* ── MAIN ── */
+  main { max-width: 600px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+  .screen { display: none; animation: fadeUp 0.25s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── CONTEO ── */
+  .emoji-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .emoji-opt {
+    font-size: 1.6rem;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    background: var(--bg);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .emoji-opt:hover { border-color: var(--green-mid); }
+  .emoji-opt.selected { border-color: var(--green); background: var(--green-light); }
+
+  .count-center { text-align: center; padding: 0.5rem 0 1rem; }
+  .display-num {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+    display: block;
+  }
+
+  .objects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    min-height: 70px;
+    align-items: center;
+    margin: 1rem 0;
+  }
+  .obj { font-size: 1.8rem; animation: pop 0.18s cubic-bezier(.2,1.6,.6,1); }
+  @keyframes pop { from { transform: scale(0) rotate(-15deg); } to { transform: scale(1) rotate(0); } }
+
+  .count-btns { display: flex; gap: 16px; justify-content: center; margin-top: 0.5rem; }
+  .big-btn {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    font-size: 2rem;
+    font-weight: 700;
+    border: 3px solid;
+    cursor: pointer;
+    transition: transform 0.12s;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Baloo 2', cursive;
+  }
+  .big-btn:active { transform: scale(0.9); }
+  .btn-plus { background: var(--green-light); border-color: var(--green); color: var(--green-dark); }
+  .btn-minus { background: var(--coral-light); border-color: var(--coral); color: #4A1B0C; }
+
+  .neighbor-row { display: flex; gap: 12px; margin-top: 1rem; }
+  .neighbor-card {
+    flex: 1;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    text-align: center;
+  }
+  .neighbor-card.next { border-color: var(--green-mid); background: var(--green-light); }
+  .neighbor-label { font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; margin-bottom: 4px; }
+  .neighbor-card.next .neighbor-label { color: #0F6E56; }
+  .neighbor-num { font-family: 'Baloo 2', cursive; font-size: 2rem; font-weight: 700; color: var(--text-mid); }
+  .neighbor-card.next .neighbor-num { color: var(--green); }
+
+  /* ── EJERCICIOS ── */
+  .problem-display {
+    font-family: 'Baloo 2', cursive;
+    font-size: 3.2rem;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 1.25rem;
+    letter-spacing: 2px;
+  }
+
+  .visual-area {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .group-box {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    text-align: center;
+  }
+  .group-emojis { display: flex; flex-wrap: wrap; gap: 3px; justify-content: center; max-width: 120px; }
+  .group-num { font-size: 0.7rem; font-weight: 700; color: var(--text-light); margin-top: 5px; }
+  .op-sign { font-family: 'Baloo 2', cursive; font-size: 2.5rem; color: var(--text-light); font-weight: 700; }
+
+  .answer-row { display: flex; gap: 12px; justify-content: center; align-items: center; margin-bottom: 1rem; }
+  .answer-input {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.5rem;
+    font-weight: 700;
+    width: 90px;
+    text-align: center;
+    border: 3px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    background: var(--bg);
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+  .answer-input:focus { outline: none; border-color: var(--green); }
+
+  .check-btn {
+    padding: 12px 32px;
+    border-radius: 999px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    background: var(--green);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s, background 0.15s;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  .check-btn:hover { background: #178a63; }
+  .check-btn:active { transform: scale(0.97); }
+
+  .new-btn {
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text-mid);
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.12s;
+    width: 100%;
+  }
+  .new-btn:hover { border-color: var(--green); color: var(--green-dark); }
+
+  .feedback-box {
+    min-height: 32px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0.75rem 0 0.25rem;
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    transition: all 0.2s;
+  }
+  .feedback-box.correct { background: var(--green-light); color: var(--green-dark); }
+  .feedback-box.wrong { background: var(--coral-light); color: #7A2010; }
+
+  .coin-earn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--amber-light);
+    border: 2px solid var(--amber);
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--amber-dark);
+    animation: coinBounce 0.4s cubic-bezier(.2,1.6,.6,1);
+  }
+  @keyframes coinBounce { from { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.2); } to { transform: scale(1); opacity: 1; } }
+
+  /* ── COMPARAR ── */
+  .cmp-row { display: flex; gap: 10px; align-items: stretch; margin-bottom: 1rem; }
+  .cmp-box {
+    flex: 1;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .cmp-box.winner { border-color: var(--green); background: var(--green-light); }
+  .cmp-box.loser { border-color: var(--coral); background: var(--coral-light); }
+  .cmp-num { font-family: 'Baloo 2', cursive; font-size: 3.5rem; font-weight: 800; color: var(--text); }
+  .cmp-dots { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--green); }
+  .cmp-middle { display: flex; align-items: center; padding: 0 4px; }
+  .cmp-sign-big { font-family: 'Baloo 2', cursive; font-size: 3rem; font-weight: 800; color: var(--text-light); }
+
+  .cmp-opts { display: flex; gap: 10px; justify-content: center; margin: 1rem 0; }
+  .cmp-opt {
+    width: 60px; height: 60px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--surface);
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cmp-opt:hover { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
+  .cmp-opt.correct { background: var(--green-light); border-color: var(--green); color: var(--green-dark); }
+  .cmp-opt.wrong { background: var(--coral-light); border-color: var(--coral); color: #7A2010; }
+
+  /* ── PREMIOS ── */
+  .progress-section { margin-bottom: 1.5rem; }
+  .coins-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .coins-header span { font-weight: 700; color: var(--text-mid); font-size: 0.9rem; }
+  .coins-header strong { font-family: 'Baloo 2', cursive; font-size: 2rem; color: var(--amber-dark); }
+  .progress-track {
+    height: 14px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 999px;
+    transition: width 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-light); margin-top: 5px; font-weight: 600; }
+
+  .prizes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .prize-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.1rem 0.9rem;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .prize-card.available { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(239,159,39,0.15); }
+  .prize-card.claimed { border-color: var(--green); background: var(--green-light); }
+  .prize-emoji { font-size: 2.4rem; margin-bottom: 8px; display: block; }
+  .prize-name { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+  .prize-cost { font-size: 0.8rem; font-weight: 700; color: var(--amber-dark); margin-bottom: 10px; }
+  .prize-claimed-badge { font-size: 0.75rem; font-weight: 700; color: var(--green-dark); }
+  .prize-btn {
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text-mid);
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+  }
+  .prize-btn.can-buy { background: var(--amber); border-color: var(--amber); color: white; cursor: pointer; }
+  .prize-btn.can-buy:hover { background: #d48f1e; }
+  .prize-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .history-section { margin-top: 1.5rem; }
+  .history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  .history-item-left { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+  .history-item-right { font-size: 0.8rem; color: var(--text-light); font-weight: 600; }
+
+  /* ── GLOBOS ── */
+  .globos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .globos-target {
+    background: var(--blue-light);
+    border: 2px solid var(--blue);
+    border-radius: var(--radius);
+    padding: 0.6rem 1.2rem;
+    text-align: center;
+  }
+  .globos-target-label { font-size: 0.7rem; font-weight: 700; color: #185FA5; text-transform: uppercase; letter-spacing: 0.06em; }
+  .globos-target-num { font-family: 'Baloo 2', cursive; font-size: 2.2rem; font-weight: 800; color: #0C447C; line-height: 1; }
+
+  .globos-stats { display: flex; gap: 10px; }
+  .stat-pill {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
+    text-align: center;
+    min-width: 70px;
+  }
+  .stat-pill-label { font-size: 0.65rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; }
+  .stat-pill-val { font-family: 'Baloo 2', cursive; font-size: 1.3rem; font-weight: 800; color: var(--text); }
+
+  #globos-arena, #sg-arena {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    background: #EAF3FF;
+    border: 2px solid #B5D4F4;
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    cursor: default;
+  }
+
+  /* Shared balloon used by both games - drawn on canvas */
+  @keyframes floatUp {
+    from { bottom: -130px; }
+    to   { bottom: 110%; }
+  }
+  @keyframes popAnim {
+    0%  { transform: scale(1) translateX(-50%); opacity: 1; }
+    40% { transform: scale(1.6) translateX(-31%); opacity: 0.8; }
+    100%{ transform: scale(0.05) translateX(-1000%); opacity: 0; }
+  }
+  @keyframes wobble {
+    0%,100% { transform: translateX(-50%) rotate(-3deg); }
+    50%      { transform: translateX(-50%) rotate(3deg); }
+  }
+  .balloon-wrap {
+    position: absolute;
+    left: 0; /* set via JS as px */
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: floatUp linear forwards;
+    transform: translateX(-50%);
+  }
+  .balloon-wrap:hover { filter: brightness(1.12); }
+  .balloon-wrap.popping { animation: popAnim 0.3s ease forwards !important; pointer-events: none; }
+  .balloon-wrap.sg-chosen {
+    animation: wobble 0.5s ease infinite !important;
+    filter: drop-shadow(0 0 10px white) brightness(1.1);
+  }
+  .balloon-svg { display: block; }
+  .balloon-string-line {
+    width: 2px;
+    background: rgba(120,100,80,0.5);
+    height: 36px;
+    border-radius: 1px;
+  }
+
+
+  /* ── SUMA GLOBOS PROGRESS ── */
+  .sg-progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+  .sg-step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .sg-step-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2.5px solid var(--border);
+    color: var(--text-light);
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .sg-step.active .sg-step-circle { background: var(--blue); border-color: var(--blue); color: white; }
+  .sg-step.done .sg-step-circle { background: var(--green); border-color: var(--green); color: white; }
+  .sg-step-label { font-size: 0.65rem; font-weight: 700; color: var(--text-light); text-align: center; line-height: 1.2; }
+  .sg-step.active .sg-step-label { color: var(--blue); }
+  .sg-step.done .sg-step-label { color: var(--green-dark); }
+  .sg-step-line {
+    flex: 1; height: 3px;
+    background: var(--border);
+    margin: 0 4px;
+    margin-bottom: 18px;
+    border-radius: 2px;
+    transition: background 0.4s;
+    max-width: 60px;
+  }
+  .sg-step-line.done { background: var(--green); }
+
+  .sg-level-reward {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--amber-light);
+    border: 2px solid var(--amber);
+    border-radius: var(--radius-sm);
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--amber-dark);
+    margin-top: 8px;
+  }
+
+  .sg-complete-stars { font-size: 2.2rem; letter-spacing: 4px; }
+
+  .globos-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(234,243,255,0.92);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: var(--radius);
+  }
+  .globos-overlay.show { display: flex; }
+  .overlay-emoji { font-size: 3.5rem; }
+  .overlay-title { font-family: 'Baloo 2', cursive; font-size: 1.8rem; font-weight: 800; color: var(--text); }
+  .overlay-sub { font-size: 0.95rem; font-weight: 600; color: var(--text-mid); }
+  .play-btn {
+    padding: 12px 36px;
+    border-radius: 999px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    background: var(--blue);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s;
+    margin-top: 4px;
+  }
+  .play-btn:hover { background: #2876c8; }
+  .play-btn:active { transform: scale(0.97); }
+
+  .level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--amber-light);
+    border: 2px solid var(--amber);
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--amber-dark);
+  }
+
+
+  /* ── COHETES ── */
+  #cohetes-arena {
+    position: relative;
+    width: 100%;
+    height: 460px;
+    background: linear-gradient(180deg, #0A0E2A 0%, #1A2A6C 50%, #2D1B69 100%);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Stars background */
+  .star-dot {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: 0.3; transform: scale(1); }
+    50%      { opacity: 1;   transform: scale(1.3); }
+  }
+
+  /* Rocket */
+  .rocket-wrap {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: bottom 0.4s cubic-bezier(.4,0,.2,1);
+  }
+  .rocket-svg { display: block; filter: drop-shadow(0 0 8px rgba(255,180,50,0.6)); }
+
+  /* Problem display */
+  .cohetes-problem {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    padding: 8px 24px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    white-space: nowrap;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  /* Timer ring */
+  .timer-wrap {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+  }
+  .timer-ring { transform: rotate(-90deg); }
+  .timer-ring-bg { fill: none; stroke: rgba(255,255,255,0.15); stroke-width: 4; }
+  .timer-ring-fill { fill: none; stroke: #EF9F27; stroke-width: 4; stroke-linecap: round;
+    stroke-dasharray: 113; stroke-dashoffset: 0; transition: stroke-dashoffset 0.1s linear, stroke 0.3s; }
+  .timer-num {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: white;
+  }
+
+  /* Answer options */
+  .cohetes-options {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: absolute;
+    bottom: 18px;
+    left: 0; right: 0;
+    padding: 0 12px;
+  }
+  .cohetes-opt {
+    flex: 1;
+    min-width: 64px;
+    max-width: 90px;
+    padding: 12px 6px;
+    border-radius: var(--radius-sm);
+    background: rgba(255,255,255,0.13);
+    border: 2px solid rgba(255,255,255,0.3);
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.12s;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .cohetes-opt:hover  { background: rgba(255,255,255,0.25); transform: scale(1.06); }
+  .cohetes-opt:active { transform: scale(0.95); }
+  .cohetes-opt.correct { background: #1D9E75; border-color: #1D9E75; animation: optPop 0.3s ease; }
+  .cohetes-opt.wrong   { background: #D85A30; border-color: #D85A30; }
+  @keyframes optPop { 0%{transform:scale(1)} 50%{transform:scale(1.18)} 100%{transform:scale(1)} }
+
+  /* Flame exhaust */
+  .rocket-flame {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    animation: flamePulse 0.18s ease infinite alternate;
+  }
+  @keyframes flamePulse {
+    from { transform: translateX(-50%) scaleY(0.85); opacity: 0.8; }
+    to   { transform: translateX(-50%) scaleY(1.15); opacity: 1; }
+  }
+
+  /* Launch animation */
+  @keyframes rocketLaunch {
+    0%   { bottom: 40px; opacity: 1; }
+    100% { bottom: 520px; opacity: 0; }
+  }
+  .rocket-wrap.launching { animation: rocketLaunch 1.1s cubic-bezier(.4,0,.6,1) forwards; }
+
+  /* Explosion */
+  @keyframes explode {
+    0%   { transform: translateX(-50%) scale(1); opacity: 1; }
+    40%  { transform: translateX(-50%) scale(2.5); opacity: 0.7; }
+    100% { transform: translateX(-50%) scale(0.2); opacity: 0; }
+  }
+  .rocket-wrap.exploding { animation: explode 0.5s ease forwards; }
+
+  /* Overlay */
+  .cohetes-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(10,14,42,0.88);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-radius: var(--radius);
+    z-index: 10;
+  }
+  .cohetes-overlay.show { display: flex; }
+  .cohetes-overlay .overlay-title { color: white; }
+  .cohetes-overlay .overlay-sub   { color: rgba(255,255,255,0.75); }
+  .cohetes-play-btn {
+    padding: 12px 32px;
+    border-radius: 999px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    background: var(--amber);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: transform 0.1s;
+  }
+  .cohetes-play-btn:hover  { background: #d48f1e; }
+  .cohetes-play-btn:active { transform: scale(0.97); }
+
+  /* Top stats bar */
+  .cohetes-stats {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cohetes-stat-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  /* Level dots */
+  .cohetes-level-dots {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    margin-top: 52px;
+  }
+  .level-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    transition: all 0.3s;
+  }
+  .level-dot.active { background: var(--amber); border-color: var(--amber); }
+  .level-dot.done   { background: var(--green); border-color: var(--green); }
+
+
+  /* ── GRANJA MÁGICA ── */
+  #granja-arena {
+    background: linear-gradient(180deg, #87CEEB 0%, #B8E4F0 35%, #7EC850 35%, #5AAF30 100%);
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem 1rem;
+    margin-bottom: 0.75rem;
+    min-height: 280px;
+    position: relative;
+    border: 2px solid #4A9A20;
+    overflow: hidden;
+  }
+
+  /* Sun */
+  .granja-sun {
+    position: absolute; top: 10px; right: 18px;
+    width: 48px; height: 48px;
+    background: #FFD700;
+    border-radius: 50%;
+    box-shadow: 0 0 0 6px rgba(255,215,0,0.3), 0 0 0 12px rgba(255,215,0,0.15);
+  }
+
+  /* Clouds */
+  .granja-cloud {
+    position: absolute;
+    background: white;
+    border-radius: 999px;
+    opacity: 0.85;
+  }
+
+  .granja-question {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .granja-question-text {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #1A4A00;
+    background: rgba(255,255,255,0.75);
+    border-radius: 999px;
+    padding: 5px 22px;
+    display: inline-block;
+    border: 2px solid rgba(255,255,255,0.9);
+  }
+
+  .granja-groups {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .granja-group {
+    background: rgba(255,255,255,0.7);
+    border: 2.5px solid rgba(255,255,255,0.9);
+    border-radius: 16px;
+    padding: 10px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    align-content: flex-start;
+    min-width: 70px;
+    max-width: 110px;
+    animation: groupPop 0.3s cubic-bezier(.2,1.4,.6,1) both;
+  }
+  @keyframes groupPop {
+    from { transform: scale(0.4); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .granja-animal {
+    font-size: 1.8rem;
+    line-height: 1;
+    animation: animalWiggle 2s ease-in-out infinite;
+  }
+  @keyframes animalWiggle {
+    0%,100% { transform: rotate(-5deg); }
+    50%      { transform: rotate(5deg); }
+  }
+
+  .granja-opts {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .granja-opt {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.6rem;
+    font-weight: 800;
+    border: 3px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .granja-opt:hover  { border-color: var(--green); background: var(--green-light); transform: scale(1.08); }
+  .granja-opt:active { transform: scale(0.94); }
+  .granja-opt.correct { background: var(--green); border-color: var(--green); color: white; animation: optPop 0.3s ease; }
+  .granja-opt.wrong   { background: var(--coral); border-color: var(--coral); color: white; }
+
+  .granja-feedback {
+    text-align: center;
+    min-height: 28px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+  .granja-feedback.correct { color: var(--green-dark); }
+  .granja-feedback.wrong   { color: var(--coral); }
+
+  .granja-progress {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 0.75rem;
+    padding: 0 0.25rem;
+  }
+  .granja-prog-bar {
+    flex: 1;
+    height: 10px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .granja-prog-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+  .granja-prog-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-light);
+    white-space: nowrap;
+  }
+
+  /* Table selector pills */
+  .tabla-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+  .tabla-pill {
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .tabla-pill.active  { background: var(--amber); border-color: var(--amber); color: white; }
+  .tabla-pill:hover:not(.active) { border-color: var(--amber); color: var(--amber-dark); }
+
+  .granja-overlay {
+    display: none;
+    position: absolute; inset: 0;
+    background: rgba(0,60,0,0.7);
+    border-radius: var(--radius);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 10;
+  }
+  .granja-overlay.show { display: flex; }
+  .granja-overlay .overlay-title { color: white; }
+  .granja-overlay .overlay-sub   { color: rgba(255,255,255,0.8); }
+
+  .granja-stars {
+    display: flex;
+    gap: 4px;
+    margin-top: 0.25rem;
+    justify-content: center;
+  }
+  .granja-star {
+    font-size: 1.4rem;
+    color: #ddd;
+    transition: color 0.3s, transform 0.3s;
+  }
+  .granja-star.lit { color: #FFD700; transform: scale(1.15); }
+
+
+  /* ── CONEJOS ── */
+  #conejos-arena {
+    background: linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 40%, #A5D6A7 100%);
+    border: 2px solid #66BB6A;
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem 1rem;
+    min-height: 340px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative grass blades */
+  .conejos-grass {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 28px;
+    background: repeating-linear-gradient(
+      90deg,
+      #4CAF50 0px, #4CAF50 6px,
+      #66BB6A 6px, #66BB6A 14px
+    );
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+
+  .conejos-title {
+    text-align: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1B5E20;
+    background: rgba(255,255,255,0.7);
+    border-radius: 999px;
+    padding: 4px 20px;
+    display: inline-block;
+    margin-bottom: 0.9rem;
+    width: 100%;
+  }
+
+  /* Zanahorias row */
+  .zanahorias-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin-bottom: 1rem;
+    min-height: 44px;
+    align-items: center;
+  }
+  .zanahoria {
+    font-size: 1.8rem;
+    animation: zPop 0.25s cubic-bezier(.2,1.4,.6,1) both;
+    cursor: default;
+  }
+  @keyframes zPop {
+    from { transform: scale(0) rotate(-20deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  /* Conejos row */
+  .conejos-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .conejo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255,255,255,0.65);
+    border: 2.5px solid rgba(255,255,255,0.9);
+    border-radius: 16px;
+    padding: 8px 10px 6px;
+    min-width: 68px;
+    animation: cPop 0.3s cubic-bezier(.2,1.4,.6,1) both;
+  }
+  @keyframes cPop {
+    from { transform: scale(0.3); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .conejo-emoji { font-size: 2.4rem; line-height: 1; animation: cHop 1.2s ease-in-out infinite; }
+  @keyframes cHop {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+  }
+  .conejo-zanahorias {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    justify-content: center;
+    min-height: 26px;
+    align-items: center;
+  }
+  .conejo-z { font-size: 1.1rem; animation: zPop 0.2s ease both; }
+  .conejo-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #2E7D32;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Answer options */
+  .conejos-opts {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+  }
+  .conejos-opt {
+    width: 62px; height: 62px;
+    border-radius: 50%;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.6rem;
+    font-weight: 800;
+    border: 3px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .conejos-opt:hover  { border-color: #66BB6A; background: #E8F5E9; transform: scale(1.1); }
+  .conejos-opt:active { transform: scale(0.94); }
+  .conejos-opt.correct { background: var(--green); border-color: var(--green); color: white; animation: optPop 0.3s ease; }
+  .conejos-opt.wrong   { background: var(--coral); border-color: var(--coral); color: white; }
+
+  .conejos-feedback {
+    text-align: center;
+    min-height: 26px;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+  .conejos-feedback.correct { color: #1B5E20; }
+  .conejos-feedback.wrong   { color: var(--coral); }
+
+  /* Progress */
+  .conejos-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.75rem;
+  }
+  .conejos-prog-bar {
+    flex: 1; height: 10px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .conejos-prog-fill {
+    height: 100%;
+    background: #66BB6A;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .conejos-overlay {
+    display: none;
+    position: absolute; inset: 0;
+    background: rgba(27,94,32,0.82);
+    border-radius: var(--radius);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 10;
+  }
+  .conejos-overlay.show { display: flex; }
+  .conejos-overlay .overlay-title { color: white; }
+  .conejos-overlay .overlay-sub   { color: rgba(255,255,255,0.85); }
+
+
+  /* ── TIENDA ── */
+  .tienda-scene {
+    background: linear-gradient(180deg, #FFF8F0 0%, #FFE0B2 100%);
+    border: 2px solid #FFAB40;
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem 1rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Shop shelf */
+  .tienda-shelf {
+    background: #8D6E63;
+    border-radius: 8px;
+    padding: 10px 14px 6px;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .tienda-shelf::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 0; right: 0;
+    height: 8px;
+    background: #6D4C41;
+    border-radius: 0 0 8px 8px;
+  }
+
+  .tienda-product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: white;
+    border-radius: 12px;
+    padding: 10px 12px 8px;
+    border: 2px solid #FFE0B2;
+    min-width: 74px;
+    cursor: pointer;
+    transition: transform 0.12s, border-color 0.12s;
+    user-select: none;
+  }
+  .tienda-product:hover   { transform: scale(1.06); border-color: #FFAB40; }
+  .tienda-product.selected { border-color: #FF6F00; background: #FFF3E0;
+    box-shadow: 0 0 0 3px rgba(255,111,0,0.2); }
+  .tienda-product-emoji { font-size: 2rem; }
+  .tienda-product-name  { font-size: 0.72rem; font-weight: 800; color: var(--text); text-align: center; }
+  .tienda-product-price {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #E65100;
+    background: #FFF3E0;
+    border-radius: 999px;
+    padding: 1px 10px;
+    border: 1.5px solid #FFAB40;
+  }
+
+  /* Cart */
+  .tienda-cart {
+    background: white;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-bottom: 0.75rem;
+    min-height: 54px;
+  }
+  .tienda-cart-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .tienda-cart-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    min-height: 32px;
+  }
+  .tienda-cart-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #FFF3E0;
+    border: 1.5px solid #FFAB40;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #5D4037;
+    animation: zPop 0.2s ease both;
+    cursor: pointer;
+  }
+  .tienda-cart-item:hover { background: #FFCCBC; }
+
+  /* Total */
+  .tienda-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #E8F5E9;
+    border: 2px solid #A5D6A7;
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    margin-bottom: 0.75rem;
+  }
+  .tienda-total-label {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #1B5E20;
+  }
+  .tienda-total-val {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1B5E20;
+  }
+
+  /* Phase 2 — Money */
+  .money-zone {
+    background: #F1F8E9;
+    border: 2px solid #AED581;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-bottom: 0.75rem;
+  }
+  .money-zone-title {
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #33691E;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .money-bills-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Bill SVG button */
+  .money-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    transition: transform 0.12s;
+  }
+  .money-btn:hover  { transform: scale(1.1) translateY(-3px); }
+  .money-btn:active { transform: scale(0.95); }
+  .money-btn svg   { display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18)); }
+  .money-btn-label {
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: var(--text-mid);
+  }
+
+  /* Wallet (selected money) */
+  .wallet-zone {
+    background: white;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    min-height: 64px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .wallet-empty {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+  }
+  .wallet-item {
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.1s;
+    animation: zPop 0.2s ease both;
+  }
+  .wallet-item:hover { transform: scale(1.12); opacity: 0.7; }
+
+  /* Confirm button */
+  .tienda-confirm-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 999px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    background: var(--green);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s;
+    margin-bottom: 0.5rem;
+  }
+  .tienda-confirm-btn:hover   { background: #178a63; }
+  .tienda-confirm-btn:active  { transform: scale(0.97); }
+  .tienda-confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .tienda-phase { display: none; }
+  .tienda-phase.active { display: block; animation: fadeUp 0.2s ease; }
+
+  .tienda-feedback {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    min-height: 28px;
+    margin-top: 0.25rem;
+  }
+  .tienda-feedback.correct { color: var(--green-dark); }
+  .tienda-feedback.wrong   { color: var(--coral); }
+
+  .tienda-phase-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .tienda-phase-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--amber);
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tienda-stats {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .tienda-score-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+  .tienda-prog-bar {
+    flex: 1; height: 10px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .tienda-prog-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    display: none;
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: white;
+    border-radius: 999px;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 700;
+    z-index: 999;
+    white-space: nowrap;
+    animation: toastIn 0.3s cubic-bezier(.2,1.4,.6,1);
+  }
+  .toast.show { display: block; }
+  @keyframes toastIn { from { transform: translateX(-50%) translateY(-20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Aventura <span>Matemática</span> ✨</h1>
+  <div class="coin-pill" onclick="goToScreen('premios')">
+    <span class="coin-icon">🪙</span>
+    <div>
+      <div class="coin-val" id="coin-display">0</div>
+      <div class="coin-lbl">monedas</div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="goToScreen('conteo')">
+    <span class="icon">🍎</span>
+    <span class="nav-op">1 2 3</span>
+    <span class="nav-label">Conteo</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('suma')">
+    <span class="icon">➕</span>
+    <span class="nav-op">Suma</span>
+    <span class="nav-label">ejercicios</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('resta')">
+    <span class="icon">➖</span>
+    <span class="nav-op">Resta</span>
+    <span class="nav-label">ejercicios</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('comparar')">
+    <span class="icon">⚖️</span>
+    <span class="nav-op">Mayor</span>
+    <span class="nav-label">¿cuál es más?</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('suma-globos')">
+    <span class="icon">🎈</span>
+    <span class="nav-op">Globos</span>
+    <span class="nav-label">sumá dos globos</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('cohetes')">
+    <span class="icon">🚀</span>
+    <span class="nav-op">Cohetes</span>
+    <span class="nav-label">restas</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('granja')">
+    <span class="icon">🐔</span>
+    <span class="nav-op">Granja</span>
+    <span class="nav-label">multiplicar</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('conejos')">
+    <span class="icon">🐰</span>
+    <span class="nav-op">Conejos</span>
+    <span class="nav-label">dividir</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('tienda')">
+    <span class="icon">🛒</span>
+    <span class="nav-op">Tienda</span>
+    <span class="nav-label">pagar con $</span>
+  </button>
+  <button class="nav-btn prizes-btn" onclick="goToScreen('premios')">
+    <span class="icon">🎁</span>
+    <span class="nav-op">Premios</span>
+    <span class="nav-label">canjear</span>
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<main>
+
+  <!-- CONTEO -->
+  <div class="screen active" id="screen-conteo">
+    <div class="card">
+      <div class="section-label">Elegí un objeto</div>
+      <div class="emoji-row">
+        <span class="emoji-opt selected" onclick="setEmoji(this,'🍎')">🍎</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'⭐')">⭐</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🐱')">🐱</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🌸')">🌸</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🚗')">🚗</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🦋')">🦋</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🐸')">🐸</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🍕')">🍕</span>
+      </div>
+      <div class="count-center">
+        <span class="display-num" id="count-num">0</span>
+        <div class="objects-grid" id="objects-grid"></div>
+        <div class="count-btns">
+          <button class="big-btn btn-minus" onclick="changeCount(-1)">−</button>
+          <button class="big-btn btn-plus" onclick="changeCount(1)">+</button>
+        </div>
+        <div style="margin-top:12px; font-size:0.8rem; color:var(--text-light); font-weight:600;">Llegá a 5, 10, 15 o 20 y ganás una moneda 🪙</div>
+        <div id="conteo-earn" style="min-height:32px; margin-top:8px; text-align:center;"></div>
+      </div>
+    </div>
+    <div class="neighbor-row">
+      <div class="neighbor-card">
+        <div class="neighbor-label">Número anterior</div>
+        <div class="neighbor-num" id="prev-num">—</div>
+      </div>
+      <div class="neighbor-card next">
+        <div class="neighbor-label">Número siguiente</div>
+        <div class="neighbor-num" id="next-num">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMA -->
+  <div class="screen" id="screen-suma">
+    <div class="card">
+      <div class="section-label">Sumamos juntas</div>
+      <div class="problem-display" id="suma-text">3 + 2 = ?</div>
+      <div class="visual-area" id="suma-visual"></div>
+      <div class="answer-row">
+        <input type="number" class="answer-input" id="suma-input" placeholder="?" min="0" max="30" onkeyup="if(event.key==='Enter')checkSuma()">
+      </div>
+      <button class="check-btn" onclick="checkSuma()">Verificar ✓</button>
+      <div class="feedback-box" id="suma-feedback"></div>
+      <div id="suma-earn" style="min-height:32px; text-align:center; margin-bottom:4px;"></div>
+      <button class="new-btn" onclick="newSuma()">Otro ejercicio →</button>
+    </div>
+  </div>
+
+  <!-- RESTA -->
+  <div class="screen" id="screen-resta">
+    <div class="card">
+      <div class="section-label">Restamos juntas</div>
+      <div class="problem-display" id="resta-text">5 − 2 = ?</div>
+      <div class="visual-area" id="resta-visual"></div>
+      <div class="answer-row">
+        <input type="number" class="answer-input" id="resta-input" placeholder="?" min="0" max="20" onkeyup="if(event.key==='Enter')checkResta()">
+      </div>
+      <button class="check-btn" onclick="checkResta()">Verificar ✓</button>
+      <div class="feedback-box" id="resta-feedback"></div>
+      <div id="resta-earn" style="min-height:32px; text-align:center; margin-bottom:4px;"></div>
+      <button class="new-btn" onclick="newResta()">Otro ejercicio →</button>
+    </div>
+  </div>
+
+  <!-- COMPARAR -->
+  <div class="screen" id="screen-comparar">
+    <div class="card">
+      <div class="section-label">¿Cuál número es mayor?</div>
+      <div class="cmp-row">
+        <div class="cmp-box" id="cmp-left">
+          <div class="cmp-num" id="cmp-a">7</div>
+          <div class="cmp-dots" id="cmp-dots-a"></div>
+        </div>
+        <div class="cmp-middle">
+          <div class="cmp-sign-big" id="cmp-sign">?</div>
+        </div>
+        <div class="cmp-box" id="cmp-right">
+          <div class="cmp-num" id="cmp-b">4</div>
+          <div class="cmp-dots" id="cmp-dots-b"></div>
+        </div>
+      </div>
+      <div class="cmp-opts">
+        <button class="cmp-opt" onclick="checkCmp('>')">›</button>
+        <button class="cmp-opt" onclick="checkCmp('=')">＝</button>
+        <button class="cmp-opt" onclick="checkCmp('<')">‹</button>
+      </div>
+      <div class="feedback-box" id="cmp-feedback"></div>
+      <div id="cmp-earn" style="min-height:32px; text-align:center; margin-bottom:4px;"></div>
+      <button class="new-btn" onclick="newCmp()">Otro par →</button>
+    </div>
+  </div>
+
+  <!-- GLOBOS -->
+  <div class="screen" id="screen-globos">
+    <div class="card" style="padding:1rem 1.25rem;">
+      <div class="globos-header">
+        <div>
+          <div class="section-label">Juego de globos</div>
+          <div class="level-badge" id="globos-level-badge">Nivel 1 — hasta 10</div>
+        </div>
+        <div class="globos-target">
+          <div class="globos-target-label">Buscá el globo que vale</div>
+          <div class="globos-target-num" id="globos-target">?</div>
+        </div>
+      </div>
+      <div class="globos-stats">
+        <div class="stat-pill">
+          <div class="stat-pill-label">Vidas</div>
+          <div class="stat-pill-val" id="globos-lives">❤️❤️❤️</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Puntos</div>
+          <div class="stat-pill-val" id="globos-score">0</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Racha</div>
+          <div class="stat-pill-val" id="globos-streak">🔥0</div>
+        </div>
+      </div>
+    </div>
+    <div id="globos-arena">
+      <div class="globos-overlay show" id="globos-overlay">
+        <div class="overlay-emoji">🎈</div>
+        <div class="overlay-title">¡Juego de Globos!</div>
+        <div class="overlay-sub">Tocá el globo que muestre el número del objetivo</div>
+        <button class="play-btn" onclick="startGlobos()">¡Empezar! →</button>
+      </div>
+    </div>
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Aparecen globos con números — tocá el que tenga exactamente el número objetivo. ¡Cuidado con los otros!
+    </div>
+  </div>
+
+  <!-- SUMA GLOBOS -->
+  <div class="screen" id="screen-suma-globos">
+
+    <!-- Progress steps -->
+    <div class="sg-progress-row">
+      <div class="sg-step" id="sg-step-1">
+        <div class="sg-step-circle">1</div>
+        <div class="sg-step-label">Fácil<br><small>hasta 10</small></div>
+      </div>
+      <div class="sg-step-line" id="sg-line-1"></div>
+      <div class="sg-step" id="sg-step-2">
+        <div class="sg-step-circle">2</div>
+        <div class="sg-step-label">Medio<br><small>hasta 15</small></div>
+      </div>
+      <div class="sg-step-line" id="sg-line-2"></div>
+      <div class="sg-step" id="sg-step-3">
+        <div class="sg-step-circle">3</div>
+        <div class="sg-step-label">Difícil<br><small>hasta 20</small></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div class="globos-header">
+        <div>
+          <div class="section-label">Suma de globos</div>
+          <div class="level-badge" id="sg-level-badge">Nivel 1 — hasta 10</div>
+        </div>
+        <div class="globos-target">
+          <div class="globos-target-label">¿Cuáles suman?</div>
+          <div class="globos-target-num" id="sg-target">?</div>
+        </div>
+      </div>
+      <div class="globos-stats">
+        <div class="stat-pill">
+          <div class="stat-pill-label">Vidas</div>
+          <div class="stat-pill-val" id="sg-lives">❤️❤️❤️</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Aciertos</div>
+          <div class="stat-pill-val" id="sg-hits">0/10</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Elegido</div>
+          <div class="stat-pill-val" id="sg-selected">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sg-arena">
+      <div class="globos-overlay show" id="sg-overlay">
+        <div class="overlay-emoji">🎈➕🎈</div>
+        <div class="overlay-title">¡Suma de Globos!</div>
+        <div class="overlay-sub">Tocá DOS globos que juntos sumen el número objetivo</div>
+        <div style="font-size:0.82rem; color:var(--text-mid); margin-top:-4px;">Hay 3 niveles — ¡completá los 3 para ganar el gran premio!</div>
+        <button class="play-btn" onclick="startSumaGlobos()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Tocá un globo para elegirlo (se mueve), luego tocá otro que sume el objetivo.
+    </div>
+  </div>
+
+  <!-- COHETES -->
+  <div class="screen" id="screen-cohetes">
+    <div class="card" style="padding:0.9rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🚀 Cohetes — Resta</div>
+          <div class="level-badge" id="cohetes-level-label">Nivel 1 — resta hasta 10</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Vidas</div>
+            <div class="stat-pill-val" id="cohetes-lives-disp">🚀🚀🚀</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="cohetes-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cohetes-arena">
+      <!-- stars injected by JS -->
+
+      <!-- Stats overlay top-left -->
+      <div class="cohetes-stats" id="cohetes-stats-overlay" style="display:none;">
+        <div class="cohetes-stat-pill" id="cohetes-lives-arena">🚀🚀🚀</div>
+        <div class="cohetes-stat-pill" id="cohetes-score-arena">⭐ 0</div>
+      </div>
+
+      <!-- Problem -->
+      <div class="cohetes-problem" id="cohetes-problem" style="display:none;">12 − 5 = ?</div>
+
+      <!-- Timer -->
+      <div class="timer-wrap" id="cohetes-timer-wrap" style="display:none;">
+        <svg class="timer-ring" width="42" height="42" viewBox="0 0 42 42">
+          <circle class="timer-ring-bg" cx="21" cy="21" r="18"/>
+          <circle class="timer-ring-fill" id="timer-fill" cx="21" cy="21" r="18"/>
+        </svg>
+        <div class="timer-num" id="timer-num">8</div>
+      </div>
+
+      <!-- Level dots -->
+      <div class="cohetes-level-dots" id="cohetes-dots" style="display:none;">
+        <div class="level-dot" id="cdot-1"></div>
+        <div class="level-dot" id="cdot-2"></div>
+        <div class="level-dot" id="cdot-3"></div>
+      </div>
+
+      <!-- Rocket -->
+      <div class="rocket-wrap" id="rocket-wrap" style="display:none;">
+        <svg class="rocket-svg" width="60" height="90" viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="rktBody" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#C0C8E8"/>
+              <stop offset="50%" stop-color="#FFFFFF"/>
+              <stop offset="100%" stop-color="#8A96C0"/>
+            </linearGradient>
+            <linearGradient id="rktNose" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FF6B6B"/>
+              <stop offset="100%" stop-color="#CC2222"/>
+            </linearGradient>
+          </defs>
+          <!-- Body -->
+          <rect x="20" y="28" width="20" height="42" rx="3" fill="url(#rktBody)"/>
+          <!-- Nose -->
+          <path d="M30 4 L44 30 L16 30 Z" fill="url(#rktNose)"/>
+          <!-- Window -->
+          <circle cx="30" cy="42" r="7" fill="#5BB8F5" stroke="white" stroke-width="1.5"/>
+          <circle cx="30" cy="42" r="4" fill="#2299E8" opacity="0.7"/>
+          <!-- Fins -->
+          <path d="M20 58 L10 72 L20 68 Z" fill="#FF9F6B"/>
+          <path d="M40 58 L50 72 L40 68 Z" fill="#FF9F6B"/>
+          <!-- Exhaust nozzle -->
+          <rect x="24" y="70" width="12" height="6" rx="2" fill="#888"/>
+        </svg>
+        <!-- Flame -->
+        <svg class="rocket-flame" width="24" height="32" viewBox="0 0 24 32">
+          <ellipse cx="12" cy="10" rx="7" ry="12" fill="#EF9F27" opacity="0.9"/>
+          <ellipse cx="12" cy="14" rx="4" ry="8"  fill="#FFF176" opacity="0.8"/>
+        </svg>
+      </div>
+
+      <!-- Answer options -->
+      <div class="cohetes-options" id="cohetes-options" style="display:none;"></div>
+
+      <!-- Overlay -->
+      <div class="cohetes-overlay show" id="cohetes-overlay">
+        <div class="overlay-emoji">🚀</div>
+        <div class="overlay-title">¡Juego de Cohetes!</div>
+        <div class="overlay-sub">Elegí la respuesta correcta antes de que el cohete explote</div>
+        <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:-4px;">3 niveles — restas hasta 20</div>
+        <button class="cohetes-play-btn" onclick="startCohetes()">¡Despegar! 🚀</button>
+      </div>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600;">
+      💡 Tocá la respuesta correcta antes de que el reloj llegue a cero. ¡Cada acierto sube el cohete!
+    </div>
+  </div>
+
+  <!-- GRANJA MÁGICA -->
+  <div class="screen" id="screen-granja">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🐔 Granja Mágica — Multiplicación</div>
+          <div class="level-badge" id="granja-tabla-label">Tabla del 2</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Aciertos</div>
+            <div class="stat-pill-val" id="granja-hits-disp">0/10</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="granja-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla selector -->
+    <div class="tabla-row">
+      <button class="tabla-pill active" id="tab-2" onclick="selectTabla(2)">× 2</button>
+      <button class="tabla-pill"        id="tab-3" onclick="selectTabla(3)">× 3</button>
+      <button class="tabla-pill"        id="tab-4" onclick="selectTabla(4)">× 4</button>
+      <button class="tabla-pill"        id="tab-5" onclick="selectTabla(5)">× 5</button>
+    </div>
+
+    <!-- Arena -->
+    <div id="granja-arena">
+      <!-- decorations injected by JS -->
+
+      <div class="granja-question">
+        <span class="granja-question-text" id="granja-q">¿Cuántos animales hay en total?</span>
+      </div>
+
+      <div class="granja-groups" id="granja-groups"></div>
+
+      <div class="granja-opts" id="granja-opts"></div>
+
+      <div class="granja-overlay show" id="granja-overlay">
+        <div class="overlay-emoji">🐔🐄🐑🐖</div>
+        <div class="overlay-title">¡Granja Mágica!</div>
+        <div class="overlay-sub">Contá los animales y elegí el total correcto</div>
+        <button class="play-btn" style="background:var(--green);" onclick="startGranja()">¡Entrar a la granja! →</button>
+      </div>
+    </div>
+
+    <!-- Feedback + progress -->
+    <div class="granja-feedback" id="granja-feedback"></div>
+
+    <div class="granja-progress">
+      <span class="granja-prog-label" id="granja-prog-label">0 / 10</span>
+      <div class="granja-prog-bar">
+        <div class="granja-prog-fill" id="granja-prog-fill" style="width:0%"></div>
+      </div>
+      <div class="granja-stars" id="granja-stars">
+        <span class="granja-star" id="gstar-1">★</span>
+        <span class="granja-star" id="gstar-2">★</span>
+        <span class="granja-star" id="gstar-3">★</span>
+      </div>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Mirá los grupos de animales — cada cerco tiene la misma cantidad. ¡Contá todos juntos!
+    </div>
+  </div>
+
+  <!-- CONEJOS -->
+  <div class="screen" id="screen-conejos">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🐰 Conejos — División</div>
+          <div class="level-badge" id="conejos-level-label">Nivel 1 — dividir entre 2 y 3</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Aciertos</div>
+            <div class="stat-pill-val" id="conejos-hits-disp">0/10</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="conejos-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="conejos-arena">
+      <div class="conejos-grass"></div>
+
+      <div class="conejos-title" id="conejos-title">Tenés 🥕 para repartir entre 🐰</div>
+
+      <!-- Zanahorias totales -->
+      <div class="zanahorias-row" id="zanahorias-row"></div>
+
+      <!-- Conejos -->
+      <div class="conejos-row" id="conejos-row"></div>
+
+      <!-- Opciones -->
+      <div class="conejos-opts" id="conejos-opts"></div>
+
+      <div class="conejos-overlay show" id="conejos-overlay">
+        <div style="font-size:2.5rem;">🐰🥕🐰</div>
+        <div class="overlay-title">¡Conejos y Zanahorias!</div>
+        <div class="overlay-sub">Repartí las zanahorias entre los conejos por igual</div>
+        <button class="play-btn" style="background:#4CAF50;" onclick="startConejos()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="conejos-feedback" id="conejos-feedback"></div>
+
+    <div class="conejos-progress">
+      <span style="font-size:0.75rem; font-weight:700; color:var(--text-light);" id="conejos-prog-label">0 / 10</span>
+      <div class="conejos-prog-bar">
+        <div class="conejos-prog-fill" id="conejos-prog-fill" style="width:0%"></div>
+      </div>
+      <span style="font-size:0.75rem; font-weight:700; color:var(--text-light);" id="conejos-stars">⭐⭐⭐</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Contá las zanahorias y los conejos — ¡elegí cuántas le toca a cada uno!
+    </div>
+  </div>
+
+  <!-- TIENDA -->
+  <div class="screen" id="screen-tienda">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🛒 La Tiendita — Sumar y Pagar</div>
+          <div class="level-badge" id="tienda-level-label">Nivel 1 — precios simples</div>
+        </div>
+        <div class="tienda-stats">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Compras</div>
+            <div class="stat-pill-val" id="tienda-hits-disp">0/8</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="tienda-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tienda-scene">
+
+      <!-- PHASE 1: suma de precios -->
+      <div class="tienda-phase active" id="tienda-phase1">
+        <div class="tienda-phase-header">
+          <div class="tienda-phase-num">1</div>
+          ¡Elegí lo que querés comprar!
+        </div>
+
+        <!-- Shelf with products -->
+        <div class="tienda-shelf" id="tienda-shelf"></div>
+
+        <!-- Cart -->
+        <div class="tienda-cart">
+          <div class="tienda-cart-title">🛒 Tu carrito (tocá para agregar, tocá de nuevo para sacar)</div>
+          <div class="tienda-cart-items" id="tienda-cart-items">
+            <span style="font-size:0.82rem; color:var(--text-light); font-weight:600;">Elegí productos del estante</span>
+          </div>
+        </div>
+
+        <!-- Total question -->
+        <div class="tienda-total-row">
+          <div class="tienda-total-label">💰 Total a pagar:</div>
+          <div class="tienda-total-val" id="tienda-total-disp">$0</div>
+        </div>
+
+        <button class="tienda-confirm-btn" id="tienda-pay-btn" onclick="goToPhase2()" disabled>
+          ¡Ir a pagar! →
+        </button>
+      </div>
+
+      <!-- PHASE 2: pagar con billetes y monedas -->
+      <div class="tienda-phase" id="tienda-phase2">
+        <div class="tienda-phase-header">
+          <div class="tienda-phase-num">2</div>
+          <span>¡Pagá con billetes y monedas! Total: <span id="tienda-total-p2" style="color:#E65100;">$0</span></span>
+        </div>
+
+        <!-- Money available -->
+        <div class="money-zone">
+          <div class="money-zone-title">💵 Tocá para agregar al pago</div>
+          <div class="money-bills-row" id="money-bills-row"></div>
+        </div>
+
+        <!-- Wallet -->
+        <div style="font-size:0.72rem; font-weight:800; color:var(--text-light); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:5px;">
+          Tu pago (tocá para devolver)
+        </div>
+        <div class="wallet-zone" id="wallet-zone">
+          <span class="wallet-empty">Tocá un billete o moneda para pagarlo</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:0.85rem; font-weight:700; color:var(--text-mid);">Estás pagando:</span>
+          <span style="font-family:'Baloo 2',cursive; font-size:1.4rem; font-weight:800; color:var(--green-dark);" id="wallet-total">$0</span>
+        </div>
+
+        <button class="tienda-confirm-btn" id="tienda-confirm-btn" onclick="confirmPayment()" disabled>
+          ✓ ¡Confirmar pago!
+        </button>
+
+        <button onclick="backToPhase1()" style="width:100%;padding:8px;border-radius:999px;font-size:0.85rem;font-weight:700;border:2px solid var(--border);background:var(--bg);color:var(--text-mid);cursor:pointer;margin-top:6px;">
+          ← Cambiar productos
+        </button>
+      </div>
+
+      <!-- PHASE 3: vuelto question -->
+      <div class="tienda-phase" id="tienda-phase3">
+        <div class="tienda-phase-header">
+          <div class="tienda-phase-num" style="background:var(--green);">3</div>
+          ¿Cuánto de vuelto recibís?
+        </div>
+
+        <div style="background:#E8F5E9; border:2px solid #A5D6A7; border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:1rem; text-align:center;">
+          <div style="font-size:0.85rem; font-weight:700; color:#2E7D32; margin-bottom:6px;">Tu compra costó</div>
+          <div style="font-family:'Baloo 2',cursive; font-size:2rem; font-weight:800; color:#1B5E20;" id="vuelto-compra">$0</div>
+          <div style="font-size:0.85rem; font-weight:700; color:#2E7D32; margin:8px 0 6px;">Pagaste</div>
+          <div style="font-family:'Baloo 2',cursive; font-size:2rem; font-weight:800; color:#1B5E20;" id="vuelto-pago">$0</div>
+          <div style="font-size:1rem; font-weight:800; color:#388E3C; margin-top:8px;">¿Cuánto te tienen que dar de vuelto?</div>
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:1rem;" id="vuelto-opts"></div>
+
+        <div class="tienda-feedback" id="vuelto-feedback"></div>
+      </div>
+
+    </div><!-- /tienda-scene -->
+
+    <div class="tienda-feedback" id="tienda-feedback"></div>
+
+    <div class="tienda-score-bar">
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="tienda-prog-label">0 / 8</span>
+      <div class="tienda-prog-bar">
+        <div class="tienda-prog-fill" id="tienda-prog-fill" style="width:0%"></div>
+      </div>
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="tienda-stars">☆☆☆</span>
+    </div>
+
+  </div>
+
+  <!-- PREMIOS -->
+  <div class="screen" id="screen-premios">
+    <div class="card progress-section">
+      <div class="section-label">Tus monedas</div>
+      <div class="coins-header">
+        <span>Total acumulado</span>
+        <strong id="coins-big">0 🪙</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-labels">
+        <span>0</span>
+        <span id="next-prize-label">Próximo: 5 🪙</span>
+        <span>25</span>
+      </div>
+    </div>
+
+    <div class="section-label">Tienda de premios</div>
+    <div class="prizes-grid" id="prizes-grid"></div>
+
+    <div class="history-section">
+      <div class="section-label">Historial de canjes</div>
+      <div id="history-list">
+        <div style="font-size:0.85rem; color:var(--text-light); text-align:center; padding:1.5rem 0; font-weight:600;">Todavía no canjeaste ningún premio</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+let coins = 0;
+let countVal = 0;
+let countEmoji = '🍎';
+let sumaA, sumaB, restaA, restaB, cmpA, cmpB;
+let conteoMilestones = [5, 10, 15, 20];
+let reachedMilestones = new Set();
+let history = [];
+
+const PRIZES = [
+  { id:'p1', emoji:'🍬', name:'Un caramelo', cost:5, claimed:false },
+  { id:'p2', emoji:'📺', name:'10 min de tele', cost:8, claimed:false },
+  { id:'p3', emoji:'🎨', name:'Pintar con mamá', cost:10, claimed:false },
+  { id:'p4', emoji:'🧁', name:'Elegir la merienda', cost:12, claimed:false },
+  { id:'p5', emoji:'🎮', name:'Juego a elección', cost:15, claimed:false },
+  { id:'p6', emoji:'🌟', name:'Noche de película', cost:18, claimed:false },
+  { id:'p7', emoji:'🛍️', name:'Salida especial', cost:20, claimed:false },
+  { id:'p8', emoji:'🎪', name:'Paseo sorpresa', cost:25, claimed:false },
+];
+
+const OBJ_EMOJIS = ['🍎','⭐','🐱','🌸','🚗','🦋','🐸','🍕'];
+
+function goToScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  const btns = document.querySelectorAll('.nav-btn');
+  const names = ['conteo','suma','resta','comparar','suma-globos','cohetes','granja','conejos','tienda','premios'];
+  const idx = names.indexOf(name);
+  if (idx >= 0) btns[idx].classList.add('active');
+  if (name === 'cohetes') initCohetes();
+  if (name === 'suma-globos') initSumaGlobos();
+  if (name === 'granja') initGranja();
+  if (name === 'conejos') initConejos();
+  if (name === 'tienda') initTienda();
+  if (name === 'suma') newSuma();
+  if (name === 'resta') newResta();
+  if (name === 'comparar') newCmp();
+  if (name === 'premios') { renderPrizes(); renderHistory(); }
+}
+
+function gei(id) { return document.getElementById(id); }
+
+function updateCoins(amount, earnElId) {
+  coins += amount;
+  const coinDisp = gei('coin-display');
+  const coinsBig = gei('coins-big');
+  const fill = gei('progress-fill');
+  const nextLabel = gei('next-prize-label');
+  if (coinDisp) coinDisp.textContent = coins;
+  if (coinsBig) coinsBig.textContent = coins + ' 🪙';
+  const pct = Math.min((coins / 20) * 100, 100);
+  if (fill) fill.style.width = pct + '%';
+  const next = PRIZES.filter(p => !p.claimed && p.cost > coins)[0];
+  if (nextLabel) nextLabel.textContent = next ? 'Próximo: ' + next.cost + ' 🪙' : '¡Podés canjear premios!';
+  if (earnElId) {
+    const earnEl = el(earnElId);
+    if (earnEl) {
+      earnEl.innerHTML = '<span class="coin-earn">+' + amount + ' 🪙 ganadas</span>';
+      setTimeout(() => { if (earnEl) earnEl.innerHTML = ''; }, 2500);
+    }
+  }
+}
+
+function showToast(msg) {
+  const t = gei('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function renderPrizes() {
+  const grid = document.getElementById('prizes-grid');
+  grid.innerHTML = '';
+  PRIZES.forEach(p => {
+    const canBuy = coins >= p.cost && !p.claimed;
+    const div = document.createElement('div');
+    div.className = 'prize-card' + (canBuy ? ' available' : '') + (p.claimed ? ' claimed' : '');
+    div.innerHTML =
+      '<span class="prize-emoji">' + p.emoji + '</span>' +
+      '<div class="prize-name">' + p.name + '</div>' +
+      '<div class="prize-cost">' + (p.claimed ? '' : p.cost + ' 🪙') + '</div>' +
+      (p.claimed
+        ? '<div class="prize-claimed-badge">✓ Canjeado</div>'
+        : '<button class="prize-btn' + (canBuy ? ' can-buy' : '') + '" ' +
+          (canBuy ? '' : 'disabled') +
+          ' onclick="claimPrize(\'' + p.id + '\')">' +
+          (canBuy ? 'Canjear ✨' : 'Faltan ' + (p.cost - coins) + ' 🪙') +
+          '</button>'
+      );
+    grid.appendChild(div);
+  });
+}
+
+function claimPrize(id) {
+  const p = PRIZES.find(x => x.id === id);
+  if (!p || p.claimed || coins < p.cost) return;
+  coins -= p.cost;
+  p.claimed = true;
+  if (gei('coin-display')) gei('coin-display').textContent = coins;
+  if (gei('coins-big')) gei('coins-big').textContent = coins + ' 🪙';
+  const pct = Math.min((coins / MAX_PRIZE_COST) * 100, 100);
+  if (gei('progress-fill')) gei('progress-fill').style.width = pct + '%';
+  const nextAfter = PRIZES.filter(p => !p.claimed && p.cost > coins)[0];
+  if (gei('next-prize-label'))
+    gei('next-prize-label').textContent = nextAfter ? 'Próximo premio: ' + nextAfter.cost + ' 🪙' : '¡Podés canjear todos!';
+  history.unshift({ emoji: p.emoji, name: p.name, cost: p.cost, date: new Date().toLocaleDateString('es-AR') });
+  renderPrizes();
+  renderHistory();
+  showToast('¡Felicitaciones! ' + p.emoji + ' ' + p.name);
+}
+
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (history.length === 0) {
+    el.innerHTML = '<div style="font-size:0.85rem; color:var(--text-light); text-align:center; padding:1.5rem 0; font-weight:600;">Todavía no canjeaste ningún premio</div>';
+    return;
+  }
+  el.innerHTML = history.map(h =>
+    '<div class="history-item">' +
+    '<div class="history-item-left"><span style="font-size:1.2rem;">' + h.emoji + '</span> ' + h.name + '</div>' +
+    '<div class="history-item-right">−' + h.cost + ' 🪙 · ' + h.date + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function setEmoji(el, emoji) {
+  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  countEmoji = emoji;
+  renderObjects();
+}
+
+function changeCount(delta) {
+  countVal = Math.max(0, Math.min(20, countVal + delta));
+  document.getElementById('count-num').textContent = countVal;
+  document.getElementById('prev-num').textContent = countVal > 0 ? countVal - 1 : '—';
+  document.getElementById('next-num').textContent = countVal < 20 ? countVal + 1 : '—';
+  renderObjects();
+  if (conteoMilestones.includes(countVal) && !reachedMilestones.has(countVal)) {
+    reachedMilestones.add(countVal);
+    updateCoins(1, 'conteo-earn');
+  }
+}
+
+function renderObjects() {
+  const grid = document.getElementById('objects-grid');
+  grid.innerHTML = '';
+  for (let i = 0; i < countVal; i++) {
+    const span = document.createElement('span');
+    span.className = 'obj';
+    span.style.animationDelay = (i * 0.025) + 's';
+    span.textContent = countEmoji;
+    grid.appendChild(span);
+  }
+}
+
+function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function makeVisual(a, b, op, containerId) {
+  const el = document.getElementById(containerId);
+  const emj = OBJ_EMOJIS[rnd(0, OBJ_EMOJIS.length - 1)];
+  let html = '<div class="group-box"><div class="group-emojis">';
+  for (let i = 0; i < a; i++) html += '<span style="font-size:1.3rem;">' + emj + '</span>';
+  html += '</div><div class="group-num">' + a + '</div></div>';
+  html += '<span class="op-sign">' + op + '</span>';
+  if (op === '+') {
+    html += '<div class="group-box"><div class="group-emojis">';
+    for (let i = 0; i < b; i++) html += '<span style="font-size:1.3rem;">' + emj + '</span>';
+    html += '</div><div class="group-num">' + b + '</div></div>';
+  } else {
+    html += '<div class="group-box"><div class="group-emojis">';
+    for (let i = 0; i < a; i++) {
+      const faded = i >= (a - b);
+      html += '<span style="font-size:1.3rem; opacity:' + (faded ? '0.18' : '1') + ';">' + emj + '</span>';
+    }
+    html += '</div><div class="group-num">−' + b + '</div></div>';
+  }
+  el.innerHTML = html;
+}
+
+function newSuma() {
+  sumaA = rnd(1, 9); sumaB = rnd(1, 10 - sumaA);
+  document.getElementById('suma-text').textContent = sumaA + ' + ' + sumaB + ' = ?';
+  makeVisual(sumaA, sumaB, '+', 'suma-visual');
+  document.getElementById('suma-input').value = '';
+  document.getElementById('suma-feedback').textContent = '';
+  document.getElementById('suma-feedback').className = 'feedback-box';
+  document.getElementById('suma-earn').innerHTML = '';
+  document.getElementById('suma-input').focus();
+}
+
+function checkSuma() {
+  const val = parseInt(document.getElementById('suma-input').value);
+  const fb = document.getElementById('suma-feedback');
+  if (isNaN(val)) { fb.textContent = 'Escribí un número 🤔'; fb.className = 'feedback-box'; return; }
+  if (val === sumaA + sumaB) {
+    fb.textContent = '¡Muy bien! ' + sumaA + ' + ' + sumaB + ' = ' + (sumaA + sumaB) + ' ✓';
+    fb.className = 'feedback-box correct';
+    updateCoins(2, 'suma-earn');
+  } else {
+    fb.textContent = 'Casi... el resultado es ' + (sumaA + sumaB) + ' ¡Intentá de nuevo!';
+    fb.className = 'feedback-box wrong';
+  }
+}
+
+function newResta() {
+  restaA = rnd(3, 10); restaB = rnd(1, restaA - 1);
+  document.getElementById('resta-text').textContent = restaA + ' − ' + restaB + ' = ?';
+  makeVisual(restaA, restaB, '−', 'resta-visual');
+  document.getElementById('resta-input').value = '';
+  document.getElementById('resta-feedback').textContent = '';
+  document.getElementById('resta-feedback').className = 'feedback-box';
+  document.getElementById('resta-earn').innerHTML = '';
+  document.getElementById('resta-input').focus();
+}
+
+function checkResta() {
+  const val = parseInt(document.getElementById('resta-input').value);
+  const fb = document.getElementById('resta-feedback');
+  if (isNaN(val)) { fb.textContent = 'Escribí un número 🤔'; fb.className = 'feedback-box'; return; }
+  if (val === restaA - restaB) {
+    fb.textContent = '¡Perfecto! ' + restaA + ' − ' + restaB + ' = ' + (restaA - restaB) + ' ✓';
+    fb.className = 'feedback-box correct';
+    updateCoins(2, 'resta-earn');
+  } else {
+    fb.textContent = 'El resultado es ' + (restaA - restaB) + ' ¡Volvé a intentarlo!';
+    fb.className = 'feedback-box wrong';
+  }
+}
+
+function makeDots(containerId, n) {
+  const el = document.getElementById(containerId);
+  let html = '';
+  for (let i = 0; i < Math.min(n, 15); i++) html += '<div class="dot"></div>';
+  el.innerHTML = html;
+}
+
+function newCmp() {
+  cmpA = rnd(1, 15); cmpB = rnd(1, 15);
+  document.getElementById('cmp-a').textContent = cmpA;
+  document.getElementById('cmp-b').textContent = cmpB;
+  makeDots('cmp-dots-a', cmpA);
+  makeDots('cmp-dots-b', cmpB);
+  document.getElementById('cmp-sign').textContent = '?';
+  document.getElementById('cmp-feedback').textContent = '';
+  document.getElementById('cmp-feedback').className = 'feedback-box';
+  document.getElementById('cmp-earn').innerHTML = '';
+  document.getElementById('cmp-left').className = 'cmp-box';
+  document.getElementById('cmp-right').className = 'cmp-box';
+  document.querySelectorAll('.cmp-opt').forEach(b => b.className = 'cmp-opt');
+}
+
+function checkCmp(answer) {
+  let correct = cmpA > cmpB ? '>' : cmpA < cmpB ? '<' : '=';
+  const signMap = { '>': '›', '<': '‹', '=': '=' };
+  const fb = document.getElementById('cmp-feedback');
+  document.getElementById('cmp-sign').textContent = signMap[correct];
+  if (answer === correct) {
+    fb.textContent = '¡Excelente! ¡Lo lograste! ✓';
+    fb.className = 'feedback-box correct';
+    document.getElementById('cmp-left').className = 'cmp-box ' + (cmpA >= cmpB ? 'winner' : 'loser');
+    document.getElementById('cmp-right').className = 'cmp-box ' + (cmpB >= cmpA ? 'winner' : 'loser');
+    updateCoins(2, 'cmp-earn');
+  } else {
+    fb.textContent = 'El correcto es ' + signMap[correct] + ' ¡Seguí intentando!';
+    fb.className = 'feedback-box wrong';
+  }
+}
+
+
+
+// ── SHARED BALLOON HELPERS ──────────────────────────────
+function makeBalloonSVG(value, colorPair, size) {
+  const [fill, shadow] = colorPair;
+  const w = size, h = size * 1.18;
+  const cx = w/2, cy = h*0.46;
+  const rx = w*0.46, ry = h*0.44;
+  const gid = 'bg' + value + '_' + (Date.now() % 99999);
+  return '<svg class="balloon-svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">' +
+    '<defs><radialGradient id="'+gid+'" cx="38%" cy="32%" r="62%">' +
+      '<stop offset="0%" stop-color="white" stop-opacity="0.35"/>' +
+      '<stop offset="100%" stop-color="'+shadow+'" stop-opacity="1"/>' +
+    '</radialGradient></defs>' +
+    '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="url(#'+gid+')" stroke="'+shadow+'" stroke-width="1.5" opacity="0.95"/>' +
+    '<ellipse cx="'+(cx*0.72)+'" cy="'+(cy*0.62)+'" rx="'+(rx*0.18)+'" ry="'+(ry*0.13)+'" fill="white" opacity="0.45" transform="rotate(-30,'+(cx*0.72)+','+(cy*0.62)+')"/>' +
+    '<polygon points="'+(cx-6)+','+(cy+ry)+' '+(cx+6)+','+(cy+ry)+' '+cx+','+(cy+ry+10)+'" fill="'+fill+'"/>' +
+    '<text x="'+cx+'" y="'+(cy+6)+'" text-anchor="middle" dominant-baseline="middle" font-family="Baloo2,cursive" font-size="'+(size*0.32)+'px" font-weight="800" fill="white" paint-order="stroke" stroke="rgba(0,0,0,0.25)" stroke-width="2">'+value+'</text>' +
+  '</svg>';
+}
+
+// Shared horizontal-spread spawner — tracks recently used x positions
+// Each game passes its own usedLeft array reference
+
+function getSpawnLeft(arenaId, arenaW, size) {
+  const minGap = size + 20;
+  const margin = Math.ceil(size / 2) + 14;
+  const maxLeft = arenaW - margin;
+  if (maxLeft <= margin) return Math.floor(arenaW / 2);
+
+  // Read live positions of existing balloons
+  const arena = document.getElementById(arenaId);
+  const occupied = arena
+    ? Array.from(arena.querySelectorAll('.balloon-wrap'))
+        .map(b => parseInt(b.style.left) || 0)
+    : [];
+
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const left = rnd(margin, maxLeft);
+    const tooClose = occupied.some(used => Math.abs(used - left) < minGap);
+    if (!tooClose) return left;
+  }
+  // Divide arena into columns and pick least-occupied
+  const cols = Math.max(2, Math.floor(arenaW / (size + 16)));
+  const colW = arenaW / cols;
+  let best = margin, bestCount = Infinity;
+  for (let c = 0; c < cols; c++) {
+    const cx = Math.round(colW * c + colW / 2);
+    if (cx < margin || cx > maxLeft) continue;
+    const cnt = occupied.filter(u => Math.abs(u - cx) < minGap).length;
+    if (cnt < bestCount) { bestCount = cnt; best = cx; }
+  }
+  return best;
+}
+
+// ── SUMA GLOBOS ─────────────────────────────────────────
+const SG_COLORS = [
+  ['#FF6B6B','#CC2222'],['#5BB8F5','#1A7EC8'],['#7AC74F','#3A8C1A'],
+  ['#F5A623','#B87010'],['#C084F5','#7A30CC'],['#F06EAA','#BC2272'],
+  ['#3DBFA8','#0A8070'],['#FF9F6B','#CC5520'],
+];
+
+// Each level: hits needed to complete, max number, coins reward
+const SG_LEVELS = [
+  { hits:10, max:10,  coins:3,  label:'Nivel 1 — hasta 10',  badge:'🥉' },
+  { hits:12, max:15,  coins:4,  label:'Nivel 2 — hasta 15',  badge:'🥈' },
+  { hits:15, max:20,  coins:5,  label:'Nivel 3 — hasta 20',  badge:'🥇' },
+];
+
+let sg = {
+  running:false, target:0, lives:3, score:0, level:1,
+  hitsThisLevel:0, intervalId:null, selected:[], pair:[]
+};
+
+function initSumaGlobos() {
+  updateSgProgressUI();
+  if (!sg.running) showSgOverlay('start');
+}
+
+function updateSgProgressUI() {
+  for (let i = 1; i <= 3; i++) {
+    const step = document.getElementById('sg-step-' + i);
+    const line = document.getElementById('sg-line-' + i);
+    step.className = 'sg-step' + (i < sg.level ? ' done' : i === sg.level ? ' active' : '');
+    if (line) line.className = 'sg-step-line' + (i < sg.level ? ' done' : '');
+  }
+}
+
+function showSgOverlay(type) {
+  clearSgTimers();
+  const o = document.getElementById('sg-overlay');
+  o.classList.add('show');
+  const lvl = SG_LEVELS[sg.level - 1];
+
+  if (type === 'start') {
+    o.innerHTML =
+      '<div class="overlay-emoji">🎈➕🎈</div>' +
+      '<div class="overlay-title">¡Suma de Globos!</div>' +
+      '<div class="overlay-sub">Tocá DOS globos que juntos sumen el objetivo</div>' +
+      '<div style="font-size:0.82rem;color:var(--text-mid);margin-top:-4px;">3 niveles — ¡completá todos para ganar el gran premio!</div>' +
+      '<button class="play-btn" onclick="startSumaGlobos()">¡Empezar! →</button>';
+
+  } else if (type === 'levelcomplete') {
+    const nextLvl = SG_LEVELS[sg.level - 1]; // already incremented
+    o.innerHTML =
+      '<div class="overlay-emoji">' + SG_LEVELS[sg.level - 2].badge + '</div>' +
+      '<div class="overlay-title">¡Nivel ' + (sg.level-1) + ' completado!</div>' +
+      '<div class="sg-level-reward">🪙 ¡Ganaste ' + SG_LEVELS[sg.level-2].coins + ' monedas extra!</div>' +
+      '<div class="overlay-sub" style="margin-top:8px;">Siguiente: ' + nextLvl.label + '</div>' +
+      '<button class="play-btn" onclick="resumeSumaGlobos()">¡Seguir al nivel ' + sg.level + '! →</button>';
+
+  } else if (type === 'complete') {
+    o.innerHTML =
+      '<div class="sg-complete-stars">⭐⭐⭐</div>' +
+      '<div class="overlay-title">¡Juego completado!</div>' +
+      '<div class="overlay-sub">¡Terminaste los 3 niveles! Sos una campeona 🏆</div>' +
+      '<div class="sg-level-reward" style="flex-direction:column; align-items:center; gap:4px;">' +
+        '<span>🪙 ¡Premio especial: +10 monedas!</span>' +
+        '<span style="font-size:0.75rem; font-weight:600; color:#A06020;">Puntos totales: ' + sg.score + '</span>' +
+      '</div>' +
+      '<button class="play-btn" onclick="startSumaGlobos()">Jugar de nuevo →</button>';
+
+  } else if (type === 'gameover') {
+    const livesMsg = sg.lives === 0 ? '¡Se te acabaron las vidas!' : '¡Muy bien!';
+    o.innerHTML =
+      '<div class="overlay-emoji">🎈</div>' +
+      '<div class="overlay-title">' + livesMsg + '</div>' +
+      '<div class="overlay-sub">Llegaste al nivel ' + sg.level + ' con ' + sg.score + ' puntos</div>' +
+      '<div style="display:flex;gap:10px;margin-top:4px;">' +
+        '<button class="play-btn" style="background:var(--green);" onclick="startSumaGlobos()">Volver a empezar</button>' +
+      '</div>';
+  }
+}
+
+function startSumaGlobos() {
+  sg = { running:true, target:0, lives:5, score:0, level:1, hitsThisLevel:0, intervalId:null, selected:[], pair:[] };
+  clearSgBalloons();
+  document.getElementById('sg-overlay').classList.remove('show');
+  updateSgUI();
+  updateSgProgressUI();
+  newSgRound();
+}
+
+function resumeSumaGlobos() {
+  document.getElementById('sg-overlay').classList.remove('show');
+  sg.selected = [];
+  sg.hitsThisLevel = 0;
+  updateSgProgressUI();
+  newSgRound();
+}
+
+function clearSgTimers() {
+  if (sg.intervalId) { clearTimeout(sg.intervalId); sg.intervalId = null; }
+}
+
+function clearSgBalloons() {
+  document.getElementById('sg-arena').querySelectorAll('.balloon-wrap').forEach(b => b.remove());
+  sg.selected = [];
+}
+
+function sgLevelCfg() { return SG_LEVELS[Math.min(sg.level,3) - 1]; }
+
+function newSgRound() {
+  const cfg = sgLevelCfg();
+  const max = cfg.max;
+  const a = rnd(1, Math.floor(max / 2));
+  const b = rnd(1, max - a);
+  sg.target = a + b;
+  sg.pair = [a, b];
+  sg.selected = [];
+  document.getElementById('sg-target').textContent = sg.target;
+  document.getElementById('sg-level-badge').textContent = cfg.label;
+  document.getElementById('sg-selected').textContent = '—';
+  updateSgHits();
+  clearSgBalloons();
+  spawnSgRoundBalloons(a, b, max);
+}
+
+function updateSgHits() {
+  const cfg = sgLevelCfg();
+  document.getElementById('sg-hits').textContent = sg.hitsThisLevel + '/' + cfg.hits;
+}
+
+function spawnSgRoundBalloons(a, b, max) {
+  const vals = [a, b];
+  const extras = rnd(2 + sg.level, 3 + sg.level); // more distractors at higher levels
+  for (let i = 0; i < extras; i++) {
+    let v, tries = 0;
+    do {
+      v = rnd(1, max); tries++;
+    } while (tries < 25 && (vals.includes(v) || v + a === sg.target || v + b === sg.target));
+    vals.push(v);
+  }
+  // shuffle
+  for (let i = vals.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [vals[i],vals[j]] = [vals[j],vals[i]];
+  }
+  const duration = Math.max(6, 13 - sg.level * 1.5);
+  vals.forEach((v, idx) => {
+    setTimeout(() => { if (sg.running) spawnSgBalloon(v, duration); }, idx * 550);
+  });
+  scheduleSgExtra();
+}
+
+function scheduleSgExtra() {
+  clearSgTimers();
+  const delay = Math.max(1800, 4500 - sg.level * 600);
+  sg.intervalId = setTimeout(() => {
+    if (!sg.running) return;
+    const max = sgLevelCfg().max;
+    let v, tries = 0;
+    do { v = rnd(1, max); tries++; } while (tries < 15 && (v === sg.pair[0] || v === sg.pair[1]));
+    spawnSgBalloon(v, Math.max(6, 13 - sg.level * 1.5));
+    scheduleSgExtra();
+  }, delay);
+}
+
+function spawnSgBalloon(value, duration) {
+  const arena = document.getElementById('sg-arena');
+  const arenaW = arena.offsetWidth || 360;
+  const size = Math.min(110, Math.max(88, arenaW * 0.23));
+  const colorPair = SG_COLORS[rnd(0, SG_COLORS.length-1)];
+  const left = getSpawnLeft('sg-arena', arenaW, size);
+  const dur = duration || Math.max(6, 13 - sg.level * 1.5);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'balloon-wrap';
+  wrap.style.cssText = 'left:' + left + 'px; animation-duration:' + dur + 's; bottom:-130px;';
+  wrap.dataset.value = value;
+  wrap.innerHTML = makeBalloonSVG(value, colorPair, size) +
+    '<div class="balloon-string-line"></div>';
+
+  wrap.addEventListener('click', () => onSgClick(wrap, value));
+  wrap.addEventListener('animationend', () => onSgEscape(wrap, value));
+  arena.appendChild(wrap);
+}
+
+function onSgClick(el, value) {
+  if (!sg.running || el.classList.contains('popping') || el.classList.contains('sg-chosen')) return;
+  value = parseInt(value);
+
+  if (sg.selected.length === 0) {
+    sg.selected.push({ el, value });
+    el.classList.add('sg-chosen');
+    document.getElementById('sg-selected').textContent = value + ' + ?';
+    return;
+  }
+
+  const first = sg.selected[0];
+  if (first.el === el) {
+    sg.selected = [];
+    el.classList.remove('sg-chosen');
+    document.getElementById('sg-selected').textContent = '—';
+    return;
+  }
+
+  const sum = first.value + value;
+  document.getElementById('sg-selected').textContent = first.value + ' + ' + value + ' = ' + sum;
+
+  if (sum === sg.target) {
+    [first.el, el].forEach(b => {
+      b.classList.remove('sg-chosen');
+      b.classList.add('popping');
+      setTimeout(() => { if (b.parentNode) b.remove(); }, 320);
+    });
+    sg.score += 10 + sg.level * 5;
+    sg.hitsThisLevel++;
+    sg.selected = [];
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent = coins;
+    if (gei('coins-big')) gei('coins-big').textContent = coins + ' 🪙';
+    showToast('🎉 ' + first.value + ' + ' + value + ' = ' + sg.target + '! +2 🪙');
+    updateSgHits();
+
+    const cfg = sgLevelCfg();
+    if (sg.hitsThisLevel >= cfg.hits) {
+      // Level complete
+      updateCoins(cfg.coins, null);
+      clearSgTimers();
+      clearSgBalloons();
+
+      if (sg.level >= 3) {
+        // All done!
+        sg.running = false;
+        updateCoins(10, null);
+        showSgOverlay('complete');
+        updateSgProgressUI();
+      } else {
+        sg.level++;
+        updateSgProgressUI();
+        showSgOverlay('levelcomplete');
+      }
+    } else {
+      setTimeout(() => { if (sg.running) newSgRound(); }, 500);
+    }
+
+  } else {
+    [first.el, el].forEach(b => {
+      b.classList.remove('sg-chosen');
+      b.style.animation = 'none';
+      b.style.opacity = '0.2';
+      b.style.pointerEvents = 'none';
+      setTimeout(() => { if (b.parentNode) b.remove(); }, 450);
+    });
+    sg.selected = [];
+    sg.lives = Math.max(0, sg.lives - 1);
+    if (sg.lives === 0) {
+      sg.running = false;
+      clearSgTimers();
+      clearSgBalloons();
+      showSgOverlay('gameover');
+    }
+  }
+  updateSgUI();
+}
+
+function onSgEscape(el, value) {
+  if (!el.parentNode || !sg.running) return;
+  value = parseInt(value);
+  const isPair = (value === sg.pair[0] || value === sg.pair[1]);
+  // If it was selected, deselect it
+  sg.selected = sg.selected.filter(s => s.el !== el);
+  if (document.getElementById('sg-selected'))
+    document.getElementById('sg-selected').textContent = sg.selected.length ? sg.selected[0].value + ' + ?' : '—';
+  el.remove();
+  if (!isPair) return; // distractors just disappear — no penalty
+  // Correct pair balloon escaped: just respawn it, NO life lost
+  const dur = Math.max(6, 13 - sg.level * 1.5);
+  setTimeout(() => { if (sg.running) spawnSgBalloon(value, dur); }, 500);
+}
+
+function updateSgUI() {
+  const hearts = ['','❤️','❤️❤️','❤️❤️❤️','❤️❤️❤️❤️','❤️❤️❤️❤️❤️'];
+  if (gei('sg-lives')) gei('sg-lives').textContent = hearts[Math.max(0,sg.lives)] || '🎈';
+  if (gei('sg-score')) gei('sg-score').textContent = sg.score;
+  if (gei('coins-big')) gei('coins-big').textContent = coins + ' 🪙';
+  if (gei('coin-display')) gei('coin-display').textContent = coins;
+}
+
+// ── GLOBOS ──────────────────────────────────────────────
+const BALLOON_COLORS = [
+  ['#FF6B6B','#FF4444'],['#5BB8F5','#2299E8'],['#7AC74F','#4EA828'],
+  ['#F5A623','#D4840A'],['#C084F5','#9B45E8'],['#F06EAA','#D84488'],
+];
+
+let gState = {
+  running: false, target: 0, lives: 3,
+  score: 0, streak: 0, level: 1, intervalId: null,
+};
+
+function initGlobosScreen() {
+  if (!gState.running) showGlobosOverlay('start');
+}
+
+function showGlobosOverlay(type) {
+  clearGlobosTimers();
+  const o = document.getElementById('globos-overlay');
+  o.classList.add('show');
+  if (type === 'start') {
+    o.innerHTML = '<div class="overlay-emoji">🎈</div>' +
+      '<div class="overlay-title">¡Juego de Globos!</div>' +
+      '<div class="overlay-sub">Tocá el globo que tenga el número exacto del objetivo</div>' +
+      '<button class="play-btn" onclick="startGlobos()">¡Empezar! →</button>';
+  } else if (type === 'gameover') {
+    o.innerHTML = '<div class="overlay-emoji">💔</div>' +
+      '<div class="overlay-title">¡Fin del juego!</div>' +
+      '<div class="overlay-sub">Hiciste ' + gState.score + ' puntos — ¡muy bien!</div>' +
+      '<button class="play-btn" onclick="startGlobos()">Jugar de nuevo →</button>';
+  } else if (type === 'levelup') {
+    o.innerHTML = '<div class="overlay-emoji">🌟</div>' +
+      '<div class="overlay-title">¡Nivel ' + gState.level + '!</div>' +
+      '<div class="overlay-sub">¡Genial! Ahora los números son más grandes</div>' +
+      '<button class="play-btn" onclick="resumeGlobos()">¡Seguir! →</button>';
+  }
+}
+
+function startGlobos() {
+  gState = { running:true, target:0, lives:3, score:0, streak:0, level:1, intervalId:null };
+  clearBalloonDOM();
+  document.getElementById('globos-overlay').classList.remove('show');
+  updateGlobosUI();
+  newGlobosRound();
+  scheduleNextBalloon();
+}
+
+function resumeGlobos() {
+  document.getElementById('globos-overlay').classList.remove('show');
+  newGlobosRound();
+  scheduleNextBalloon();
+}
+
+function clearGlobosTimers() {
+  if (gState.intervalId) { clearTimeout(gState.intervalId); gState.intervalId = null; }
+}
+
+function clearBalloonDOM() {
+  document.getElementById('globos-arena').querySelectorAll('.balloon').forEach(b => b.remove());
+}
+
+function maxNum() { return gState.level === 1 ? 10 : gState.level === 2 ? 15 : 20; }
+
+function newGlobosRound() {
+  gState.target = rnd(2, maxNum());
+  document.getElementById('globos-target').textContent = gState.target;
+  document.getElementById('globos-level-badge').textContent = 'Nivel ' + gState.level + ' — hasta ' + maxNum();
+}
+
+function scheduleNextBalloon() {
+  const delay = Math.max(700, 1500 - gState.level * 150 - gState.score * 4);
+  gState.intervalId = setTimeout(() => {
+    if (gState.running) { spawnBalloon(); scheduleNextBalloon(); }
+  }, delay);
+}
+
+function spawnBalloon() {
+  const arena = document.getElementById('globos-arena');
+  const isTarget = Math.random() < 0.38;
+  const value = isTarget ? gState.target : (() => {
+    let v; do { v = rnd(1, maxNum()); } while (v === gState.target); return v;
+  })();
+
+  const color = BALLOON_COLORS[rnd(0, BALLOON_COLORS.length - 1)].bg;
+  const leftPct = rnd(4, 74);
+  const duration = Math.max(3.5, 7.5 - gState.level * 0.7 - gState.score * 0.05);
+
+  const el = document.createElement('div');
+  el.className = 'balloon';
+  el.style.cssText = 'left:' + leftPct + '%; bottom:-110px; animation-duration:' + duration + 's;';
+  el.dataset.value = value;
+  el.innerHTML =
+    '<div class="balloon-body" style="background:' + color + '; color:' + color + ';">' +
+    '<span class="balloon-num">' + value + '</span></div>' +
+    '<div class="balloon-string"></div>';
+
+  el.addEventListener('click', () => onBalloonClick(el, value));
+  el.addEventListener('animationend', () => onBalloonEscape(el, value));
+  arena.appendChild(el);
+}
+
+function onBalloonClick(el, value) {
+  if (!gState.running || el.classList.contains('popping')) return;
+  el = el;
+  if (parseInt(value) === gState.target) {
+    el.classList.add('popping');
+    gState.score += 10 + gState.streak * 2;
+    gState.streak++;
+    setTimeout(() => { if (el.parentNode) el.remove(); }, 260);
+    updateCoins(1, null);
+    if (gState.streak % 5 === 0 && gState.level < 3) {
+      gState.level++;
+      clearGlobosTimers();
+      clearBalloonDOM();
+      updateCoins(2, null);
+      showToast('¡Nivel ' + gState.level + '! +2 🪙');
+      showGlobosOverlay('levelup');
+    } else {
+      newGlobosRound();
+    }
+  } else {
+    el.style.cssText += 'opacity:0.25; pointer-events:none;';
+    setTimeout(() => { if (el.parentNode) el.remove(); }, 350);
+    gState.streak = 0;
+    loseLife();
+  }
+  updateGlobosUI();
+}
+
+function onBalloonEscape(el, value) {
+  if (!el.parentNode) return;
+  el.remove();
+  if (!gState.running) return;
+  if (parseInt(value) === gState.target) {
+    gState.streak = 0;
+    loseLife();
+    if (gState.running) { newGlobosRound(); updateGlobosUI(); }
+  }
+}
+
+function loseLife() {
+  gState.lives = Math.max(0, gState.lives - 1);
+  if (gState.lives === 0) {
+    gState.running = false;
+    clearGlobosTimers();
+    clearBalloonDOM();
+    showGlobosOverlay('gameover');
+  }
+}
+
+function updateGlobosUI() {
+  const h = ['💔','❤️','❤️❤️','❤️❤️❤️'];
+  if (gei('globos-lives')) gei('globos-lives').textContent = h[Math.max(0,gState.lives)] || '🎈';
+  if (gei('globos-score')) gei('globos-score').textContent = gState.score;
+  if (gei('globos-streak')) gei('globos-streak').textContent = '🔥' + gState.streak;
+  if (gei('coins-big')) gei('coins-big').textContent = coins + ' 🪙';
+}
+
+
+// ── COHETES ──────────────────────────────────────────────
+const CR_LEVELS = [
+  { max:10, time:8,  hits:8,  coins:3, label:'Nivel 1 — resta hasta 10'  },
+  { max:15, time:7,  hits:10, coins:4, label:'Nivel 2 — resta hasta 15'  },
+  { max:20, time:6,  hits:12, coins:5, label:'Nivel 3 — resta hasta 20'  },
+];
+
+let cr = {
+  running:false, level:1, lives:3, score:0, hits:0,
+  a:0, b:0, answer:0,
+  timerSec:0, timerInterval:null, timerDash:113,
+  rocketY:40,
+};
+
+function initCohetes() {
+  buildStars();
+  updateCohetesDots();
+  if (!cr.running) showCohetesOverlay('start');
+}
+
+function buildStars() {
+  const arena = document.getElementById('cohetes-arena');
+  if (arena.querySelector('.star-dot')) return; // already built
+  for (let i = 0; i < 55; i++) {
+    const s = document.createElement('div');
+    s.className = 'star-dot';
+    const sz = rnd(1, 3);
+    s.style.cssText = 'width:'+sz+'px; height:'+sz+'px; top:'+rnd(0,88)+'%; left:'+rnd(0,96)+'%;'
+      + 'animation-delay:'+((i*0.13)%2.5)+'s; animation-duration:'+(1.5+Math.random())+'s;';
+    arena.appendChild(s);
+  }
+}
+
+function showCohetesOverlay(type) {
+  clearCrTimer();
+  const o = document.getElementById('cohetes-overlay');
+  if (!o) return;
+  o.classList.add('show');
+  if (type === 'start') {
+    o.innerHTML =
+      '<div class="overlay-emoji">🚀</div>' +
+      '<div class="overlay-title">¡Juego de Cohetes!</div>' +
+      '<div class="overlay-sub">Elegí la respuesta correcta antes de que el reloj llegue a cero</div>' +
+      '<div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:-4px;">3 niveles — restas hasta 20</div>' +
+      '<button class="cohetes-play-btn" onclick="startCohetes()">¡Despegar! 🚀</button>';
+  } else if (type === 'levelup') {
+    const lvl = CR_LEVELS[cr.level - 1];
+    o.innerHTML =
+      '<div class="overlay-emoji">🌟</div>' +
+      '<div class="overlay-title">¡Nivel ' + (cr.level) + '!</div>' +
+      '<div style="background:rgba(239,159,39,0.25);border:1.5px solid #EF9F27;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:#FAEEDA;">🪙 +' + CR_LEVELS[cr.level-2].coins + ' monedas ganadas</div>' +
+      '<div class="overlay-sub" style="margin-top:4px;">' + lvl.label + '</div>' +
+      '<button class="cohetes-play-btn" onclick="resumeCohetes()">¡Seguir! →</button>';
+  } else if (type === 'complete') {
+    o.innerHTML =
+      '<div style="font-size:2.5rem;">🏆⭐🚀</div>' +
+      '<div class="overlay-title">¡Completaste los 3 niveles!</div>' +
+      '<div class="overlay-sub">¡Sos una astronauta campeona!</div>' +
+      '<div style="background:rgba(239,159,39,0.25);border:1.5px solid #EF9F27;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:#FAEEDA;">🪙 Premio especial: +8 monedas</div>' +
+      '<button class="cohetes-play-btn" onclick="startCohetes()">Jugar de nuevo →</button>';
+  } else if (type === 'gameover') {
+    o.innerHTML =
+      '<div class="overlay-emoji">🚀</div>' +
+      '<div class="overlay-title">¡Fin del vuelo!</div>' +
+      '<div class="overlay-sub">Llegaste al nivel ' + cr.level + ' con ' + cr.score + ' puntos</div>' +
+      '<button class="cohetes-play-btn" onclick="startCohetes()">Intentar de nuevo →</button>';
+  }
+}
+
+function startCohetes() {
+  cr = { running:true, level:1, lives:3, score:0, hits:0,
+         a:0, b:0, answer:0, timerSec:0, timerInterval:null, rocketY:40 };
+  const o = document.getElementById('cohetes-overlay');
+  if (o) o.classList.remove('show');
+  ['cohetes-stats-overlay','cohetes-problem','cohetes-timer-wrap',
+   'rocket-wrap','cohetes-options','cohetes-dots'].forEach(id => {
+    const e = document.getElementById(id);
+    if (e) e.style.display = '';
+  });
+  setRocketY(40);
+  updateCohetesUI();
+  updateCohetesDots();
+  nextCohetesProblem();
+}
+
+function resumeCohetes() {
+  const o = document.getElementById('cohetes-overlay');
+  if (o) o.classList.remove('show');
+  cr.hits = 0;
+  cr.rocketY = 40;
+  setRocketY(40);
+  updateCohetesDots();
+  nextCohetesProblem();
+}
+
+function clearCrTimer() {
+  if (cr.timerInterval) { clearInterval(cr.timerInterval); cr.timerInterval = null; }
+}
+
+function setRocketY(y) {
+  cr.rocketY = y;
+  const rk = document.getElementById('rocket-wrap');
+  if (rk) rk.style.bottom = y + 'px';
+}
+
+function nextCohetesProblem() {
+  if (!cr.running) return;
+  const cfg = CR_LEVELS[cr.level - 1];
+  const max = cfg.max;
+  cr.a = rnd(3, max);
+  cr.b = rnd(1, cr.a - 1);
+  cr.answer = cr.a - cr.b;
+
+  // Show problem
+  const prob = document.getElementById('cohetes-problem');
+  if (prob) prob.textContent = cr.a + ' − ' + cr.b + ' = ?';
+
+  // Build 4 options: correct + 3 distractors
+  const opts = new Set([cr.answer]);
+  while (opts.size < 4) {
+    let d = cr.answer + rnd(-4, 4);
+    if (d >= 0 && d !== cr.answer) opts.add(d);
+  }
+  const shuffled = [...opts].sort(() => Math.random() - 0.5);
+  const optsEl = document.getElementById('cohetes-options');
+  if (optsEl) {
+    optsEl.innerHTML = '';
+    shuffled.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'cohetes-opt';
+      btn.textContent = val;
+      btn.onclick = () => onCohetesAnswer(btn, val);
+      optsEl.appendChild(btn);
+    });
+  }
+
+  // Reset rocket state (no launch/explode classes)
+  const rk = document.getElementById('rocket-wrap');
+  if (rk) { rk.className = 'rocket-wrap'; rk.style.bottom = cr.rocketY + 'px'; }
+
+  // Start timer
+  startCrTimer(cfg.time);
+}
+
+function startCrTimer(seconds) {
+  clearCrTimer();
+  cr.timerSec = seconds;
+  const fill = document.getElementById('timer-fill');
+  const num  = document.getElementById('timer-num');
+  const totalDash = 113;
+
+  function tick() {
+    if (!cr.running) { clearCrTimer(); return; }
+    if (num)  num.textContent = Math.ceil(cr.timerSec);
+    const pct = cr.timerSec / seconds;
+    if (fill) {
+      fill.style.strokeDashoffset = totalDash * (1 - pct);
+      fill.style.stroke = pct > 0.5 ? '#EF9F27' : pct > 0.25 ? '#F5A623' : '#D85A30';
+    }
+    cr.timerSec -= 0.1;
+    if (cr.timerSec <= 0) {
+      clearCrTimer();
+      onTimerExpired();
+    }
+  }
+  tick();
+  cr.timerInterval = setInterval(tick, 100);
+}
+
+function onCohetesAnswer(btn, val) {
+  if (!cr.running) return;
+  clearCrTimer();
+  const opts = document.querySelectorAll('.cohetes-opt');
+  opts.forEach(b => b.disabled = true);
+
+  if (val === cr.answer) {
+    btn.classList.add('correct');
+    cr.score += 10 + (cr.level * 3);
+    cr.hits++;
+    updateCoins(1, null);
+    // Rocket rises
+    const newY = Math.min(cr.rocketY + 35, 340);
+    setRocketY(newY);
+    updateCohetesUI();
+
+    const cfg = CR_LEVELS[cr.level - 1];
+    if (cr.hits >= cfg.hits) {
+      // Level complete
+      updateCoins(cfg.coins, null);
+      clearCrTimer();
+      if (cr.level >= 3) {
+        cr.running = false;
+        updateCoins(8, null);
+        // Launch rocket to celebrate
+        const rk = document.getElementById('rocket-wrap');
+        if (rk) rk.classList.add('launching');
+        setTimeout(() => showCohetesOverlay('complete'), 1100);
+      } else {
+        cr.level++;
+        updateCohetesDots();
+        setTimeout(() => showCohetesOverlay('levelup'), 600);
+      }
+    } else {
+      setTimeout(() => nextCohetesProblem(), 700);
+    }
+  } else {
+    btn.classList.add('wrong');
+    // Show correct
+    opts.forEach(b => { if (parseInt(b.textContent) === cr.answer) b.classList.add('correct'); });
+    cr.lives--;
+    // Rocket shakes down a bit
+    const newY = Math.max(cr.rocketY - 20, 40);
+    setRocketY(newY);
+    updateCohetesUI();
+    if (cr.lives <= 0) {
+      cr.running = false;
+      clearCrTimer();
+      const rk = document.getElementById('rocket-wrap');
+      if (rk) rk.classList.add('exploding');
+      setTimeout(() => showCohetesOverlay('gameover'), 600);
+    } else {
+      setTimeout(() => nextCohetesProblem(), 1000);
+    }
+  }
+}
+
+function onTimerExpired() {
+  if (!cr.running) return;
+  // Show correct answer and penalise
+  const opts = document.querySelectorAll('.cohetes-opt');
+  opts.forEach(b => {
+    b.disabled = true;
+    if (parseInt(b.textContent) === cr.answer) b.classList.add('correct');
+  });
+  cr.lives--;
+  const newY = Math.max(cr.rocketY - 20, 40);
+  setRocketY(newY);
+  updateCohetesUI();
+  if (cr.lives <= 0) {
+    cr.running = false;
+    const rk = document.getElementById('rocket-wrap');
+    if (rk) rk.classList.add('exploding');
+    setTimeout(() => showCohetesOverlay('gameover'), 600);
+  } else {
+    setTimeout(() => nextCohetesProblem(), 1100);
+  }
+}
+
+function updateCohetesDots() {
+  for (let i = 1; i <= 3; i++) {
+    const d = document.getElementById('cdot-' + i);
+    if (!d) continue;
+    d.className = 'level-dot' + (i < cr.level ? ' done' : i === cr.level ? ' active' : '');
+  }
+  const lbl = document.getElementById('cohetes-level-label');
+  if (lbl) lbl.textContent = CR_LEVELS[Math.min(cr.level,3)-1].label;
+}
+
+function updateCohetesUI() {
+  const rockets = ['','🚀','🚀🚀','🚀🚀🚀'];
+  const livesStr = rockets[Math.max(0, cr.lives)] || '💥';
+  if (gei('cohetes-lives-disp'))  gei('cohetes-lives-disp').textContent  = livesStr;
+  if (gei('cohetes-lives-arena')) gei('cohetes-lives-arena').textContent = livesStr;
+  if (gei('cohetes-score-disp'))  gei('cohetes-score-disp').textContent  = cr.score;
+  if (gei('cohetes-score-arena')) gei('cohetes-score-arena').textContent = '⭐ ' + cr.score;
+  if (gei('coin-display')) gei('coin-display').textContent = coins;
+  if (gei('coins-big'))    gei('coins-big').textContent    = coins + ' 🪙';
+}
+
+
+
+
+// ── TIENDA ────────────────────────────────────────────────
+// Argentine money: coins and bills
+const AR_MONEY = [
+  { val:1,   label:'$1',   type:'coin', color:['#B0BEC5','#78909C'] },
+  { val:2,   label:'$2',   type:'coin', color:['#B0BEC5','#78909C'] },
+  { val:5,   label:'$5',   type:'coin', color:['#FFD54F','#FFA000'] },
+  { val:10,  label:'$10',  type:'coin', color:['#FFD54F','#FFA000'] },
+  { val:50,  label:'$50',  type:'bill', color:['#A5D6A7','#388E3C'] },
+  { val:100, label:'$100', type:'bill', color:['#90CAF9','#1565C0'] },
+  { val:200, label:'$200', type:'bill', color:['#FFCC80','#E65100'] },
+  { val:500, label:'$500', type:'bill', color:['#CE93D8','#6A1B9A'] },
+];
+
+// Products by level
+const TIENDA_LEVELS = [
+  { rounds:8,  coins:3, label:'Nivel 1 — precios simples',   products: [
+    { emoji:'✏️',  name:'Lápiz',    price:10  },
+    { emoji:'📏',  name:'Regla',    price:5   },
+    { emoji:'📓',  name:'Cuaderno', price:20  },
+    { emoji:'🖍️', name:'Crayón',   price:15  },
+    { emoji:'✂️', name:'Tijera',   price:10  },
+    { emoji:'🎨', name:'Pintura',  price:25  },
+  ]},
+  { rounds:8,  coins:4, label:'Nivel 2 — precios medianos',  products: [
+    { emoji:'🍎',  name:'Manzana',  price:50  },
+    { emoji:'🍞',  name:'Pan',      price:100 },
+    { emoji:'🥛',  name:'Leche',    price:150 },
+    { emoji:'🧃',  name:'Jugo',     price:200 },
+    { emoji:'🍫',  name:'Chocolate',price:250 },
+    { emoji:'🍬',  name:'Caramelo', price:50  },
+  ]},
+  { rounds:8,  coins:5, label:'Nivel 3 — desafío con vuelto', products: [
+    { emoji:'📚',  name:'Libro',    price:500 },
+    { emoji:'🎮',  name:'Juego',    price:300 },
+    { emoji:'🧸',  name:'Peluche',  price:400 },
+    { emoji:'⚽',  name:'Pelota',   price:250 },
+    { emoji:'🎁',  name:'Regalo',   price:350 },
+    { emoji:'🎨',  name:'Kit arte', price:450 },
+  ]},
+];
+
+let td = {
+  level: 1,
+  hits: 0,
+  score: 0,
+  cart: [],         // [{emoji, name, price}]
+  wallet: [],       // [{val, label, type, color, id}]
+  walletTotal: 0,
+  cartTotal: 0,
+  currentProducts: [],
+  phase: 1,
+  pendingVuelto: 0,
+};
+
+function initTienda() {
+  updateTiendaLevelLabel();
+  renderTiendaShelf();
+  renderMoney();
+  updateTiendaProgress();
+}
+
+function updateTiendaLevelLabel() {
+  const cfg = TIENDA_LEVELS[Math.min(td.level,3)-1];
+  if (gei('tienda-level-label')) gei('tienda-level-label').textContent = cfg.label;
+}
+
+function renderTiendaShelf() {
+  const cfg = TIENDA_LEVELS[Math.min(td.level,3)-1];
+  // Pick 4 random products for this round
+  const shuffled = [...cfg.products].sort(() => Math.random()-0.5).slice(0,4);
+  td.currentProducts = shuffled;
+  td.cart = [];
+  td.cartTotal = 0;
+
+  const shelf = gei('tienda-shelf');
+  if (!shelf) return;
+  shelf.innerHTML = '';
+  shuffled.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'tienda-product';
+    div.dataset.price = p.price;
+    div.dataset.name = p.name;
+    div.dataset.emoji = p.emoji;
+    div.innerHTML =
+      '<div class="tienda-product-emoji">' + p.emoji + '</div>' +
+      '<div class="tienda-product-name">' + p.name + '</div>' +
+      '<div class="tienda-product-price">$' + p.price + '</div>';
+    div.onclick = () => toggleCart(div, p);
+    shelf.appendChild(div);
+  });
+
+  updateCartDisplay();
+  updatePayBtn();
+  if (gei('tienda-feedback')) { gei('tienda-feedback').textContent = ''; gei('tienda-feedback').className = 'tienda-feedback'; }
+}
+
+function toggleCart(el, product) {
+  const idx = td.cart.findIndex(c => c.name === product.name);
+  if (idx >= 0) {
+    td.cart.splice(idx, 1);
+    el.classList.remove('selected');
+  } else {
+    if (td.cart.length >= 3) return; // max 3 items
+    td.cart.push(product);
+    el.classList.add('selected');
+  }
+  td.cartTotal = td.cart.reduce((s,c) => s+c.price, 0);
+  updateCartDisplay();
+  updatePayBtn();
+}
+
+function updateCartDisplay() {
+  const el = gei('tienda-cart-items');
+  const tot = gei('tienda-total-disp');
+  if (!el) return;
+  if (td.cart.length === 0) {
+    el.innerHTML = '<span style="font-size:0.82rem; color:var(--text-light); font-weight:600;">Elegí productos del estante</span>';
+  } else {
+    el.innerHTML = td.cart.map(c =>
+      '<div class="tienda-cart-item">' + c.emoji + ' ' + c.name + ' <strong>$' + c.price + '</strong></div>'
+    ).join('');
+  }
+  if (tot) tot.textContent = '$' + td.cartTotal;
+}
+
+function updatePayBtn() {
+  const btn = gei('tienda-pay-btn');
+  if (btn) btn.disabled = td.cart.length < 2;
+}
+
+function goToPhase2() {
+  if (td.cart.length < 2) return;
+  td.phase = 2;
+  td.wallet = [];
+  td.walletTotal = 0;
+
+  gei('tienda-phase1').classList.remove('active');
+  gei('tienda-phase2').classList.add('active');
+
+  if (gei('tienda-total-p2')) gei('tienda-total-p2').textContent = '$' + td.cartTotal;
+  renderMoney();
+  updateWalletDisplay();
+  updateConfirmBtn();
+}
+
+function backToPhase1() {
+  td.phase = 1;
+  if (gei('tienda-phase2')) gei('tienda-phase2').classList.remove('active');
+  if (gei('tienda-phase3')) gei('tienda-phase3').classList.remove('active');
+  if (gei('tienda-phase1')) gei('tienda-phase1').classList.add('active');
+}
+
+function makeBillSVG(money) {
+  const [c1,c2] = money.color;
+  if (money.type === 'coin') {
+    // Coin: circle
+    return '<svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><radialGradient id="cg_'+money.val+'" cx="38%" cy="32%" r="65%">' +
+        '<stop offset="0%" stop-color="white" stop-opacity="0.5"/>' +
+        '<stop offset="100%" stop-color="'+c2+'" stop-opacity="1"/>' +
+      '</radialGradient></defs>' +
+      '<circle cx="26" cy="26" r="24" fill="url(#cg_'+money.val+')" stroke="'+c2+'" stroke-width="1.5"/>' +
+      '<circle cx="26" cy="26" r="17" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>' +
+      '<text x="26" y="31" text-anchor="middle" font-family="Baloo2,cursive" font-size="14" font-weight="800" fill="white" paint-order="stroke" stroke="'+c2+'" stroke-width="2">'+money.label+'</text>' +
+    '</svg>';
+  } else {
+    // Bill: rectangle
+    const w=76, h=38;
+    return '<svg width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><linearGradient id="bg_'+money.val+'" x1="0%" y1="0%" x2="100%" y2="100%">' +
+        '<stop offset="0%" stop-color="'+c1+'"/><stop offset="100%" stop-color="'+c2+'"/>' +
+      '</linearGradient></defs>' +
+      '<rect width="'+w+'" height="'+h+'" rx="5" fill="url(#bg_'+money.val+')" stroke="'+c2+'" stroke-width="1.2"/>' +
+      '<rect x="4" y="4" width="'+(w-8)+'" height="'+(h-8)+'" rx="3" fill="none" stroke="white" stroke-width="0.8" opacity="0.4"/>' +
+      '<circle cx="'+(w/2)+'" cy="'+(h/2)+'" r="11" fill="white" opacity="0.2"/>' +
+      '<text x="'+(w/2)+'" y="'+(h/2+5)+'" text-anchor="middle" font-family="Baloo2,cursive" font-size="15" font-weight="800" fill="white" paint-order="stroke" stroke="'+c2+'" stroke-width="2">'+money.label+'</text>' +
+    '</svg>';
+  }
+}
+
+function renderMoney() {
+  const row = gei('money-bills-row');
+  if (!row) return;
+  row.innerHTML = '';
+  // Show only denominations <= total needed (rounded sensibly)
+  const useful = AR_MONEY.filter(m => m.val <= td.cartTotal + 10);
+  const toShow = useful.length > 0 ? useful : AR_MONEY.slice(0,5);
+  toShow.forEach(money => {
+    const btn = document.createElement('button');
+    btn.className = 'money-btn';
+    btn.innerHTML = makeBillSVG(money) + '<span class="money-btn-label">' + money.label + '</span>';
+    btn.onclick = () => addToWallet(money);
+    row.appendChild(btn);
+  });
+}
+
+let walletIdCounter = 0;
+function addToWallet(money) {
+  if (td.walletTotal >= td.cartTotal + 500) return; // cap overflow
+  const item = { ...money, uid: walletIdCounter++ };
+  td.wallet.push(item);
+  td.walletTotal += money.val;
+  updateWalletDisplay();
+  updateConfirmBtn();
+}
+
+function removeFromWallet(uid) {
+  const idx = td.wallet.findIndex(w => w.uid === uid);
+  if (idx < 0) return;
+  td.walletTotal -= td.wallet[idx].val;
+  td.wallet.splice(idx, 1);
+  updateWalletDisplay();
+  updateConfirmBtn();
+}
+
+function updateWalletDisplay() {
+  const zone = gei('wallet-zone');
+  const tot  = gei('wallet-total');
+  if (!zone) return;
+  if (td.wallet.length === 0) {
+    zone.innerHTML = '<span class="wallet-empty">Tocá un billete o moneda para pagarlo</span>';
+  } else {
+    zone.innerHTML = '';
+    td.wallet.forEach(item => {
+      const span = document.createElement('span');
+      span.className = 'wallet-item';
+      span.innerHTML = makeBillSVG(item);
+      span.title = 'Tocar para devolver';
+      span.onclick = () => removeFromWallet(item.uid);
+      zone.appendChild(span);
+    });
+  }
+  if (tot) tot.textContent = '$' + td.walletTotal;
+}
+
+function updateConfirmBtn() {
+  const btn = gei('tienda-confirm-btn');
+  if (!btn) return;
+  // Enable only when wallet >= cartTotal
+  btn.disabled = td.walletTotal < td.cartTotal;
+  if (td.walletTotal >= td.cartTotal && td.walletTotal > 0) {
+    btn.textContent = td.walletTotal === td.cartTotal
+      ? '✓ ¡Pago exacto! Confirmar'
+      : '✓ Pago $' + td.walletTotal + ' (vuelto: $' + (td.walletTotal - td.cartTotal) + ')';
+  } else {
+    btn.textContent = td.walletTotal > 0
+      ? 'Faltan $' + (td.cartTotal - td.walletTotal) + ' más'
+      : '✓ ¡Confirmar pago!';
+  }
+}
+
+function confirmPayment() {
+  if (td.walletTotal < td.cartTotal) return;
+  const exact = td.walletTotal === td.cartTotal;
+  const vuelto = td.walletTotal - td.cartTotal;
+
+  if (!exact) {
+    // Go to phase 3 — vuelto question
+    td.pendingVuelto = vuelto;
+    showVueltoQuestion(vuelto);
+  } else {
+    // Exact payment — skip phase 3
+    finishPurchase(true, 0);
+  }
+}
+
+function showVueltoQuestion(vuelto) {
+  // Switch to phase 3
+  gei('tienda-phase2').classList.remove('active');
+  gei('tienda-phase3').classList.add('active');
+
+  if (gei('vuelto-compra')) gei('vuelto-compra').textContent = '$' + td.cartTotal;
+  if (gei('vuelto-pago'))   gei('vuelto-pago').textContent   = '$' + td.walletTotal;
+  if (gei('vuelto-feedback')) { gei('vuelto-feedback').textContent = ''; gei('vuelto-feedback').className = 'tienda-feedback'; }
+
+  // Build 4 options: correct vuelto + 3 distractors
+  const opts = new Set([vuelto]);
+  let tries = 0;
+  while (opts.size < 4 && tries < 60) {
+    tries++;
+    const d = vuelto + [-10,-5,5,10,15,-15][rnd(0,5)];
+    if (d >= 0 && d !== vuelto) opts.add(d);
+  }
+  let extra = 5;
+  while (opts.size < 4) { opts.add(vuelto + extra); extra += 5; }
+  const shuffled = [...opts].sort(() => Math.random()-0.5);
+
+  const optsEl = gei('vuelto-opts');
+  if (optsEl) {
+    optsEl.innerHTML = '';
+    shuffled.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'granja-opt'; // reuse same style — big round buttons
+      btn.style.cssText = 'min-width:72px; height:72px; font-size:1.2rem;';
+      btn.innerHTML = '$' + val;
+      btn.onclick = () => onVueltoAnswer(btn, val, vuelto);
+      optsEl.appendChild(btn);
+    });
+  }
+}
+
+function onVueltoAnswer(btn, val, vuelto) {
+  document.querySelectorAll('#vuelto-opts .granja-opt').forEach(b => b.disabled = true);
+  const fb = gei('vuelto-feedback');
+  if (val === vuelto) {
+    btn.classList.add('correct');
+    if (fb) { fb.textContent = '🎉 ¡Correcto! Te dan $' + vuelto + ' de vuelto. ¡Sos una crack!'; fb.className = 'tienda-feedback correct'; }
+    setTimeout(() => finishPurchase(false, vuelto), 1200);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#vuelto-opts .granja-opt').forEach(b => {
+      if (b.textContent === '$' + vuelto) b.classList.add('correct');
+    });
+    if (fb) { fb.textContent = 'El vuelto correcto es $' + vuelto + ' ($' + td.walletTotal + ' − $' + td.cartTotal + ')'; fb.className = 'tienda-feedback wrong'; }
+    setTimeout(() => finishPurchase(false, vuelto), 1600);
+  }
+}
+
+function finishPurchase(exact, vuelto) {
+  td.hits++;
+  td.score += exact ? 20 : 15;
+
+  updateCoins(exact ? 3 : 2, null);
+  if (gei('coin-display')) gei('coin-display').textContent = coins;
+  if (gei('coins-big'))    gei('coins-big').textContent = coins + ' 🪙';
+  if (gei('tienda-score-disp')) gei('tienda-score-disp').textContent = td.score;
+  updateTiendaProgress();
+
+  const cfg = TIENDA_LEVELS[Math.min(td.level,3)-1];
+  if (td.hits >= cfg.rounds) {
+    updateCoins(cfg.coins, null);
+    showToast('🛒 ¡Nivel ' + td.level + ' completo! +' + cfg.coins + ' 🪙');
+    if (td.level >= 3) {
+      td.level = 3;
+      updateCoins(8, null);
+      setTimeout(() => showTiendaComplete(), 1000);
+    } else {
+      td.level++;
+      td.hits = 0;
+      updateTiendaLevelLabel();
+      setTimeout(() => { backToPhase1(); renderTiendaShelf(); updateTiendaProgress(); }, 1200);
+    }
+  } else {
+    setTimeout(() => { backToPhase1(); renderTiendaShelf(); }, 1200);
+  }
+}
+
+function updateTiendaProgress() {
+  const cfg = TIENDA_LEVELS[Math.min(td.level,3)-1];
+  const pct = Math.min((td.hits / cfg.rounds) * 100, 100);
+  if (gei('tienda-prog-fill'))  gei('tienda-prog-fill').style.width  = pct + '%';
+  if (gei('tienda-prog-label')) gei('tienda-prog-label').textContent  = td.hits + ' / ' + cfg.rounds;
+  if (gei('tienda-hits-disp'))  gei('tienda-hits-disp').textContent   = td.hits + '/' + cfg.rounds;
+  const lit = td.hits >= Math.floor(cfg.rounds*0.75) ? 3 : td.hits >= Math.floor(cfg.rounds*0.4) ? 2 : td.hits >= 1 ? 1 : 0;
+  const stars = ['☆☆☆','⭐☆☆','⭐⭐☆','⭐⭐⭐'];
+  if (gei('tienda-stars')) gei('tienda-stars').textContent = stars[lit];
+}
+
+function showTiendaComplete() {
+  // Inject overlay into scene
+  const scene = document.querySelector('#screen-tienda .tienda-scene');
+  if (!scene) return;
+  let o = gei('tienda-complete-overlay');
+  if (!o) {
+    o = document.createElement('div');
+    o.id = 'tienda-complete-overlay';
+    o.style.cssText = 'position:absolute;inset:0;background:rgba(0,60,0,0.82);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:20;';
+    scene.appendChild(o);
+  }
+  o.innerHTML =
+    '<div style="font-size:2.5rem;">🛒🌟💰</div>' +
+    '<div class="overlay-title" style="color:white;">¡Campeona de las compras!</div>' +
+    '<div class="overlay-sub" style="color:rgba(255,255,255,0.85);">Completaste los 3 niveles de la tienda</div>' +
+    '<div style="background:rgba(255,255,255,0.2);border:1.5px solid white;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 ¡Premio especial: +8 monedas!</div>' +
+    '<button class="play-btn" style="background:var(--green);" onclick="restartTienda()">Jugar de nuevo →</button>';
+}
+
+function restartTienda() {
+  const o = gei('tienda-complete-overlay');
+  if (o) o.remove();
+  td = { level:1, hits:0, score:0, cart:[], wallet:[], walletTotal:0, cartTotal:0, currentProducts:[], phase:1 };
+  if (gei('tienda-score-disp')) gei('tienda-score-disp').textContent = 0;
+  backToPhase1();
+  updateTiendaLevelLabel();
+  renderTiendaShelf();
+  renderMoney();
+  updateTiendaProgress();
+}
+
+// ── CONEJOS (DIVISIÓN) ───────────────────────────────────
+// Levels: [divisors available, rounds needed]
+const CN_LEVELS = [
+  { divisors:[2,3],   rounds:10, coins:3, label:'Nivel 1 — dividir entre 2 y 3' },
+  { divisors:[2,3,4], rounds:12, coins:4, label:'Nivel 2 — dividir entre 2, 3 y 4' },
+  { divisors:[2,3,4,5], rounds:14, coins:5, label:'Nivel 3 — dividir entre 2, 3, 4 y 5' },
+];
+
+let cn = {
+  level: 1,
+  hits: 0,
+  score: 0,
+  answered: false,
+  dividend: 0,   // total zanahorias
+  divisor: 0,    // conejos
+  quotient: 0,   // zanahorias por conejo
+};
+
+function initConejos() {
+  if (document.getElementById('conejos-overlay').classList.contains('show')) return;
+  nextConejosProblem();
+}
+
+function startConejos() {
+  cn = { level:1, hits:0, score:0, answered:false, dividend:0, divisor:0, quotient:0 };
+  const o = document.getElementById('conejos-overlay');
+  if (o) o.classList.remove('show');
+  updateConejosProgress();
+  updateConejosLevelLabel();
+  nextConejosProblem();
+}
+
+function updateConejosLevelLabel() {
+  const cfg = CN_LEVELS[Math.min(cn.level,3)-1];
+  if (gei('conejos-level-label')) gei('conejos-level-label').textContent = cfg.label;
+}
+
+function nextConejosProblem() {
+  cn.answered = false;
+  const cfg = CN_LEVELS[Math.min(cn.level,3)-1];
+  // Pick divisor and quotient so dividend is clean
+  cn.divisor   = cfg.divisors[rnd(0, cfg.divisors.length-1)];
+  cn.quotient  = rnd(1, Math.min(5, Math.floor(20/cn.divisor)));
+  cn.dividend  = cn.divisor * cn.quotient;
+
+  // Title
+  const title = gei('conejos-title');
+  if (title) {
+    const zEmoji = '🥕'.repeat(Math.min(cn.dividend, 8)) + (cn.dividend > 8 ? '…' : '');
+    const cEmoji = '🐰'.repeat(cn.divisor);
+    title.innerHTML =
+      'Tenés <strong>' + cn.dividend + ' zanahorias</strong> ' + zEmoji + '<br>' +
+      'Repartí entre <strong>' + cn.divisor + ' conejos</strong> ' + cEmoji + '<br>' +
+      '<span style="font-size:0.9rem; font-weight:600; color:#388E3C;">¿Cuántas le toca a cada uno?</span>';
+  }
+
+  // Render zanahorias
+  const zRow = gei('zanahorias-row');
+  if (zRow) {
+    zRow.innerHTML = '';
+    for (let i = 0; i < cn.dividend; i++) {
+      const z = document.createElement('span');
+      z.className = 'zanahoria';
+      z.textContent = '🥕';
+      z.style.animationDelay = (i * 0.04) + 's';
+      zRow.appendChild(z);
+    }
+  }
+
+  // Render conejos
+  const cRow = gei('conejos-row');
+  if (cRow) {
+    cRow.innerHTML = '';
+    for (let c = 0; c < cn.divisor; c++) {
+      const box = document.createElement('div');
+      box.className = 'conejo-box';
+      box.style.animationDelay = (c * 0.1) + 's';
+      box.innerHTML =
+        '<span class="conejo-emoji" style="animation-delay:' + (c*0.3) + 's">🐰</span>' +
+        '<div class="conejo-zanahorias" id="cbox-' + c + '"></div>' +
+        '<div class="conejo-label">conejo ' + (c+1) + '</div>';
+      cRow.appendChild(box);
+    }
+  }
+
+  // Build options: correct + distractors
+  const opts = new Set([cn.quotient]);
+  let tries = 0;
+  while (opts.size < 4 && tries < 60) {
+    tries++;
+    const d = cn.quotient + [-2,-1,1,2,3][rnd(0,4)];
+    if (d > 0 && d !== cn.quotient) opts.add(d);
+  }
+  let extra = 1;
+  while (opts.size < 4) { opts.add(cn.quotient + extra); extra++; }
+  const shuffled = [...opts].sort(() => Math.random()-0.5);
+
+  const optsEl = gei('conejos-opts');
+  if (optsEl) {
+    optsEl.innerHTML = '';
+    shuffled.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'conejos-opt';
+      btn.textContent = val;
+      btn.onclick = () => onConejosAnswer(btn, val);
+      optsEl.appendChild(btn);
+    });
+  }
+
+  // Clear feedback
+  const fb = gei('conejos-feedback');
+  if (fb) { fb.textContent = ''; fb.className = 'conejos-feedback'; }
+}
+
+function onConejosAnswer(btn, val) {
+  if (cn.answered) return;
+  cn.answered = true;
+
+  document.querySelectorAll('.conejos-opt').forEach(b => b.disabled = true);
+  const fb = gei('conejos-feedback');
+
+  if (val === cn.quotient) {
+    btn.classList.add('correct');
+    cn.hits++;
+    cn.score += 10 + cn.level * 3;
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent = coins;
+    if (gei('coins-big'))    gei('coins-big').textContent = coins + ' 🪙';
+
+    // Animate: fill each conejo box with zanahorias
+    for (let c = 0; c < cn.divisor; c++) {
+      const box = gei('cbox-' + c);
+      if (!box) continue;
+      setTimeout(() => {
+        box.innerHTML = '';
+        for (let z = 0; z < cn.quotient; z++) {
+          const span = document.createElement('span');
+          span.className = 'conejo-z';
+          span.textContent = '🥕';
+          span.style.animationDelay = (z * 0.07) + 's';
+          box.appendChild(span);
+        }
+      }, c * 150);
+    }
+
+    if (fb) {
+      fb.textContent = '🎉 ¡Genial! ' + cn.dividend + ' ÷ ' + cn.divisor + ' = ' + cn.quotient + ' 🥕 por conejo';
+      fb.className = 'conejos-feedback correct';
+    }
+    updateConejosProgress();
+
+    const cfg = CN_LEVELS[Math.min(cn.level,3)-1];
+    if (cn.hits >= cfg.rounds) {
+      updateCoins(cfg.coins, null);
+      showToast('🐰 ¡Nivel ' + cn.level + ' completo! +' + cfg.coins + ' 🪙');
+      if (cn.level >= 3) {
+        cn.level = 3;
+        updateCoins(8, null);
+        setTimeout(() => showConejosComplete(), 1200);
+      } else {
+        cn.level++;
+        cn.hits = 0;
+        updateConejosLevelLabel();
+        setTimeout(() => {
+          updateConejosProgress();
+          nextConejosProblem();
+        }, 1400);
+      }
+    } else {
+      setTimeout(() => nextConejosProblem(), 1300);
+    }
+
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.conejos-opt').forEach(b => {
+      if (parseInt(b.textContent) === cn.quotient) b.classList.add('correct');
+    });
+    if (fb) {
+      fb.textContent = 'La respuesta es ' + cn.quotient + ' — ' + cn.dividend + ' ÷ ' + cn.divisor + ' = ' + cn.quotient;
+      fb.className = 'conejos-feedback wrong';
+    }
+    updateConejosProgress();
+    setTimeout(() => nextConejosProblem(), 1500);
+  }
+
+  if (gei('conejos-score-disp')) gei('conejos-score-disp').textContent = cn.score;
+}
+
+function updateConejosProgress() {
+  const cfg = CN_LEVELS[Math.min(cn.level,3)-1];
+  const pct = Math.min((cn.hits / cfg.rounds) * 100, 100);
+  if (gei('conejos-prog-fill'))  gei('conejos-prog-fill').style.width  = pct + '%';
+  if (gei('conejos-prog-label')) gei('conejos-prog-label').textContent  = cn.hits + ' / ' + cfg.rounds;
+  if (gei('conejos-hits-disp'))  gei('conejos-hits-disp').textContent   = cn.hits + '/' + cfg.rounds;
+  // Stars
+  const stars = ['', '⭐', '⭐⭐', '⭐⭐⭐'];
+  const lit = cn.hits >= cfg.rounds ? 3 : cn.hits >= Math.floor(cfg.rounds*0.6) ? 2 : cn.hits >= Math.floor(cfg.rounds*0.3) ? 1 : 0;
+  if (gei('conejos-stars')) gei('conejos-stars').textContent = stars[lit] + (lit < 3 ? '☆'.repeat(3-lit) : '');
+}
+
+function showConejosComplete() {
+  const o = gei('conejos-overlay');
+  if (!o) return;
+  o.classList.add('show');
+  o.innerHTML =
+    '<div style="font-size:2.5rem;">🐰🥕🌟</div>' +
+    '<div class="overlay-title">¡Lo lograste!</div>' +
+    '<div class="overlay-sub">¡Repartiste todas las zanahorias perfectamente!</div>' +
+    '<div style="background:rgba(255,255,255,0.2);border:1.5px solid white;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 ¡Premio especial: +8 monedas!</div>' +
+    '<button class="play-btn" style="background:#4CAF50;" onclick="startConejos()">Jugar de nuevo →</button>';
+}
+
+// ── GRANJA MÁGICA ─────────────────────────────────────────
+const GRANJA_ANIMALS = {
+  2: ['🐑','🐑'], 3: ['🐔','🐔'], 4: ['🐖','🐖'], 5: ['🐄','🐄']
+};
+// Rotate through different animals for variety
+const ANIMAL_POOL = ['🐔','🐑','🐖','🐄','🐇','🐣','🦆','🐝'];
+
+let gr = {
+  tabla: 2,
+  factor: 1,       // how many groups (1-5)
+  hits: 0,
+  score: 0,
+  total: 10,       // rounds per tabla
+  answered: false,
+  animalIdx: 0,
+};
+
+function initGranja() {
+  buildGranjaDecor();
+  updateGranjaTablaUI();
+  if (document.getElementById('granja-overlay').classList.contains('show')) return;
+}
+
+function buildGranjaDecor() {
+  const arena = document.getElementById('granja-arena');
+  if (arena.querySelector('.granja-sun')) return;
+  // Sun
+  const sun = document.createElement('div');
+  sun.className = 'granja-sun';
+  arena.appendChild(sun);
+  // Clouds
+  [[12,8,60,18],[28,4,90,14],[55,6,50,16]].forEach(([top,left,w,h]) => {
+    const cl = document.createElement('div');
+    cl.className = 'granja-cloud';
+    cl.style.cssText = 'top:'+top+'px; left:'+left+'%; width:'+w+'px; height:'+h+'px;';
+    arena.appendChild(cl);
+  });
+}
+
+function selectTabla(n) {
+  gr.tabla = n;
+  gr.hits = 0;
+  gr.score = 0;
+  gr.animalIdx = 0;
+  document.querySelectorAll('.tabla-pill').forEach(p => p.classList.remove('active'));
+  const btn = document.getElementById('tab-' + n);
+  if (btn) btn.classList.add('active');
+  updateGranjaTablaUI();
+  updateGranjaProgress();
+  const overlay = document.getElementById('granja-overlay');
+  if (overlay) overlay.classList.remove('show');
+  nextGranjaProblem();
+}
+
+function startGranja() {
+  gr.hits = 0; gr.score = 0; gr.answered = false; gr.animalIdx = 0;
+  const overlay = document.getElementById('granja-overlay');
+  if (overlay) overlay.classList.remove('show');
+  updateGranjaTablaUI();
+  updateGranjaProgress();
+  nextGranjaProblem();
+}
+
+function updateGranjaTablaUI() {
+  const lbl = gei('granja-tabla-label');
+  if (lbl) lbl.textContent = 'Tabla del ' + gr.tabla;
+}
+
+function nextGranjaProblem() {
+  gr.answered = false;
+  // factor = number of groups (1 to 5), tabla = items per group
+  gr.factor = rnd(1, 5);
+  const total = gr.factor * gr.tabla;
+  const emoji = ANIMAL_POOL[gr.animalIdx % ANIMAL_POOL.length];
+  gr.animalIdx++;
+
+  // Update question text
+  const q = gei('granja-q');
+  if (q) q.textContent = gr.factor + ' grupos de ' + gr.tabla + ' — ¿cuántos hay en total?';
+
+  // Render groups
+  const groupsEl = gei('granja-groups');
+  if (groupsEl) {
+    groupsEl.innerHTML = '';
+    for (let g = 0; g < gr.factor; g++) {
+      const box = document.createElement('div');
+      box.className = 'granja-group';
+      box.style.animationDelay = (g * 0.08) + 's';
+      for (let a = 0; a < gr.tabla; a++) {
+        const span = document.createElement('span');
+        span.className = 'granja-animal';
+        span.textContent = emoji;
+        span.style.animationDelay = (Math.random() * 1.5) + 's';
+        box.appendChild(span);
+      }
+      groupsEl.appendChild(box);
+    }
+  }
+
+  // Build 4 options
+  const opts = new Set([total]);
+  let attempts = 0;
+  while (opts.size < 4 && attempts < 50) {
+    attempts++;
+    const d = total + [-gr.tabla, gr.tabla, -1, 1, gr.tabla*2, -gr.tabla*2][rnd(0,5)];
+    if (d > 0 && d !== total && d <= 30) opts.add(d);
+  }
+  // Fallback if not enough
+  let extra = 1;
+  while (opts.size < 4) { if (total + extra !== total) opts.add(total + extra); extra++; }
+  const shuffled = [...opts].sort(() => Math.random() - 0.5);
+
+  const optsEl = gei('granja-opts');
+  if (optsEl) {
+    optsEl.innerHTML = '';
+    shuffled.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'granja-opt';
+      btn.textContent = val;
+      btn.onclick = () => onGranjaAnswer(btn, val, total);
+      optsEl.appendChild(btn);
+    });
+  }
+
+  // Clear feedback
+  const fb = gei('granja-feedback');
+  if (fb) { fb.textContent = ''; fb.className = 'granja-feedback'; }
+}
+
+function onGranjaAnswer(btn, val, total) {
+  if (gr.answered) return;
+  gr.answered = true;
+
+  const allBtns = document.querySelectorAll('.granja-opt');
+  allBtns.forEach(b => b.disabled = true);
+
+  const fb = gei('granja-feedback');
+
+  if (val === total) {
+    btn.classList.add('correct');
+    gr.hits++;
+    gr.score += 10 + gr.tabla;
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent = coins;
+    if (gei('coins-big')) gei('coins-big').textContent = coins + ' 🪙';
+    if (fb) {
+      fb.textContent = '🎉 ¡Muy bien! ' + gr.factor + ' × ' + gr.tabla + ' = ' + total;
+      fb.className = 'granja-feedback correct';
+    }
+    updateGranjaProgress();
+    // Check if tabla complete
+    if (gr.hits >= gr.total) {
+      updateCoins(4, null);
+      showToast('🐔 ¡Tabla del ' + gr.tabla + ' completa! +4 🪙');
+      setTimeout(() => showGranjaComplete(), 900);
+    } else {
+      setTimeout(() => nextGranjaProblem(), 1100);
+    }
+  } else {
+    btn.classList.add('wrong');
+    // Highlight correct
+    allBtns.forEach(b => { if (parseInt(b.textContent) === total) b.classList.add('correct'); });
+    if (fb) {
+      fb.textContent = 'La respuesta es ' + total + ' — ' + gr.factor + ' × ' + gr.tabla + ' = ' + total;
+      fb.className = 'granja-feedback wrong';
+    }
+    updateGranjaProgress();
+    setTimeout(() => nextGranjaProblem(), 1400);
+  }
+
+  if (gei('granja-score-disp')) gei('granja-score-disp').textContent = gr.score;
+}
+
+function updateGranjaProgress() {
+  const pct = Math.min((gr.hits / gr.total) * 100, 100);
+  if (gei('granja-prog-fill')) gei('granja-prog-fill').style.width = pct + '%';
+  if (gei('granja-prog-label')) gei('granja-prog-label').textContent = gr.hits + ' / ' + gr.total;
+  if (gei('granja-hits-disp')) gei('granja-hits-disp').textContent = gr.hits + '/' + gr.total;
+  // Stars: 1 at 4 hits, 2 at 7, 3 at 10
+  [1,2,3].forEach((s,i) => {
+    const star = gei('gstar-' + s);
+    if (star) star.className = 'granja-star' + (gr.hits >= [4,7,10][i] ? ' lit' : '');
+  });
+}
+
+function showGranjaComplete() {
+  const overlay = gei('granja-overlay');
+  if (!overlay) return;
+  overlay.classList.add('show');
+  overlay.innerHTML =
+    '<div style="font-size:2.5rem;">🌟🐔🌟</div>' +
+    '<div class="overlay-title">¡Tabla del ' + gr.tabla + ' completada!</div>' +
+    '<div class="overlay-sub">¡Lo hiciste genial!</div>' +
+    '<div style="background:rgba(29,158,117,0.3);border:1.5px solid #1D9E75;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 +4 monedas ganadas</div>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;">' +
+      [2,3,4,5].filter(t => t !== gr.tabla).map(t =>
+        '<button class="play-btn" style="background:var(--green);padding:8px 18px;font-size:0.9rem;" onclick="selectTabla('+t+')">Tabla del '+t+' →</button>'
+      ).join('') +
+      '<button class="play-btn" style="background:var(--amber);padding:8px 18px;font-size:0.9rem;" onclick="selectTabla('+gr.tabla+')">Repetir</button>' +
+    '</div>';
+}
+
+// Only init things that are safe before any screen is visited
+renderPrizes();
+// Pre-generate values so first navigation is instant
+sumaA = rnd(1,9); sumaB = rnd(1, 10-sumaA);
+restaA = rnd(3,10); restaB = rnd(1, restaA-1);
+cmpA = rnd(1,15); cmpB = rnd(1,15);
+</script>
+</body>
+</html>

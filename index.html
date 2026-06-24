@@ -334,42 +334,150 @@
   }
   @keyframes coinBounce { from { transform: scale(0.4); opacity: 0; } 60% { transform: scale(1.2); } to { transform: scale(1); opacity: 1; } }
 
-  /* ── COMPARAR ── */
-  .cmp-row { display: flex; gap: 10px; align-items: stretch; margin-bottom: 1rem; }
-  .cmp-box {
-    flex: 1;
-    background: var(--bg);
-    border: 2px solid var(--border);
+  /* ── COMPARAR — El cocodrilo glotón ── */
+  .cmp2-arena {
+    background: linear-gradient(160deg, #E6F1FB 0%, #E1F5EE 100%);
+    border: 2px solid #A5D6A7;
     border-radius: var(--radius);
-    padding: 1.25rem 1rem;
+    padding: 1rem 1rem 1.5rem;
+    margin-bottom: 0.75rem;
+    min-height: 390px;
+    position: relative;
     text-align: center;
-    transition: all 0.2s;
   }
-  .cmp-box.winner { border-color: var(--green); background: var(--green-light); }
-  .cmp-box.loser { border-color: var(--coral); background: var(--coral-light); }
-  .cmp-num { font-family: 'Baloo 2', cursive; font-size: 3.5rem; font-weight: 800; color: var(--text); }
-  .cmp-dots { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 8px; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--green); }
-  .cmp-middle { display: flex; align-items: center; padding: 0 4px; }
-  .cmp-sign-big { font-family: 'Baloo 2', cursive; font-size: 3rem; font-weight: 800; color: var(--text-light); }
+  .cmp2-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+  .cmp2-box {
+    flex: 1;
+    max-width: 140px;
+    background: white;
+    border: 3px solid var(--border);
+    border-radius: 18px;
+    padding: 10px 6px 12px;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(.2,1.4,.5,1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cmp2-box:hover  { border-color: var(--green); background: var(--green-light); transform: translateY(-3px); }
+  .cmp2-box:active { transform: scale(0.96); }
+  .cmp2-box.winner { border-color: var(--green); background: var(--green-light); transform: scale(1.06); box-shadow: 0 8px 18px rgba(29,158,117,0.3); }
+  .cmp2-box.loser  { border-color: var(--coral); background: var(--coral-light); transform: scale(0.92); opacity: 0.85; }
+  .cmp2-box.dim    { pointer-events: none; }
 
-  .cmp-opts { display: flex; gap: 10px; justify-content: center; margin: 1rem 0; }
-  .cmp-opt {
-    width: 60px; height: 60px;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--border);
-    background: var(--surface);
+  .cmp2-tower {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 2px;
+    height: 184px;
+    justify-content: flex-start;
+  }
+  .cmp2-cube {
+    border-radius: 4px;
+    background: var(--blue);
+    border: 1.5px solid rgba(0,0,0,0.12);
+    box-shadow: inset 0 2px 0 rgba(255,255,255,0.4);
+    flex-shrink: 0;
+    animation: cmp2CubePop 0.25s cubic-bezier(.2,1.6,.6,1) both;
+  }
+  @keyframes cmp2CubePop { 0%{transform:scale(0);} 100%{transform:scale(1);} }
+
+  .cmp2-num {
     font-family: 'Baloo 2', cursive;
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 2.8rem;
+    font-weight: 800;
     color: var(--text);
+    line-height: 1;
+  }
+
+  .cmp2-croc {
+    width: 84px;
+    flex-shrink: 0;
+    align-self: center;
+    margin-bottom: 42px;
+    transition: transform 0.3s cubic-bezier(.2,1.6,.6,1);
+  }
+  .cmp2-croc svg { width: 100%; height: auto; display: block; }
+  .cmp2-croc.chomp { animation: cmp2Chomp 0.55s ease; }
+  @keyframes cmp2Chomp {
+    0%   { transform: scale(0.55) rotate(-10deg); }
+    50%  { transform: scale(1.28) rotate(7deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  .cmp2-equal-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white;
+    border: 3px solid #FFB74D;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--amber-dark);
     cursor: pointer;
     transition: all 0.12s;
-    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 0.75rem;
+    -webkit-tap-highlight-color: transparent;
   }
-  .cmp-opt:hover { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
-  .cmp-opt.correct { background: var(--green-light); border-color: var(--green); color: var(--green-dark); }
-  .cmp-opt.wrong { background: var(--coral-light); border-color: var(--coral); color: #7A2010; }
+  .cmp2-equal-btn:hover  { background: var(--amber-light); transform: translateY(-2px); }
+  .cmp2-equal-btn:active { transform: scale(0.95); }
+  .cmp2-equal-btn.dim    { pointer-events: none; }
+  .cmp2-equal-btn.eq-win { background: var(--green-light); border-color: var(--green); color: var(--green-dark); transform: scale(1.05); }
+
+  .cmp2-hint {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1565C0;
+    background: rgba(255,255,255,0.75);
+    border-radius: 12px;
+    padding: 8px 16px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .cmp2-hint.menos { color: #6A1B9A; background: #F3E5F5; }
+
+  .cmp2-statement {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-mid);
+    min-height: 40px;
+    margin-top: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .cmp2-statement .big { color: var(--green-dark); font-size: 2.4rem; }
+
+  .cmp2-feedback {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    min-height: 28px;
+    margin-top: 0.4rem;
+  }
+  .cmp2-feedback.correct { color: var(--green-dark); }
+  .cmp2-feedback.wrong   { color: var(--coral); }
+
+  .cmp2-overlay {
+    display: none; position: absolute; inset: 0;
+    background: rgba(29,158,117,0.9);
+    border-radius: var(--radius);
+    flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px; z-index: 10;
+    padding: 1rem; text-align: center;
+  }
+  .cmp2-overlay.show { display: flex; }
+  .cmp2-overlay .overlay-title { color: white; }
+  .cmp2-overlay .overlay-sub   { color: rgba(255,255,255,0.92); }
 
   /* ── PREMIOS ── */
   .progress-section { margin-bottom: 1.5rem; }
@@ -513,7 +621,7 @@
   }
   .balloon-wrap:hover { filter: brightness(1.12); }
   .balloon-wrap.popping { animation: popAnim 0.3s ease forwards !important; pointer-events: none; }
-  .balloon-wrap.sg-chosen {
+  .balloon-wrap.sg-chosen, .puppy-wrap.sg-chosen {
     animation: wobble 0.5s ease infinite !important;
     filter: drop-shadow(0 0 10px white) brightness(1.1);
   }
@@ -1488,6 +1596,965 @@
     transition: width 0.4s ease;
   }
 
+
+  /* ── PERRITOS SUMA GLOBOS ── */
+  #sg-arena .balloon-wrap { width: auto; }
+
+  .puppy-wrap {
+    position: absolute;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: floatUp linear forwards;
+    transform: translateX(-50%);
+    transition: filter 0.15s;
+  }
+  .puppy-wrap:hover { filter: brightness(1.1) drop-shadow(0 0 6px rgba(255,255,255,0.8)); }
+  .puppy-wrap.popping { animation: popAnim 0.3s ease forwards !important; pointer-events: none; }
+  .puppy-wrap.sg-chosen {
+    animation: wobble 0.5s ease infinite !important;
+    filter: drop-shadow(0 0 12px white) brightness(1.15);
+  }
+  .puppy-num-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: white;
+    border-radius: 50%;
+    width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: #333;
+    border: 2px solid rgba(0,0,0,0.15);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+  .puppy-svg-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── SECUENCIAS ── */
+  .seq-arena {
+    background: linear-gradient(135deg, #F3E5F5 0%, #E8EAF6 100%);
+    border: 2px solid #CE93D8;
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem 1.5rem;
+    margin-bottom: 0.75rem;
+    min-height: 320px;
+    position: relative;
+  }
+
+  .seq-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.7);
+    border: 1.5px solid rgba(206,147,216,0.5);
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #6A1B9A;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+
+  .seq-instruction {
+    text-align: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #4A148C;
+    margin-bottom: 1.25rem;
+    background: rgba(255,255,255,0.65);
+    border-radius: 12px;
+    padding: 8px 14px;
+  }
+
+  /* Pattern row */
+  .seq-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .seq-arrow {
+    font-size: 1.4rem;
+    color: #9C27B0;
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
+
+  /* A tile — number, color or shape */
+  .seq-tile {
+    width: 68px; height: 68px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: white;
+    border: 3px solid rgba(0,0,0,0.12);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+    animation: tileIn 0.3s cubic-bezier(.2,1.4,.6,1) both;
+    position: relative;
+    user-select: none;
+  }
+  @keyframes tileIn {
+    from { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .seq-tile.correct-flash {
+    animation: correctFlash 0.5s ease;
+  }
+  @keyframes correctFlash {
+    0%,100% { transform: scale(1); }
+    40%      { transform: scale(1.2); filter: brightness(1.3); }
+  }
+
+  /* Drop zone — the blank */
+  .seq-drop {
+    width: 68px; height: 68px;
+    border-radius: 16px;
+    border: 3px dashed #9C27B0;
+    background: rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #CE93D8;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .seq-drop.drag-over {
+    border-color: #6A1B9A;
+    background: rgba(156,39,176,0.15);
+    transform: scale(1.08);
+  }
+  .seq-drop.filled {
+    border-style: solid;
+    border-color: #43A047;
+    background: rgba(67,160,71,0.1);
+  }
+
+  /* Draggable answer tiles */
+  .seq-options {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .seq-opt {
+    width: 72px; height: 72px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: white;
+    border: 3px solid rgba(0,0,0,0.15);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    cursor: grab;
+    transition: transform 0.12s, box-shadow 0.12s;
+    user-select: none;
+    touch-action: none;
+    position: relative;
+  }
+  .seq-opt:hover  { transform: scale(1.08) translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.25); }
+  .seq-opt:active { cursor: grabbing; transform: scale(1.05); }
+  .seq-opt.dragging { opacity: 0.4; transform: scale(0.95); }
+  .seq-opt.used { opacity: 0.25; pointer-events: none; }
+  .seq-opt.correct { border-color: #43A047 !important; animation: optCorrect 0.4s ease; }
+  .seq-opt.wrong   { border-color: #D84040 !important; animation: optShake 0.4s ease; }
+  @keyframes optCorrect { 0%,100%{transform:scale(1)} 50%{transform:scale(1.18)} }
+  @keyframes optShake   { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+  /* Progress + stars */
+  .seq-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 0.75rem;
+  }
+  .seq-prog-bar { flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden; }
+  .seq-prog-fill { height:100%; background:#9C27B0; border-radius:999px; transition:width 0.4s ease; }
+
+  /* Overlay */
+  .seq-overlay {
+    display: none;
+    position: absolute; inset: 0;
+    background: rgba(74,20,140,0.85);
+    border-radius: var(--radius);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 10;
+  }
+  .seq-overlay.show { display: flex; }
+  .seq-overlay .overlay-title { color: white; }
+  .seq-overlay .overlay-sub   { color: rgba(255,255,255,0.85); }
+
+  /* Feedback */
+  .seq-feedback {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    min-height: 28px;
+    margin-top: 0.5rem;
+  }
+  .seq-feedback.correct { color: #1B5E20; }
+  .seq-feedback.wrong   { color: var(--coral); }
+
+  /* ── SECUENCIAS HINT PANEL ── */
+  .seq-hint-panel {
+    background: rgba(255,255,255,0.8);
+    border: 2px solid rgba(156,39,176,0.3);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .seq-hint-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+  .seq-hint-text {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #4A148C;
+    line-height: 1.4;
+    flex: 1;
+  }
+  .seq-hint-demo {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .seq-hint-tile {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: white;
+    border: 2px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+  .seq-hint-arrow {
+    font-size: 0.8rem;
+    color: #9C27B0;
+    opacity: 0.6;
+  }
+  .seq-hint-blank {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    border: 2.5px dashed #9C27B0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #CE93D8;
+    flex-shrink: 0;
+    animation: hintPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes hintPulse {
+    0%,100% { border-color: #9C27B0; background: rgba(156,39,176,0.05); }
+    50%      { border-color: #E040FB; background: rgba(224,64,251,0.12); }
+  }
+  .seq-drag-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    background: rgba(156,39,176,0.1);
+    border-radius: 10px;
+    padding: 6px 14px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #6A1B9A;
+    animation: dragHintBounce 2s ease-in-out infinite;
+  }
+  .seq-drag-hand { font-size: 1.3rem; animation: handSwipe 2s ease-in-out infinite; }
+  @keyframes handSwipe {
+    0%,100% { transform: translateX(0); }
+    40%      { transform: translateX(18px); }
+    60%      { transform: translateX(18px); }
+  }
+  @keyframes dragHintBounce {
+    0%,100% { opacity:0.8; }
+    50%      { opacity:1; }
+  }
+
+  /* ── CONTAR OBJETOS ── */
+  .contar-arena {
+    background: linear-gradient(160deg, #FFF8E1 0%, #FFF3E0 100%);
+    border: 2px solid #FFCA28;
+    border-radius: var(--radius);
+    padding: 1.25rem 1rem 1.5rem;
+    margin-bottom: 0.75rem;
+    min-height: 360px;
+    position: relative;
+    text-align: center;
+  }
+
+  .contar-question {
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #E65100;
+    background: rgba(255,255,255,0.8);
+    border-radius: 999px;
+    padding: 7px 22px;
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    border: 2px solid rgba(255,202,40,0.5);
+  }
+
+  .contar-objects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    min-height: 110px;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+  }
+
+  .contar-obj {
+    font-size: 2.8rem;
+    line-height: 1;
+    animation: contar-pop 0.3s cubic-bezier(.2,1.6,.6,1) both;
+    display: inline-block;
+    user-select: none;
+  }
+  @keyframes contar-pop {
+    from { transform: scale(0) rotate(-15deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0);      opacity: 1; }
+  }
+
+  /* Celebration burst */
+  .contar-obj.celebrate {
+    animation: contar-bounce 0.5s ease infinite alternate;
+  }
+  @keyframes contar-bounce {
+    from { transform: scale(1) rotate(-5deg); }
+    to   { transform: scale(1.2) rotate(5deg); }
+  }
+
+  /* Confetti pieces */
+  .confetti-piece {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+    z-index: 20;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg);    opacity: 1; }
+    100% { transform: translateY(220px) rotate(720deg); opacity: 0; }
+  }
+
+  .contar-opts {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .contar-opt {
+    width: 80px; height: 80px;
+    border-radius: 20px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    border: 3px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .contar-opt:hover  { transform: scale(1.1) translateY(-3px); border-color: #FFCA28; background: #FFF8E1; }
+  .contar-opt:active { transform: scale(0.95); }
+  .contar-opt.correct {
+    background: var(--green); border-color: var(--green); color: white;
+    animation: contar-correct 0.4s ease;
+  }
+  .contar-opt.wrong {
+    background: var(--coral); border-color: var(--coral); color: white;
+    animation: contar-shake 0.4s ease;
+  }
+  @keyframes contar-correct { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+  @keyframes contar-shake   { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+
+  .contar-feedback {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    min-height: 30px;
+    margin-top: 0.5rem;
+  }
+  .contar-feedback.correct { color: var(--green-dark); }
+  .contar-feedback.wrong   { color: var(--coral); }
+
+  .contar-progress {
+    display: flex; align-items: center; gap: 8px; margin-top: 0.75rem;
+  }
+  .contar-prog-bar {
+    flex:1; height:10px; background:var(--bg);
+    border:1.5px solid var(--border); border-radius:999px; overflow:hidden;
+  }
+  .contar-prog-fill {
+    height:100%; background: var(--amber);
+    border-radius:999px; transition: width 0.4s ease;
+  }
+
+  .contar-overlay {
+    display: none; position: absolute; inset: 0;
+    background: rgba(230,81,0,0.85); border-radius: var(--radius);
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; z-index: 10;
+  }
+  .contar-overlay.show { display: flex; }
+
+  /* ── MEMOTEST ── */
+  .memo-arena {
+    background: linear-gradient(135deg, #E3F2FD 0%, #E8F5E9 100%);
+    border: 2px solid #90CAF9;
+    border-radius: var(--radius);
+    padding: 1.25rem 0.75rem 1.5rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+
+  .memo-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  /* Card flip container */
+  .memo-card {
+    aspect-ratio: 1;
+    cursor: pointer;
+    perspective: 600px;
+    user-select: none;
+  }
+  .memo-card-inner {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+    border-radius: 14px;
+  }
+  .memo-card.flipped .memo-card-inner  { transform: rotateY(180deg); }
+  .memo-card.matched .memo-card-inner  { transform: rotateY(180deg); }
+
+  .memo-card-back,
+  .memo-card-front {
+    position: absolute; inset: 0;
+    border-radius: 14px;
+    backface-visibility: hidden;
+    display: flex; align-items: center; justify-content: center;
+    border: 3px solid rgba(0,0,0,0.08);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  }
+
+  /* Card back — the hidden side */
+  .memo-card-back {
+    background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+    font-size: 1.8rem;
+  }
+
+  /* Card front — revealed */
+  .memo-card-front {
+    background: white;
+    transform: rotateY(180deg);
+    font-family: 'Baloo 2', cursive;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    padding: 6px;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .memo-card-front.type-op   { background: #E3F2FD; color: #0D47A1; }
+  .memo-card-front.type-res  { background: #E8F5E9; color: #1B5E20; font-size: 1.6rem; }
+
+  /* Matched cards glow */
+  .memo-card.matched .memo-card-front {
+    background: #E8F5E9;
+    border-color: #43A047;
+    box-shadow: 0 0 0 3px rgba(67,160,71,0.3), 0 4px 10px rgba(0,0,0,0.1);
+    animation: memoMatchPulse 0.5s ease;
+  }
+  @keyframes memoMatchPulse {
+    0%,100% { transform: rotateY(180deg) scale(1); }
+    50%      { transform: rotateY(180deg) scale(1.08); }
+  }
+
+  /* Wrong pair shake */
+  .memo-card.wrong-flip .memo-card-inner {
+    animation: memoWrong 0.4s ease;
+  }
+  @keyframes memoWrong {
+    0%,100% { transform: rotateY(180deg); }
+    25%      { transform: rotateY(180deg) translateX(-6px); }
+    75%      { transform: rotateY(180deg) translateX(6px); }
+  }
+
+  .memo-status {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .memo-stat {
+    background: rgba(255,255,255,0.8);
+    border: 1.5px solid #90CAF9;
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #0D47A1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .memo-feedback {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    min-height: 28px;
+    margin-top: 0.75rem;
+  }
+  .memo-feedback.correct { color: var(--green-dark); }
+  .memo-feedback.wrong   { color: var(--coral); }
+
+  .memo-overlay {
+    display: none; position: absolute; inset: 0;
+    background: rgba(13,71,161,0.88);
+    border-radius: var(--radius);
+    flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px; z-index: 10;
+  }
+  .memo-overlay.show { display: flex; }
+
+  .memo-level-row {
+    display: flex; gap: 8px; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 0.75rem;
+  }
+  .memo-level-btn {
+    padding: 7px 18px; border-radius: 999px;
+    font-size: 0.85rem; font-weight: 700;
+    border: 2px solid var(--border);
+    background: var(--bg); color: var(--text-mid);
+    cursor: pointer; transition: all 0.12s;
+  }
+  .memo-level-btn:hover  { border-color: #1565C0; color: #1565C0; }
+  .memo-level-btn.active { background: #1565C0; border-color: #1565C0; color: white; }
+
+  /* ── VOZ ── */
+  .voz-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 2px solid #90CAF9;
+    background: #E3F2FD;
+    color: #0D47A1;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .voz-btn:hover  { background: #BBDEFB; border-color: #1565C0; }
+  .voz-btn:active { transform: scale(0.96); }
+  .voz-btn.speaking {
+    background: #1565C0;
+    border-color: #1565C0;
+    color: white;
+    animation: vozPulse 0.6s ease infinite alternate;
+  }
+  @keyframes vozPulse {
+    from { box-shadow: 0 0 0 0 rgba(21,101,192,0.4); }
+    to   { box-shadow: 0 0 0 8px rgba(21,101,192,0); }
+  }
+  .voz-btn-icon { font-size: 1.1rem; }
+
+  /* Global floating voice bar at the bottom */
+  #voz-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    border-top: 2px solid var(--border);
+    padding: 8px 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 200;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+  }
+  #voz-text {
+    flex: 1;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    line-height: 1.3;
+    font-style: italic;
+  }
+  #voz-stop-btn {
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 2px solid var(--coral);
+    background: var(--coral-light);
+    color: var(--coral);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: none;
+  }
+  #voz-stop-btn.show { display: block; }
+
+  /* Add bottom padding to main so content isn't hidden behind bar */
+  main { padding-bottom: 5rem; }
+
+  /* ── SUMA INTERACTIVA ── */
+  .suma2-arena {
+    background: linear-gradient(160deg, #FFF8E1 0%, #E8F5E9 100%);
+    border: 2px solid #A5D6A7;
+    border-radius: var(--radius);
+    padding: 1.5rem 1rem;
+    margin-bottom: 0.75rem;
+    min-height: 360px;
+    position: relative;
+    text-align: center;
+  }
+
+  .suma2-groups {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+  .suma2-group {
+    background: white;
+    border: 3px solid #A5D6A7;
+    border-radius: 18px;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    align-content: center;
+    min-width: 96px;
+    min-height: 96px;
+    max-width: 150px;
+  }
+  .suma2-plus {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+  .suma2-obj {
+    font-size: 2.2rem;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.12s;
+    animation: contar-pop 0.3s cubic-bezier(.2,1.6,.6,1) both;
+  }
+  .suma2-obj:active { transform: scale(0.85); }
+  .suma2-obj.counted {
+    animation: suma2Count 0.3s ease;
+    filter: drop-shadow(0 0 6px #FFD700);
+  }
+  @keyframes suma2Count {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.4) rotate(10deg); }
+    100% { transform: scale(1.1); }
+  }
+
+  /* Equation with big dyslexia-friendly font */
+  .suma2-equation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 0.75rem;
+    font-family: 'Baloo 2', cursive;
+  }
+  .suma2-eq-num {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: #FFF3E0;
+    border: 3px solid #FFB74D;
+    color: #E65100;
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .suma2-eq-op { font-size: 2rem; font-weight: 800; color: var(--text-mid); }
+  .suma2-eq-q {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: #E8F5E9;
+    border: 3px dashed #66BB6A;
+    color: #66BB6A;
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .suma2-counthint {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #558B2F;
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    padding: 6px 14px;
+    display: inline-block;
+    margin-bottom: 1.25rem;
+  }
+  .suma2-counthint.done {
+    color: #1B5E20;
+    background: #C8E6C9;
+  }
+
+  .suma2-opts {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .suma2-opt {
+    width: 78px; height: 78px;
+    border-radius: 20px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    border: 3px solid var(--border);
+    background: white;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .suma2-opt:hover  { transform: scale(1.08) translateY(-3px); border-color: var(--green); background: var(--green-light); }
+  .suma2-opt:active { transform: scale(0.94); }
+  .suma2-opt.correct { background: var(--green); border-color: var(--green); color: white; animation: contar-correct 0.4s ease; }
+  .suma2-opt.wrong   { background: var(--coral); border-color: var(--coral); color: white; animation: contar-shake 0.4s ease; }
+
+  .suma2-feedback {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    min-height: 30px;
+    margin-top: 0.5rem;
+  }
+  .suma2-feedback.correct { color: var(--green-dark); }
+  .suma2-feedback.wrong   { color: var(--coral); }
+
+  .suma2-overlay {
+    display: none; position: absolute; inset: 0;
+    background: rgba(46,125,50,0.85);
+    border-radius: var(--radius);
+    flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px; z-index: 10;
+  }
+  .suma2-overlay.show { display: flex; }
+  .suma2-overlay .overlay-title { color: white; }
+  .suma2-overlay .overlay-sub   { color: rgba(255,255,255,0.9); }
+
+  /* ── RESTA INTERACTIVA ── */
+  .resta2-arena {
+    background: linear-gradient(160deg, #FFF3E0 0%, #FBE9E7 100%);
+    border: 2px solid #FFAB91;
+    border-radius: var(--radius);
+    padding: 1.5rem 1rem;
+    margin-bottom: 0.75rem;
+    min-height: 360px;
+    position: relative;
+    text-align: center;
+  }
+  .resta2-grouptitle {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #BF360C;
+    margin-bottom: 0.75rem;
+  }
+  .resta2-group {
+    background: white;
+    border: 3px solid #FFAB91;
+    border-radius: 18px;
+    padding: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-content: center;
+    min-height: 100px;
+    max-width: 340px;
+    margin: 0 auto 1rem;
+  }
+  .resta2-obj {
+    font-size: 2.4rem;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.12s, opacity 0.3s, filter 0.3s;
+  }
+  .resta2-obj:hover  { transform: scale(1.1); }
+  .resta2-obj:active { transform: scale(0.85); }
+  .resta2-obj.removed {
+    opacity: 0.18;
+    filter: grayscale(1);
+    transform: scale(0.85);
+    position: relative;
+  }
+  .resta2-obj.removed::after {
+    content: '✖';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 1.6rem;
+    color: #D84040;
+    opacity: 0.85;
+  }
+
+  .resta2-removehint {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #D84315;
+    background: rgba(255,255,255,0.65);
+    border-radius: 10px;
+    padding: 6px 14px;
+    display: inline-block;
+    margin-bottom: 1.25rem;
+  }
+  .resta2-removehint.done {
+    color: #1B5E20;
+    background: #C8E6C9;
+  }
+
+  .resta2-equation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+    font-family: 'Baloo 2', cursive;
+  }
+  .resta2-eq-num {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: #FFF3E0;
+    border: 3px solid #FFB74D;
+    color: #E65100;
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .resta2-eq-op { font-size: 2rem; font-weight: 800; color: var(--text-mid); }
+  .resta2-eq-q {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: #E8F5E9;
+    border: 3px dashed #66BB6A;
+    color: #66BB6A;
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .resta2-opts {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .resta2-opt {
+    width: 78px; height: 78px;
+    border-radius: 20px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    border: 3px solid var(--border);
+    background: white;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  .resta2-opt:hover  { transform: scale(1.08) translateY(-3px); border-color: #D85A30; background: #FBE9E7; }
+  .resta2-opt:active { transform: scale(0.94); }
+  .resta2-opt.correct { background: var(--green); border-color: var(--green); color: white; animation: contar-correct 0.4s ease; }
+  .resta2-opt.wrong   { background: var(--coral); border-color: var(--coral); color: white; animation: contar-shake 0.4s ease; }
+
+  .resta2-feedback {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    min-height: 30px;
+    margin-top: 0.5rem;
+  }
+  .resta2-feedback.correct { color: var(--green-dark); }
+  .resta2-feedback.wrong   { color: var(--coral); }
+
+  .resta2-overlay {
+    display: none; position: absolute; inset: 0;
+    background: rgba(191,54,12,0.85);
+    border-radius: var(--radius);
+    flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px; z-index: 10;
+  }
+  .resta2-overlay.show { display: flex; }
+  .resta2-overlay .overlay-title { color: white; }
+  .resta2-overlay .overlay-sub   { color: rgba(255,255,255,0.9); }
   /* ── TOAST ── */
   .toast {
     display: none;
@@ -1539,9 +2606,9 @@
     <span class="nav-label">ejercicios</span>
   </button>
   <button class="nav-btn" onclick="goToScreen('comparar')">
-    <span class="icon">⚖️</span>
-    <span class="nav-op">Mayor</span>
-    <span class="nav-label">¿cuál es más?</span>
+    <span class="icon">🐊</span>
+    <span class="nav-op">Más o menos</span>
+    <span class="nav-label">cocodrilo glotón</span>
   </button>
   <button class="nav-btn" onclick="goToScreen('suma-globos')">
     <span class="icon">🎈</span>
@@ -1567,6 +2634,21 @@
     <span class="icon">🛒</span>
     <span class="nav-op">Tienda</span>
     <span class="nav-label">pagar con $</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('secuencias')">
+    <span class="icon">🔢</span>
+    <span class="nav-op">Patrones</span>
+    <span class="nav-label">secuencias</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('contar')">
+    <span class="icon">⭐</span>
+    <span class="nav-op">Contar</span>
+    <span class="nav-label">¿cuántos hay?</span>
+  </button>
+  <button class="nav-btn" onclick="goToScreen('memotest')">
+    <span class="icon">🃏</span>
+    <span class="nav-op">Memo</span>
+    <span class="nav-label">memoria + cálculo</span>
   </button>
   <button class="nav-btn prizes-btn" onclick="goToScreen('premios')">
     <span class="icon">🎁</span>
@@ -1618,61 +2700,181 @@
 
   <!-- SUMA -->
   <div class="screen" id="screen-suma">
-    <div class="card">
-      <div class="section-label">Sumamos juntas</div>
-      <div class="problem-display" id="suma-text">3 + 2 = ?</div>
-      <div class="visual-area" id="suma-visual"></div>
-      <div class="answer-row">
-        <input type="number" class="answer-input" id="suma-input" placeholder="?" min="0" max="30" onkeyup="if(event.key==='Enter')checkSuma()">
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">➕ Sumamos juntas</div>
+          <div class="level-badge" id="suma2-level-label">Nivel 1 — sumas hasta 10</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="suma2-hits-disp">0/8</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="suma2-score-disp">0</div></div>
+        </div>
       </div>
-      <button class="check-btn" onclick="checkSuma()">Verificar ✓</button>
-      <div class="feedback-box" id="suma-feedback"></div>
-      <div id="suma-earn" style="min-height:32px; text-align:center; margin-bottom:4px;"></div>
-      <button class="new-btn" onclick="newSuma()">Otro ejercicio →</button>
+    </div>
+
+    <div class="suma2-arena" id="suma2-arena">
+
+      <!-- Two groups of objects -->
+      <div class="suma2-groups">
+        <div class="suma2-group" id="suma2-groupA"></div>
+        <div class="suma2-plus">➕</div>
+        <div class="suma2-group" id="suma2-groupB"></div>
+      </div>
+
+      <!-- Equation display -->
+      <div class="suma2-equation" id="suma2-equation">
+        <span class="suma2-eq-num" id="suma2-eqA">3</span>
+        <span class="suma2-eq-op">+</span>
+        <span class="suma2-eq-num" id="suma2-eqB">2</span>
+        <span class="suma2-eq-op">=</span>
+        <span class="suma2-eq-q">?</span>
+      </div>
+
+      <!-- Count helper -->
+      <div class="suma2-counthint" id="suma2-counthint">👆 Tocá los objetos para contarlos juntos</div>
+
+      <!-- Answer options -->
+      <div class="suma2-opts" id="suma2-opts"></div>
+
+      <div class="suma2-overlay show" id="suma2-overlay">
+        <div style="font-size:2.5rem;">🍎➕⭐</div>
+        <div class="overlay-title">¡Sumamos juntas!</div>
+        <div class="overlay-sub">Mirá los dos grupos, contá todo junto y elegí el número</div>
+        <button class="play-btn" onclick="startSuma2()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="suma2-feedback" id="suma2-feedback"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="suma2-prog-label">0 / 8</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="suma2-prog-fill" style="height:100%; background:var(--green); border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="suma2-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Contá los objetos del primer grupo, después los del segundo, y elegí cuántos hay en total.
     </div>
   </div>
 
   <!-- RESTA -->
   <div class="screen" id="screen-resta">
-    <div class="card">
-      <div class="section-label">Restamos juntas</div>
-      <div class="problem-display" id="resta-text">5 − 2 = ?</div>
-      <div class="visual-area" id="resta-visual"></div>
-      <div class="answer-row">
-        <input type="number" class="answer-input" id="resta-input" placeholder="?" min="0" max="20" onkeyup="if(event.key==='Enter')checkResta()">
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">➖ Restamos juntas</div>
+          <div class="level-badge" id="resta2-level-label">Nivel 1 — restas hasta 10</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="resta2-hits-disp">0/8</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="resta2-score-disp">0</div></div>
+        </div>
       </div>
-      <button class="check-btn" onclick="checkResta()">Verificar ✓</button>
-      <div class="feedback-box" id="resta-feedback"></div>
-      <div id="resta-earn" style="min-height:32px; text-align:center; margin-bottom:4px;"></div>
-      <button class="new-btn" onclick="newResta()">Otro ejercicio →</button>
+    </div>
+
+    <div class="resta2-arena" id="resta2-arena">
+
+      <!-- Single group — tap to remove (subtract) -->
+      <div class="resta2-grouptitle" id="resta2-grouptitle">Tenemos estos:</div>
+      <div class="resta2-group" id="resta2-group"></div>
+
+      <!-- Instruction to remove -->
+      <div class="resta2-removehint" id="resta2-removehint">👆 Sacá (tocá) los que se van</div>
+
+      <!-- Equation -->
+      <div class="resta2-equation">
+        <span class="resta2-eq-num" id="resta2-eqA">5</span>
+        <span class="resta2-eq-op">−</span>
+        <span class="resta2-eq-num" id="resta2-eqB">2</span>
+        <span class="resta2-eq-op">=</span>
+        <span class="resta2-eq-q" id="resta2-eqQ">?</span>
+      </div>
+
+      <!-- Answer options -->
+      <div class="resta2-opts" id="resta2-opts"></div>
+
+      <div class="resta2-overlay show" id="resta2-overlay">
+        <div style="font-size:2.5rem;">🍎➖🍎</div>
+        <div class="overlay-title">¡Restamos juntas!</div>
+        <div class="overlay-sub">Sacá los objetos que se van y contá los que quedan</div>
+        <button class="play-btn" style="background:#D85A30;" onclick="startResta2()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="resta2-feedback" id="resta2-feedback"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="resta2-prog-label">0 / 8</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="resta2-prog-fill" style="height:100%; background:#D85A30; border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="resta2-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Mirá cuántos hay. Tocá los que se van — ¡los que quedan son la respuesta!
     </div>
   </div>
 
-  <!-- COMPARAR -->
+  <!-- COMPARAR — El cocodrilo glotón -->
   <div class="screen" id="screen-comparar">
-    <div class="card">
-      <div class="section-label">¿Cuál número es mayor?</div>
-      <div class="cmp-row">
-        <div class="cmp-box" id="cmp-left">
-          <div class="cmp-num" id="cmp-a">7</div>
-          <div class="cmp-dots" id="cmp-dots-a"></div>
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">⚖️ ¿Cuál es más?</div>
+          <div class="level-badge" id="cmp2-level-label">Nivel 1 — hasta 9</div>
         </div>
-        <div class="cmp-middle">
-          <div class="cmp-sign-big" id="cmp-sign">?</div>
-        </div>
-        <div class="cmp-box" id="cmp-right">
-          <div class="cmp-num" id="cmp-b">4</div>
-          <div class="cmp-dots" id="cmp-dots-b"></div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="cmp2-hits-disp">0/6</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="cmp2-score-disp">0</div></div>
         </div>
       </div>
-      <div class="cmp-opts">
-        <button class="cmp-opt" onclick="checkCmp('>')">›</button>
-        <button class="cmp-opt" onclick="checkCmp('=')">＝</button>
-        <button class="cmp-opt" onclick="checkCmp('<')">‹</button>
+    </div>
+
+    <div class="cmp2-arena" id="cmp2-arena">
+      <div class="cmp2-hint" id="cmp2-hint">👆 Tocá el que tiene MÁS</div>
+
+      <div class="cmp2-row">
+        <button class="cmp2-box" id="cmp2-boxA" onclick="onCmp2Pick('A')">
+          <div class="cmp2-tower" id="cmp2-towerA"></div>
+          <div class="cmp2-num" id="cmp2-numA">7</div>
+        </button>
+
+        <div class="cmp2-croc" id="cmp2-croc"></div>
+
+        <button class="cmp2-box" id="cmp2-boxB" onclick="onCmp2Pick('B')">
+          <div class="cmp2-tower" id="cmp2-towerB"></div>
+          <div class="cmp2-num" id="cmp2-numB">4</div>
+        </button>
       </div>
-      <div class="feedback-box" id="cmp-feedback"></div>
-      <div id="cmp-earn" style="min-height:32px; text-align:center; margin-bottom:4px;"></div>
-      <button class="new-btn" onclick="newCmp()">Otro par →</button>
+
+      <button class="cmp2-equal-btn" id="cmp2-equal" onclick="onCmp2Pick('=')">🟰 Son iguales</button>
+
+      <div class="cmp2-statement" id="cmp2-statement">❔</div>
+
+      <div class="cmp2-overlay show" id="cmp2-overlay">
+        <div style="font-size:2.6rem;">🐊⚖️</div>
+        <div class="overlay-title">El cocodrilo glotón</div>
+        <div class="overlay-sub">El cocodrilo siempre se come al número más grande.<br>Tocá el que tiene MÁS.</div>
+        <button class="play-btn" onclick="startCmp2()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="cmp2-feedback" id="cmp2-feedback"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="cmp2-prog-label">0 / 6</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="cmp2-prog-fill" style="height:100%; background:var(--green); border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="cmp2-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      🐊 La boca del cocodrilo siempre se abre hacia el número MÁS grande. ¡Esa boca es el signo &gt; o &lt;!
     </div>
   </div>
 
@@ -1759,8 +2961,8 @@
           <div class="stat-pill-val" id="sg-hits">0/10</div>
         </div>
         <div class="stat-pill">
-          <div class="stat-pill-label">Elegido</div>
-          <div class="stat-pill-val" id="sg-selected">—</div>
+          <div class="stat-pill-label">Elegiste</div>
+          <div class="stat-pill-val" id="sg-selected" style="font-size:1rem;">— + ? = <span id='sg-target-inline'></span></div>
         </div>
       </div>
     </div>
@@ -1776,7 +2978,7 @@
     </div>
 
     <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
-      💡 Tocá un globo para elegirlo (se mueve), luego tocá otro que sume el objetivo.
+      💡 <strong>Paso 1:</strong> Tocá un perrito. <strong>Paso 2:</strong> Tocá otro que juntos sumen el número de arriba. ¡Sin apuro, van despacio!
     </div>
   </div>
 
@@ -2132,6 +3334,202 @@
 
   </div>
 
+  <!-- SECUENCIAS -->
+  <div class="screen" id="screen-secuencias">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🔢 Patrones y Secuencias</div>
+          <div class="level-badge" id="seq-level-label">Nivel 1 — patrones simples</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="seq-hits-disp">0/8</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="seq-score-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#F3E5F5,#E8EAF6); border:2px solid #CE93D8; border-radius:var(--radius); padding:1.25rem 1rem 1.5rem; margin-bottom:0.75rem; position:relative; min-height:360px;" id="seq-arena">
+
+      <!-- Type badge -->
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap;">
+        <div class="level-badge" id="seq-type-badge" style="background:white; color:#6A1B9A; border-color:#CE93D8;">🔢 Números</div>
+        <div class="level-badge" id="seq-diff-badge" style="background:rgba(255,255,255,0.7); color:#6A1B9A;">+2 cada vez</div>
+      </div>
+
+      <!-- Hint box -->
+      <div style="background:rgba(255,255,255,0.82); border:2px solid rgba(156,39,176,0.25); border-radius:12px; padding:10px 14px; margin-bottom:1rem; display:flex; align-items:center; gap:10px;">
+        <div id="seq-hint-icon" style="font-size:1.8rem; flex-shrink:0;">🔢</div>
+        <div style="flex:1;">
+          <div id="seq-hint-text" style="font-size:0.85rem; font-weight:700; color:#4A148C; line-height:1.4;">Mirá los números y encontrá cuál falta.</div>
+          <div id="seq-hint-demo" style="display:flex; gap:5px; align-items:center; margin-top:6px; flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+      <!-- Drag instruction -->
+      <div style="text-align:center; font-size:0.82rem; font-weight:700; color:#7B1FA2; background:rgba(255,255,255,0.5); border-radius:10px; padding:5px 12px; margin-bottom:0.85rem;">
+        👆 Tocá una ficha de abajo y arrastrálla al espacio con ❓
+      </div>
+
+      <!-- Sequence row -->
+      <div id="seq-row" style="display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-bottom:1.25rem; min-height:80px;"></div>
+
+      <!-- Answer options -->
+      <div id="seq-options" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;"></div>
+
+      <!-- Overlay -->
+      <div id="seq-overlay" style="display:flex; position:absolute; inset:0; background:rgba(74,20,140,0.88); border-radius:var(--radius); flex-direction:column; align-items:center; justify-content:center; gap:12px; z-index:10;">
+        <div style="font-size:2.5rem;">🔢🎨🔷</div>
+        <div class="overlay-title" style="color:white;">¡Patrones Mágicos!</div>
+        <div class="overlay-sub" style="color:rgba(255,255,255,0.85);">Encontrá la ficha que falta y arrastrálla al espacio vacío</div>
+        <button class="play-btn" style="background:#9C27B0;" onclick="startSecuencias()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div id="seq-feedback" style="text-align:center; font-size:1rem; font-weight:700; min-height:28px; margin-top:0.25rem;"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="seq-prog-label">0 / 8</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="seq-prog-fill" style="height:100%; background:#9C27B0; border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="seq-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Mirá el patrón con cuidado — ¡encontrá la ficha que falta y arrastrálla al espacio con ❓!
+    </div>
+  </div>
+
+  <!-- CONTAR OBJETOS -->
+  <div class="screen" id="screen-contar">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">⭐ Contar Objetos</div>
+          <div class="level-badge" id="contar-level-label">Nivel 1 — hasta 5</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="contar-hits-disp">0/10</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="contar-score-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contar-arena" id="contar-arena">
+
+      <div class="contar-question" id="contar-question">¿Cuántos hay?</div>
+
+      <div class="contar-objects" id="contar-objects"></div>
+
+      <div class="contar-opts" id="contar-opts"></div>
+
+      <div class="contar-overlay" id="contar-overlay">
+        <div style="font-size:3rem;">⭐🌟⭐</div>
+        <div class="overlay-title" style="color:white; font-size:1.6rem;">¡Contar Objetos!</div>
+        <div class="overlay-sub" style="color:rgba(255,255,255,0.9);">Mirá los objetos y elegí el número correcto</div>
+        <button class="play-btn" style="background:#FFCA28; color:#5D4037; font-weight:800;" onclick="startContar()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="contar-feedback" id="contar-feedback"></div>
+
+    <div class="contar-progress">
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="contar-prog-label">0 / 10</span>
+      <div class="contar-prog-bar"><div class="contar-prog-fill" id="contar-prog-fill" style="width:0%"></div></div>
+      <span style="font-size:0.75rem;font-weight:700;color:var(--text-light);" id="contar-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Contá los objetos uno por uno y tocá el número correcto.
+    </div>
+  </div>
+
+  <!-- MEMOTEST -->
+  <div class="screen" id="screen-memotest">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🃏 Memotest Matemático</div>
+          <div class="level-badge" id="memo-level-label">Nivel 1 — sumas fáciles</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Pares</div><div class="stat-pill-val" id="memo-pairs-disp">0/4</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Intentos</div><div class="stat-pill-val" id="memo-tries-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level selector -->
+    <div class="memo-level-row">
+      <button class="memo-level-btn active" id="mlvl-1" onclick="selectMemoLevel(1)">Nivel 1 — Sumas fáciles</button>
+      <button class="memo-level-btn"        id="mlvl-2" onclick="selectMemoLevel(2)">Nivel 2 — Restas</button>
+      <button class="memo-level-btn"        id="mlvl-3" onclick="selectMemoLevel(3)">Nivel 3 — Mixto difícil</button>
+    </div>
+
+    <div class="memo-arena" id="memo-arena">
+
+      <div class="memo-status">
+        <div class="memo-stat">🃏 Tocá dos cartas</div>
+        <div class="memo-stat" id="memo-status-pairs">0 de 4 pares encontrados</div>
+      </div>
+
+      <div class="memo-grid" id="memo-grid"></div>
+
+      <div class="memo-overlay show" id="memo-overlay">
+        <div style="font-size:2.2rem; margin-bottom:2px;">🃏🧮🃏</div>
+        <div class="overlay-title" style="color:white; font-size:1.5rem;">¡Memotest Matemático!</div>
+
+        <!-- Pictographic step-by-step instructions -->
+        <div style="background:rgba(255,255,255,0.12); border:1.5px solid rgba(255,255,255,0.25); border-radius:16px; padding:12px 16px; max-width:320px; width:100%;">
+
+          <!-- Step 1 -->
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <div style="width:32px; height:32px; border-radius:50%; background:#FFCA28; color:#0D47A1; font-family:'Baloo 2',cursive; font-size:1.1rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div style="width:42px; height:42px; border-radius:10px; background:#1565C0; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">🌟</div>
+              <span style="font-size:0.78rem; font-weight:700; color:white;">Tocá una carta azul → se da vuelta</span>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <div style="width:32px; height:32px; border-radius:50%; background:#FFCA28; color:#0D47A1; font-family:'Baloo 2',cursive; font-size:1.1rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div style="width:42px; height:42px; border-radius:10px; background:#E3F2FD; border:2px solid #1565C0; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2',cursive; font-size:0.9rem; font-weight:800; color:#0D47A1; flex-shrink:0;">4+3</div>
+              <span style="font-size:1.2rem;">→</span>
+              <div style="width:42px; height:42px; border-radius:10px; background:#E8F5E9; border:2px solid #43A047; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2',cursive; font-size:1.3rem; font-weight:800; color:#1B5E20; flex-shrink:0;">7</div>
+              <span style="font-size:0.78rem; font-weight:700; color:white;">Buscá la carta con el resultado</span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:50%; background:#FFCA28; color:#0D47A1; font-family:'Baloo 2',cursive; font-size:1.1rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div style="width:42px; height:42px; border-radius:10px; background:#E8F5E9; border:2px solid #43A047; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">✅</div>
+              <span style="font-size:0.78rem; font-weight:700; color:white;">¡Par encontrado! Las dos cartas se quedan dadas vuelta</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.78rem; color:rgba(255,255,255,0.7); text-align:center;">
+          Hay 4 pares para encontrar — ¡podés hacerlo!
+        </div>
+        <button class="play-btn" style="background:#FFCA28; color:#0D47A1; font-weight:800; font-size:1rem; padding:13px 36px;" onclick="startMemotest()">¡Jugar! 🃏</button>
+      </div>
+    </div>
+
+    <div class="memo-feedback" id="memo-feedback"></div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 <strong>Paso 1</strong> tocá una carta 🌟 → <strong>Paso 2</strong> buscá la carta que le hace pareja → <strong>Paso 3</strong> ¡par encontrado! ✅
+    </div>
+  </div>
+
   <!-- PREMIOS -->
   <div class="screen" id="screen-premios">
     <div class="card progress-section">
@@ -2190,7 +3588,7 @@ function goToScreen(name) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
   const btns = document.querySelectorAll('.nav-btn');
-  const names = ['conteo','suma','resta','comparar','suma-globos','cohetes','granja','conejos','tienda','premios'];
+  const names = ['conteo','suma','resta','comparar','suma-globos','cohetes','granja','conejos','tienda','secuencias','contar','memotest','premios'];
   const idx = names.indexOf(name);
   if (idx >= 0) btns[idx].classList.add('active');
   if (name === 'cohetes') initCohetes();
@@ -2198,9 +3596,13 @@ function goToScreen(name) {
   if (name === 'granja') initGranja();
   if (name === 'conejos') initConejos();
   if (name === 'tienda') initTienda();
-  if (name === 'suma') newSuma();
-  if (name === 'resta') newResta();
-  if (name === 'comparar') newCmp();
+  if (name === 'secuencias') initSecuencias();
+  if (name === 'contar') initContar();
+  if (name === 'memotest') initMemotest();
+  vozSetScreen(name);
+  if (name === 'suma') initSuma2();
+  if (name === 'resta') initResta2();
+  if (name === 'comparar') initCmp2();
   if (name === 'premios') { renderPrizes(); renderHistory(); }
 }
 
@@ -2299,9 +3701,9 @@ function setEmoji(el, emoji) {
 
 function changeCount(delta) {
   countVal = Math.max(0, Math.min(20, countVal + delta));
-  document.getElementById('count-num').textContent = countVal;
-  document.getElementById('prev-num').textContent = countVal > 0 ? countVal - 1 : '—';
-  document.getElementById('next-num').textContent = countVal < 20 ? countVal + 1 : '—';
+  if (gei('count-num')) gei('count-num').textContent = countVal;
+  if (gei('prev-num')) gei('prev-num').textContent = countVal > 0 ? countVal - 1 : '—';
+  if (gei('next-num')) gei('next-num').textContent = countVal < 20 ? countVal + 1 : '—';
   renderObjects();
   if (conteoMilestones.includes(countVal) && !reachedMilestones.has(countVal)) {
     reachedMilestones.add(countVal);
@@ -2345,93 +3747,598 @@ function makeVisual(a, b, op, containerId) {
   el.innerHTML = html;
 }
 
-function newSuma() {
-  sumaA = rnd(1, 9); sumaB = rnd(1, 10 - sumaA);
-  document.getElementById('suma-text').textContent = sumaA + ' + ' + sumaB + ' = ?';
-  makeVisual(sumaA, sumaB, '+', 'suma-visual');
-  document.getElementById('suma-input').value = '';
-  document.getElementById('suma-feedback').textContent = '';
-  document.getElementById('suma-feedback').className = 'feedback-box';
-  document.getElementById('suma-earn').innerHTML = '';
-  document.getElementById('suma-input').focus();
+// ── SUMA INTERACTIVA ──────────────────────────────────────
+const SUMA2_EMOJIS = ['🍎','⭐','🐱','🌸','🚗','🦋','🐸','🍕','🐶','🍓','❤️','🐰','🌈','🎈','🍊'];
+const SUMA2_LEVELS = [
+  { rounds:8,  max:10, coins:3, label:'Nivel 1 — sumas hasta 10' },
+  { rounds:10, max:15, coins:4, label:'Nivel 2 — sumas hasta 15' },
+  { rounds:12, max:20, coins:5, label:'Nivel 3 — sumas hasta 20' },
+];
+let suma2 = { level:1, hits:0, score:0, a:0, b:0, answered:false, counted:0, emoji:'🍎' };
+
+function initSuma2() {
+  const ov = gei('suma2-overlay');
+  if (ov) ov.classList.add('show');
+  updateSuma2UI();
 }
 
-function checkSuma() {
-  const val = parseInt(document.getElementById('suma-input').value);
-  const fb = document.getElementById('suma-feedback');
-  if (isNaN(val)) { fb.textContent = 'Escribí un número 🤔'; fb.className = 'feedback-box'; return; }
-  if (val === sumaA + sumaB) {
-    fb.textContent = '¡Muy bien! ' + sumaA + ' + ' + sumaB + ' = ' + (sumaA + sumaB) + ' ✓';
-    fb.className = 'feedback-box correct';
-    updateCoins(2, 'suma-earn');
-  } else {
-    fb.textContent = 'Casi... el resultado es ' + (sumaA + sumaB) + ' ¡Intentá de nuevo!';
-    fb.className = 'feedback-box wrong';
+function startSuma2() {
+  suma2 = { level:1, hits:0, score:0, a:0, b:0, answered:false, counted:0, emoji:'🍎' };
+  const ov = gei('suma2-overlay');
+  if (ov) ov.classList.remove('show');
+  updateSuma2UI();
+  nextSuma2();
+}
+
+function updateSuma2UI() {
+  const cfg = SUMA2_LEVELS[Math.min(suma2.level,3)-1];
+  if (gei('suma2-level-label')) gei('suma2-level-label').textContent = cfg.label;
+  if (gei('suma2-hits-disp'))   gei('suma2-hits-disp').textContent   = suma2.hits+'/'+cfg.rounds;
+  if (gei('suma2-score-disp'))  gei('suma2-score-disp').textContent  = suma2.score;
+  const pct = Math.min((suma2.hits/cfg.rounds)*100,100);
+  if (gei('suma2-prog-fill'))   gei('suma2-prog-fill').style.width   = pct+'%';
+  if (gei('suma2-prog-label'))  gei('suma2-prog-label').textContent  = suma2.hits+' / '+cfg.rounds;
+  const lit = suma2.hits>=Math.floor(cfg.rounds*.75)?3:suma2.hits>=Math.floor(cfg.rounds*.4)?2:suma2.hits>=1?1:0;
+  if (gei('suma2-stars')) gei('suma2-stars').textContent = ['☆☆☆','⭐☆☆','⭐⭐☆','⭐⭐⭐'][lit];
+}
+
+function nextSuma2() {
+  suma2.answered = false;
+  suma2.counted  = 0;
+  const cfg = SUMA2_LEVELS[Math.min(suma2.level,3)-1];
+  // keep both numbers small & visible
+  suma2.a = rnd(1, Math.min(5, cfg.max-1));
+  suma2.b = rnd(1, Math.min(5, cfg.max - suma2.a));
+  suma2.emoji = SUMA2_EMOJIS[rnd(0, SUMA2_EMOJIS.length-1)];
+  const total = suma2.a + suma2.b;
+
+  // Equation numbers
+  if (gei('suma2-eqA')) gei('suma2-eqA').textContent = suma2.a;
+  if (gei('suma2-eqB')) gei('suma2-eqB').textContent = suma2.b;
+  if (gei('suma2-equation')) {
+    const q = gei('suma2-equation').querySelector('.suma2-eq-q');
+    if (q) { q.textContent = '?'; q.style.background='#E8F5E9'; q.style.borderColor='#66BB6A'; q.style.color='#66BB6A'; }
+  }
+
+  // Render objects in two groups
+  renderSuma2Group('suma2-groupA', suma2.a);
+  renderSuma2Group('suma2-groupB', suma2.b);
+
+  // Reset count hint
+  const hint = gei('suma2-counthint');
+  if (hint) { hint.textContent = '👆 Tocá los objetos para contarlos juntos'; hint.className = 'suma2-counthint'; }
+
+  // Build 3-4 options
+  const optsCount = suma2.level >= 3 ? 4 : 3;
+  const opts = new Set([total]);
+  while (opts.size < optsCount) {
+    const d = total + [-2,-1,1,2,3][rnd(0,4)];
+    if (d > 0 && d !== total) opts.add(d);
+  }
+  const optsEl = gei('suma2-opts');
+  if (optsEl) {
+    optsEl.innerHTML = '';
+    [...opts].sort(()=>Math.random()-.5).forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'suma2-opt';
+      btn.textContent = v;
+      btn.onclick = () => onSuma2Answer(btn, v, total);
+      optsEl.appendChild(btn);
+    });
+  }
+
+  const fb = gei('suma2-feedback');
+  if (fb) { fb.textContent=''; fb.className='suma2-feedback'; }
+}
+
+function renderSuma2Group(id, n) {
+  const el = gei(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const span = document.createElement('span');
+    span.className = 'suma2-obj';
+    span.textContent = suma2.emoji;
+    span.style.animationDelay = (i*0.05)+'s';
+    span.onclick = () => {
+      if (span.classList.contains('counted')) return;
+      span.classList.add('counted');
+      suma2.counted++;
+      playTone(500 + suma2.counted*60, 'sine', 0.1, 0, 0.1); // rising count tone
+      const total = suma2.a + suma2.b;
+      const hint = gei('suma2-counthint');
+      if (hint) {
+        if (suma2.counted >= total) {
+          hint.textContent = '✅ ¡Contaste ' + total + ' en total! Ahora elegí el número';
+          hint.className = 'suma2-counthint done';
+        } else {
+          hint.textContent = '👆 Contaste ' + suma2.counted + '… seguí contando';
+          hint.className = 'suma2-counthint';
+        }
+      }
+    };
+    el.appendChild(span);
   }
 }
 
-function newResta() {
-  restaA = rnd(3, 10); restaB = rnd(1, restaA - 1);
-  document.getElementById('resta-text').textContent = restaA + ' − ' + restaB + ' = ?';
-  makeVisual(restaA, restaB, '−', 'resta-visual');
-  document.getElementById('resta-input').value = '';
-  document.getElementById('resta-feedback').textContent = '';
-  document.getElementById('resta-feedback').className = 'feedback-box';
-  document.getElementById('resta-earn').innerHTML = '';
-  document.getElementById('resta-input').focus();
-}
+function onSuma2Answer(btn, val, total) {
+  if (suma2.answered) return;
+  suma2.answered = true;
+  document.querySelectorAll('.suma2-opt').forEach(b => b.disabled = true);
+  const fb = gei('suma2-feedback');
 
-function checkResta() {
-  const val = parseInt(document.getElementById('resta-input').value);
-  const fb = document.getElementById('resta-feedback');
-  if (isNaN(val)) { fb.textContent = 'Escribí un número 🤔'; fb.className = 'feedback-box'; return; }
-  if (val === restaA - restaB) {
-    fb.textContent = '¡Perfecto! ' + restaA + ' − ' + restaB + ' = ' + (restaA - restaB) + ' ✓';
-    fb.className = 'feedback-box correct';
-    updateCoins(2, 'resta-earn');
+  // Reveal answer in equation
+  const q = gei('suma2-equation') ? gei('suma2-equation').querySelector('.suma2-eq-q') : null;
+
+  if (val === total) {
+    btn.classList.add('correct');
+    if (q) { q.textContent = total; q.style.background='#C8E6C9'; q.style.borderColor='#43A047'; q.style.color='#1B5E20'; }
+    // celebrate objects
+    document.querySelectorAll('.suma2-obj').forEach((o,i)=> setTimeout(()=>o.classList.add('counted'), i*40));
+    if (fb) { fb.textContent = '🎉 ¡Muy bien! ' + suma2.a + ' + ' + suma2.b + ' = ' + total; fb.className='suma2-feedback correct'; }
+    playSuccessSound();
+    launchConfettiIn('suma2-arena');
+    suma2.hits++;
+    suma2.score += 10 + suma2.level*2;
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent = coins;
+    if (gei('coins-big'))    gei('coins-big').textContent    = coins+' 🪙';
+    updateSuma2UI();
+
+    const cfg = SUMA2_LEVELS[Math.min(suma2.level,3)-1];
+    if (suma2.hits >= cfg.rounds) {
+      updateCoins(cfg.coins, null);
+      showToast('➕ ¡Nivel '+suma2.level+' completo! +'+cfg.coins+' 🪙');
+      if (suma2.level >= 3) {
+        suma2.level=3; updateCoins(8,null);
+        setTimeout(showSuma2Complete, 1400);
+      } else {
+        suma2.level++; suma2.hits=0;
+        setTimeout(()=>{ updateSuma2UI(); nextSuma2(); }, 1500);
+      }
+    } else {
+      setTimeout(nextSuma2, 1400);
+    }
   } else {
-    fb.textContent = 'El resultado es ' + (restaA - restaB) + ' ¡Volvé a intentarlo!';
-    fb.className = 'feedback-box wrong';
+    btn.classList.add('wrong');
+    document.querySelectorAll('.suma2-opt').forEach(b => { if (parseInt(b.textContent)===total) b.classList.add('correct'); });
+    if (q) { q.textContent = total; q.style.background='#C8E6C9'; q.style.borderColor='#43A047'; q.style.color='#1B5E20'; }
+    if (fb) { fb.textContent = 'Son ' + total + '… ¡contá de nuevo la próxima! 😊'; fb.className='suma2-feedback wrong'; }
+    playWrongSound();
+    updateSuma2UI();
+    setTimeout(nextSuma2, 1800);
   }
 }
 
-function makeDots(containerId, n) {
-  const el = document.getElementById(containerId);
-  let html = '';
-  for (let i = 0; i < Math.min(n, 15); i++) html += '<div class="dot"></div>';
-  el.innerHTML = html;
+function showSuma2Complete() {
+  const ov = gei('suma2-overlay');
+  if (!ov) return;
+  ov.innerHTML =
+    '<div style="font-size:2.6rem;">🌟➕🌟</div>'+
+    '<div class="overlay-title" style="color:white;">¡Campeona de las sumas!</div>'+
+    '<div class="overlay-sub" style="color:rgba(255,255,255,0.9);">¡Completaste los 3 niveles!</div>'+
+    '<div style="background:rgba(255,255,255,0.2);border:1.5px solid white;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 +8 monedas especiales</div>'+
+    '<button class="play-btn" onclick="startSuma2()">Jugar de nuevo →</button>';
+  ov.classList.add('show');
+  launchConfettiIn('suma2-arena');
+  playSuccessSound();
 }
 
-function newCmp() {
-  cmpA = rnd(1, 15); cmpB = rnd(1, 15);
-  document.getElementById('cmp-a').textContent = cmpA;
-  document.getElementById('cmp-b').textContent = cmpB;
-  makeDots('cmp-dots-a', cmpA);
-  makeDots('cmp-dots-b', cmpB);
-  document.getElementById('cmp-sign').textContent = '?';
-  document.getElementById('cmp-feedback').textContent = '';
-  document.getElementById('cmp-feedback').className = 'feedback-box';
-  document.getElementById('cmp-earn').innerHTML = '';
-  document.getElementById('cmp-left').className = 'cmp-box';
-  document.getElementById('cmp-right').className = 'cmp-box';
-  document.querySelectorAll('.cmp-opt').forEach(b => b.className = 'cmp-opt');
-}
-
-function checkCmp(answer) {
-  let correct = cmpA > cmpB ? '>' : cmpA < cmpB ? '<' : '=';
-  const signMap = { '>': '›', '<': '‹', '=': '=' };
-  const fb = document.getElementById('cmp-feedback');
-  document.getElementById('cmp-sign').textContent = signMap[correct];
-  if (answer === correct) {
-    fb.textContent = '¡Excelente! ¡Lo lograste! ✓';
-    fb.className = 'feedback-box correct';
-    document.getElementById('cmp-left').className = 'cmp-box ' + (cmpA >= cmpB ? 'winner' : 'loser');
-    document.getElementById('cmp-right').className = 'cmp-box ' + (cmpB >= cmpA ? 'winner' : 'loser');
-    updateCoins(2, 'cmp-earn');
-  } else {
-    fb.textContent = 'El correcto es ' + signMap[correct] + ' ¡Seguí intentando!';
-    fb.className = 'feedback-box wrong';
+// Generic confetti into any arena id
+function launchConfettiIn(arenaId) {
+  const arena = gei(arenaId);
+  if (!arena) return;
+  const colors = ['#FFCA28','#E53935','#1E88E5','#43A047','#8E24AA','#FB8C00'];
+  for (let i=0;i<24;i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = 'left:'+rnd(10,90)+'%;top:'+rnd(5,35)+'%;background:'+colors[rnd(0,colors.length-1)]+';width:'+rnd(6,12)+'px;height:'+rnd(6,12)+'px;animation-duration:'+(0.6+Math.random()*0.8)+'s;animation-delay:'+(Math.random()*0.3)+'s;border-radius:'+(Math.random()>0.5?'50%':'2px')+';';
+    arena.appendChild(p);
+    setTimeout(()=>{ if(p.parentNode) p.remove(); }, 1400);
   }
+}
+
+// Keep old function names as aliases so nothing else breaks
+function newSuma() { /* replaced by interactive suma2 */ }
+function checkSuma() { /* replaced */ }
+
+// ── RESTA INTERACTIVA ─────────────────────────────────────
+const RESTA2_EMOJIS = ['🍎','⭐','🐱','🌸','🚗','🦋','🐸','🍕','🐶','🍓','❤️','🐰','🌈','🎈','🍊'];
+const RESTA2_LEVELS = [
+  { rounds:8,  max:10, coins:3, label:'Nivel 1 — restas hasta 10' },
+  { rounds:10, max:15, coins:4, label:'Nivel 2 — restas hasta 15' },
+  { rounds:12, max:20, coins:5, label:'Nivel 3 — restas hasta 20' },
+];
+let resta2 = { level:1, hits:0, score:0, a:0, b:0, answered:false, removed:0, emoji:'🍎' };
+
+function initResta2() {
+  const ov = gei('resta2-overlay');
+  if (ov) ov.classList.add('show');
+  updateResta2UI();
+}
+
+function startResta2() {
+  resta2 = { level:1, hits:0, score:0, a:0, b:0, answered:false, removed:0, emoji:'🍎' };
+  const ov = gei('resta2-overlay');
+  if (ov) ov.classList.remove('show');
+  updateResta2UI();
+  nextResta2();
+}
+
+function updateResta2UI() {
+  const cfg = RESTA2_LEVELS[Math.min(resta2.level,3)-1];
+  if (gei('resta2-level-label')) gei('resta2-level-label').textContent = cfg.label;
+  if (gei('resta2-hits-disp'))   gei('resta2-hits-disp').textContent   = resta2.hits+'/'+cfg.rounds;
+  if (gei('resta2-score-disp'))  gei('resta2-score-disp').textContent  = resta2.score;
+  const pct = Math.min((resta2.hits/cfg.rounds)*100,100);
+  if (gei('resta2-prog-fill'))   gei('resta2-prog-fill').style.width   = pct+'%';
+  if (gei('resta2-prog-label'))  gei('resta2-prog-label').textContent  = resta2.hits+' / '+cfg.rounds;
+  const lit = resta2.hits>=Math.floor(cfg.rounds*.75)?3:resta2.hits>=Math.floor(cfg.rounds*.4)?2:resta2.hits>=1?1:0;
+  if (gei('resta2-stars')) gei('resta2-stars').textContent = ['☆☆☆','⭐☆☆','⭐⭐☆','⭐⭐⭐'][lit];
+}
+
+function nextResta2() {
+  resta2.answered = false;
+  resta2.removed  = 0;
+  const cfg = RESTA2_LEVELS[Math.min(resta2.level,3)-1];
+  resta2.a = rnd(3, cfg.max);
+  resta2.b = rnd(1, resta2.a - 1);
+  resta2.emoji = RESTA2_EMOJIS[rnd(0, RESTA2_EMOJIS.length-1)];
+  const result = resta2.a - resta2.b;
+
+  if (gei('resta2-eqA')) gei('resta2-eqA').textContent = resta2.a;
+  if (gei('resta2-eqB')) gei('resta2-eqB').textContent = resta2.b;
+  if (gei('resta2-eqQ')) { const q=gei('resta2-eqQ'); q.textContent='?'; q.style.background='#E8F5E9'; q.style.borderColor='#66BB6A'; q.style.color='#66BB6A'; }
+  if (gei('resta2-grouptitle')) gei('resta2-grouptitle').textContent = 'Tenemos ' + resta2.a + ':';
+
+  // Render all A objects, tappable to remove
+  const grp = gei('resta2-group');
+  if (grp) {
+    grp.innerHTML = '';
+    for (let i = 0; i < resta2.a; i++) {
+      const span = document.createElement('span');
+      span.className = 'resta2-obj';
+      span.textContent = resta2.emoji;
+      span.style.animationDelay = (i*0.04)+'s';
+      span.onclick = () => {
+        if (resta2.answered) return;
+        if (span.classList.contains('removed')) {
+          // un-remove
+          span.classList.remove('removed');
+          resta2.removed--;
+        } else {
+          if (resta2.removed >= resta2.b) return; // can't remove more than b
+          span.classList.add('removed');
+          resta2.removed++;
+          playTone(400 - resta2.removed*30, 'triangle', 0.12, 0, 0.1); // descending tone
+        }
+        updateRemoveHint();
+      };
+      grp.appendChild(span);
+    }
+  }
+
+  updateRemoveHint();
+
+  // Build options
+  const optsCount = resta2.level >= 3 ? 4 : 3;
+  const opts = new Set([result]);
+  while (opts.size < optsCount) {
+    const d = result + [-2,-1,1,2,3][rnd(0,4)];
+    if (d >= 0 && d !== result) opts.add(d);
+  }
+  const optsEl = gei('resta2-opts');
+  if (optsEl) {
+    optsEl.innerHTML = '';
+    [...opts].sort(()=>Math.random()-.5).forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'resta2-opt';
+      btn.textContent = v;
+      btn.onclick = () => onResta2Answer(btn, v, result);
+      optsEl.appendChild(btn);
+    });
+  }
+
+  const fb = gei('resta2-feedback');
+  if (fb) { fb.textContent=''; fb.className='resta2-feedback'; }
+}
+
+function updateRemoveHint() {
+  const hint = gei('resta2-removehint');
+  if (!hint) return;
+  const left = resta2.a - resta2.removed;
+  if (resta2.removed >= resta2.b) {
+    hint.textContent = '✅ ¡Sacaste ' + resta2.b + '! Quedan ' + left + '. Elegí ese número';
+    hint.className = 'resta2-removehint done';
+  } else {
+    hint.textContent = '👆 Sacá ' + resta2.b + ' (llevás ' + resta2.removed + ')';
+    hint.className = 'resta2-removehint';
+  }
+}
+
+function onResta2Answer(btn, val, result) {
+  if (resta2.answered) return;
+  resta2.answered = true;
+  document.querySelectorAll('.resta2-opt').forEach(b => b.disabled = true);
+  const fb = gei('resta2-feedback');
+  const q  = gei('resta2-eqQ');
+
+  if (val === result) {
+    btn.classList.add('correct');
+    if (q) { q.textContent = result; q.style.background='#C8E6C9'; q.style.borderColor='#43A047'; q.style.color='#1B5E20'; }
+    // auto-remove the b objects visually if not all removed
+    const objs = document.querySelectorAll('.resta2-obj');
+    let r = 0;
+    objs.forEach(o => { if (r < resta2.b && !o.classList.contains('removed')) { o.classList.add('removed'); r++; } });
+    if (fb) { fb.textContent = '🎉 ¡Muy bien! ' + resta2.a + ' − ' + resta2.b + ' = ' + result; fb.className='resta2-feedback correct'; }
+    playSuccessSound();
+    launchConfettiIn('resta2-arena');
+    resta2.hits++;
+    resta2.score += 10 + resta2.level*2;
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent = coins;
+    if (gei('coins-big'))    gei('coins-big').textContent    = coins+' 🪙';
+    updateResta2UI();
+
+    const cfg = RESTA2_LEVELS[Math.min(resta2.level,3)-1];
+    if (resta2.hits >= cfg.rounds) {
+      updateCoins(cfg.coins, null);
+      showToast('➖ ¡Nivel '+resta2.level+' completo! +'+cfg.coins+' 🪙');
+      if (resta2.level >= 3) {
+        resta2.level=3; updateCoins(8,null);
+        setTimeout(showResta2Complete, 1400);
+      } else {
+        resta2.level++; resta2.hits=0;
+        setTimeout(()=>{ updateResta2UI(); nextResta2(); }, 1500);
+      }
+    } else {
+      setTimeout(nextResta2, 1400);
+    }
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.resta2-opt').forEach(b => { if (parseInt(b.textContent)===result) b.classList.add('correct'); });
+    if (q) { q.textContent = result; q.style.background='#C8E6C9'; q.style.borderColor='#43A047'; q.style.color='#1B5E20'; }
+    if (fb) { fb.textContent = 'Quedan ' + result + '… ¡contá de nuevo la próxima! 😊'; fb.className='resta2-feedback wrong'; }
+    playWrongSound();
+    updateResta2UI();
+    setTimeout(nextResta2, 1800);
+  }
+}
+
+function showResta2Complete() {
+  const ov = gei('resta2-overlay');
+  if (!ov) return;
+  ov.innerHTML =
+    '<div style="font-size:2.6rem;">🌟➖🌟</div>'+
+    '<div class="overlay-title" style="color:white;">¡Campeona de las restas!</div>'+
+    '<div class="overlay-sub" style="color:rgba(255,255,255,0.9);">¡Completaste los 3 niveles!</div>'+
+    '<div style="background:rgba(255,255,255,0.2);border:1.5px solid white;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 +8 monedas especiales</div>'+
+    '<button class="play-btn" style="background:#D85A30;" onclick="startResta2()">Jugar de nuevo →</button>';
+  ov.classList.add('show');
+  launchConfettiIn('resta2-arena');
+  playSuccessSound();
+}
+
+// Aliases so nothing else breaks
+function newResta() { /* replaced by interactive resta2 */ }
+function checkResta() { /* replaced */ }
+
+// ── COMPARAR — El cocodrilo glotón ───────────────────────
+const CMP2_LEVELS = [
+  { rounds:6, max:9,  unit:17, allowEqual:false, menos:false, coins:3, label:'Nivel 1 — hasta 9' },
+  { rounds:8, max:15, unit:9,  allowEqual:true,  menos:false, coins:4, label:'Nivel 2 — hasta 15' },
+  { rounds:8, max:20, unit:6,  allowEqual:true,  menos:true,  coins:5, label:'Nivel 3 — más y menos' },
+];
+let cmp2 = { level:1, hits:0, score:0, a:7, b:4, target:'mas', answered:false };
+
+function initCmp2() {
+  const ov = gei('cmp2-overlay');
+  if (ov) ov.classList.add('show');
+  updateCmp2UI();
+}
+
+function startCmp2() {
+  cmp2 = { level:1, hits:0, score:0, a:7, b:4, target:'mas', answered:false };
+  const ov = gei('cmp2-overlay');
+  if (ov) ov.classList.remove('show');
+  updateCmp2UI();
+  nextCmp2();
+}
+
+function updateCmp2UI() {
+  const cfg = CMP2_LEVELS[Math.min(cmp2.level,3)-1];
+  if (gei('cmp2-level-label')) gei('cmp2-level-label').textContent = cfg.label;
+  if (gei('cmp2-hits-disp'))   gei('cmp2-hits-disp').textContent   = cmp2.hits+'/'+cfg.rounds;
+  if (gei('cmp2-score-disp'))  gei('cmp2-score-disp').textContent  = cmp2.score;
+  const pct = Math.min((cmp2.hits/cfg.rounds)*100,100);
+  if (gei('cmp2-prog-fill'))   gei('cmp2-prog-fill').style.width   = pct+'%';
+  if (gei('cmp2-prog-label'))  gei('cmp2-prog-label').textContent  = cmp2.hits+' / '+cfg.rounds;
+  const lit = cmp2.hits>=Math.floor(cfg.rounds*.75)?3:cmp2.hits>=Math.floor(cfg.rounds*.4)?2:cmp2.hits>=1?1:0;
+  if (gei('cmp2-stars')) gei('cmp2-stars').textContent = ['☆☆☆','⭐☆☆','⭐⭐☆','⭐⭐⭐'][lit];
+}
+
+function cmp2RenderTower(id, n, unit) {
+  const el = gei(id);
+  if (!el) return;
+  el.innerHTML = '';
+  for (let i=0;i<n;i++) {
+    const c = document.createElement('div');
+    c.className = 'cmp2-cube';
+    c.style.width = '40px';
+    c.style.height = unit + 'px';
+    c.style.animationDelay = (i*0.03)+'s';
+    el.appendChild(c);
+  }
+}
+
+// Friendly crocodile head. dir: 'left' (boca abre a la izquierda = >),
+// 'right' (boca abre a la derecha = <), 'equal', 'neutral'.
+function cmp2CrocSVG(dir) {
+  const grad = '<defs><radialGradient id="cmpcg" cx="40%" cy="30%" r="72%">' +
+    '<stop offset="0%" stop-color="#AED581"/><stop offset="100%" stop-color="#558B2F"/>' +
+    '</radialGradient></defs>';
+  if (dir === 'equal') {
+    return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">' + grad +
+      '<circle cx="60" cy="62" r="52" fill="url(#cmpcg)" stroke="#33691E" stroke-width="3"/>' +
+      '<circle cx="42" cy="40" r="11" fill="white"/><circle cx="44" cy="42" r="5.5" fill="#222"/>' +
+      '<circle cx="78" cy="40" r="11" fill="white"/><circle cx="80" cy="42" r="5.5" fill="#222"/>' +
+      '<rect x="40" y="80" width="40" height="7" rx="3.5" fill="#33691E"/>' +
+      '</svg>';
+  }
+  if (dir === 'neutral') {
+    return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">' + grad +
+      '<circle cx="60" cy="62" r="52" fill="url(#cmpcg)" stroke="#33691E" stroke-width="3"/>' +
+      '<circle cx="42" cy="40" r="11" fill="white"/><circle cx="44" cy="42" r="5.5" fill="#222"/>' +
+      '<circle cx="78" cy="40" r="11" fill="white"/><circle cx="80" cy="42" r="5.5" fill="#222"/>' +
+      '<ellipse cx="60" cy="84" rx="9" ry="7" fill="#33691E"/>' +
+      '</svg>';
+  }
+  const flip = (dir === 'right');
+  const inner =
+    '<path d="M60 62 L15 36 A52 52 0 1 1 15 88 Z" fill="url(#cmpcg)" stroke="#33691E" stroke-width="3" stroke-linejoin="round"/>' +
+    '<path d="M58 62 L31 47 A31 31 0 0 0 31 77 Z" fill="#EF9A9A"/>' +
+    '<polygon points="33,49 42,55 33,58" fill="white"/>' +
+    '<polygon points="33,75 42,69 33,72" fill="white"/>' +
+    '<circle cx="80" cy="34" r="11" fill="white" stroke="#33691E" stroke-width="2"/><circle cx="82" cy="35" r="5.5" fill="#222"/>' +
+    '<circle cx="93" cy="58" r="3.5" fill="#33691E"/>';
+  const g = '<g'+(flip?' transform="translate(120,0) scale(-1,1)"':'')+'>' + inner + '</g>';
+  return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">' + grad + g + '</svg>';
+}
+
+function nextCmp2() {
+  cmp2.answered = false;
+  const cfg = CMP2_LEVELS[Math.min(cmp2.level,3)-1];
+  let a, b;
+  if (cfg.allowEqual && Math.random() < 0.18) {
+    a = b = rnd(2, cfg.max);
+  } else {
+    do { a = rnd(1, cfg.max); b = rnd(1, cfg.max); }
+    while (a === b || (cfg.max <= 9 && Math.abs(a - b) < 2));
+  }
+  cmp2.a = a; cmp2.b = b;
+  cmp2.target = (cfg.menos && Math.random() < 0.5) ? 'menos' : 'mas';
+
+  if (gei('cmp2-numA')) gei('cmp2-numA').textContent = a;
+  if (gei('cmp2-numB')) gei('cmp2-numB').textContent = b;
+  cmp2RenderTower('cmp2-towerA', a, cfg.unit);
+  cmp2RenderTower('cmp2-towerB', b, cfg.unit);
+
+  const croc = gei('cmp2-croc');
+  if (croc) { croc.innerHTML = cmp2CrocSVG('neutral'); croc.classList.remove('chomp'); }
+  if (gei('cmp2-statement')) gei('cmp2-statement').innerHTML = '❔';
+
+  if (gei('cmp2-boxA')) gei('cmp2-boxA').className = 'cmp2-box';
+  if (gei('cmp2-boxB')) gei('cmp2-boxB').className = 'cmp2-box';
+  if (gei('cmp2-equal')) gei('cmp2-equal').className = 'cmp2-equal-btn';
+
+  const hint = gei('cmp2-hint');
+  if (hint) {
+    if (cmp2.target === 'menos') { hint.textContent = '👇 Tocá el que tiene MENOS'; hint.className = 'cmp2-hint menos'; }
+    else { hint.textContent = '👆 Tocá el que tiene MÁS'; hint.className = 'cmp2-hint'; }
+  }
+  const fb = gei('cmp2-feedback');
+  if (fb) { fb.textContent = ''; fb.className = 'cmp2-feedback'; }
+}
+
+function onCmp2Pick(pick) {
+  if (cmp2.answered) return;
+  cmp2.answered = true;
+  const a = cmp2.a, b = cmp2.b;
+
+  if (gei('cmp2-boxA')) gei('cmp2-boxA').classList.add('dim');
+  if (gei('cmp2-boxB')) gei('cmp2-boxB').classList.add('dim');
+  if (gei('cmp2-equal')) gei('cmp2-equal').classList.add('dim');
+
+  const rel = a > b ? '>' : a < b ? '<' : '=';
+  const crocDir = rel === '>' ? 'left' : rel === '<' ? 'right' : 'equal';
+  const bigger = Math.max(a, b), smaller = Math.min(a, b);
+
+  let correctPick;
+  if (rel === '=') correctPick = '=';
+  else if (cmp2.target === 'mas') correctPick = (a > b ? 'A' : 'B');
+  else correctPick = (a < b ? 'A' : 'B');
+
+  // Reveal the hungry crocodile + the symbol it forms
+  const croc = gei('cmp2-croc');
+  if (croc) { croc.innerHTML = cmp2CrocSVG(crocDir); croc.classList.add('chomp'); }
+  const st = gei('cmp2-statement');
+  if (st) {
+    if (rel === '=')      st.innerHTML = '<span class="big">'+a+'</span> = <span class="big">'+b+'</span>';
+    else if (rel === '>') st.innerHTML = '<span class="big">'+a+'</span> &gt; <span>'+b+'</span>';
+    else                  st.innerHTML = '<span>'+a+'</span> &lt; <span class="big">'+b+'</span>';
+  }
+
+  // Highlight the box she should have tapped
+  if (correctPick === '=') {
+    if (gei('cmp2-boxA')) gei('cmp2-boxA').classList.add('winner');
+    if (gei('cmp2-boxB')) gei('cmp2-boxB').classList.add('winner');
+    if (gei('cmp2-equal')) gei('cmp2-equal').classList.add('eq-win');
+  } else {
+    const cb = gei('cmp2-box' + correctPick);
+    if (cb) cb.classList.add('winner');
+  }
+
+  const fb = gei('cmp2-feedback');
+  const isCorrect = (pick === correctPick);
+
+  if (isCorrect) {
+    if (fb) {
+      if (rel === '=') fb.textContent = '🎉 ¡Son iguales! El cocodrilo no sabe a cuál comer 😄';
+      else if (cmp2.target === 'mas') fb.textContent = '🎉 ¡Sí! El ' + bigger + ' es MÁS. ¡Ñam! 🐊';
+      else fb.textContent = '🎉 ¡Sí! El ' + smaller + ' es MENOS. ¡Muy bien! ⭐';
+      fb.className = 'cmp2-feedback correct';
+    }
+    playSuccessSound();
+    launchConfettiIn('cmp2-arena');
+    cmp2.hits++;
+    cmp2.score += 8 + cmp2.level * 2;
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent = coins;
+    if (gei('coins-big'))    gei('coins-big').textContent    = coins + ' 🪙';
+    updateCmp2UI();
+
+    const cfg = CMP2_LEVELS[Math.min(cmp2.level,3)-1];
+    if (cmp2.hits >= cfg.rounds) {
+      updateCoins(cfg.coins, null);
+      showToast('⚖️ ¡Nivel ' + cmp2.level + ' completo! +' + cfg.coins + ' 🪙');
+      if (cmp2.level >= 3) {
+        cmp2.level = 3; updateCoins(8, null);
+        setTimeout(showCmp2Complete, 1500);
+      } else {
+        cmp2.level++; cmp2.hits = 0;
+        setTimeout(() => { updateCmp2UI(); nextCmp2(); }, 1600);
+      }
+    } else {
+      setTimeout(nextCmp2, 1600);
+    }
+  } else {
+    if ((pick === 'A' || pick === 'B') && pick !== correctPick) {
+      const wb = gei('cmp2-box' + pick);
+      if (wb) wb.classList.add('loser');
+    }
+    if (fb) {
+      if (rel === '=') fb.textContent = 'Casi… ¡eran IGUALES! Mirá 😊';
+      else if (cmp2.target === 'mas') fb.textContent = 'Casi… el ' + bigger + ' es el MÁS grande 😊';
+      else fb.textContent = 'Casi… el ' + smaller + ' es el MENOS 😊';
+      fb.className = 'cmp2-feedback wrong';
+    }
+    playWrongSound();
+    setTimeout(nextCmp2, 2100);
+  }
+}
+
+function showCmp2Complete() {
+  const ov = gei('cmp2-overlay');
+  if (!ov) return;
+  ov.innerHTML =
+    '<div style="font-size:2.6rem;">🐊🏆🐊</div>' +
+    '<div class="overlay-title" style="color:white;">¡Domadora de cocodrilos!</div>' +
+    '<div class="overlay-sub" style="color:rgba(255,255,255,0.92);">¡Completaste los 3 niveles!</div>' +
+    '<div style="background:rgba(255,255,255,0.2);border:1.5px solid white;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 +8 monedas especiales</div>' +
+    '<button class="play-btn" onclick="startCmp2()">Jugar de nuevo →</button>';
+  ov.classList.add('show');
+  launchConfettiIn('cmp2-arena');
+  playSuccessSound();
 }
 
 
@@ -2467,7 +4374,7 @@ function getSpawnLeft(arenaId, arenaW, size) {
   // Read live positions of existing balloons
   const arena = document.getElementById(arenaId);
   const occupied = arena
-    ? Array.from(arena.querySelectorAll('.balloon-wrap'))
+    ? Array.from(arena.querySelectorAll('.balloon-wrap,.puppy-wrap'))
         .map(b => parseInt(b.style.left) || 0)
     : [];
 
@@ -2489,6 +4396,94 @@ function getSpawnLeft(arenaId, arenaW, size) {
   return best;
 }
 
+
+// Puppy characters for Suma Globos — original SVG designs
+const PUPPIES = [
+  { name:'Rojo',    body:'#E53935', helmet:'#B71C1C', badge:'#FFEB3B', ear:'#C62828' },
+  { name:'Azul',    body:'#1E88E5', helmet:'#0D47A1', badge:'#F5F5F5', ear:'#1565C0' },
+  { name:'Amarillo',body:'#F9A825', helmet:'#E65100', badge:'#FFFFFF', ear:'#F57F17' },
+  { name:'Rosa',    body:'#E91E63', helmet:'#880E4F', badge:'#FFFFFF', ear:'#C2185B' },
+  { name:'Verde',   body:'#43A047', helmet:'#1B5E20', badge:'#FFEB3B', ear:'#2E7D32' },
+  { name:'Naranja', body:'#FB8C00', helmet:'#E65100', badge:'#FFFFFF', ear:'#EF6C00' },
+];
+
+function makePuppySVG(value, puppyIdx, size) {
+  const p = PUPPIES[puppyIdx % PUPPIES.length];
+  const w = size, h = size * 1.1;
+  const cx = w / 2;
+
+  // Body proportions
+  const bodyY = h * 0.38, bodyR = w * 0.38;
+  const headY = h * 0.26, headR = w * 0.28;
+  const earW = w * 0.13, earH = w * 0.16;
+
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+    <defs>
+      <radialGradient id="pbody${puppyIdx}_${value}" cx="40%" cy="35%" r="60%">
+        <stop offset="0%" stop-color="white" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="${p.body}"/>
+      </radialGradient>
+      <radialGradient id="phead${puppyIdx}_${value}" cx="40%" cy="35%" r="60%">
+        <stop offset="0%" stop-color="white" stop-opacity="0.25"/>
+        <stop offset="100%" stop-color="${p.ear}"/>
+      </radialGradient>
+    </defs>
+
+    <!-- Body -->
+    <ellipse cx="${cx}" cy="${bodyY}" rx="${bodyR}" ry="${bodyR*0.85}"
+      fill="url(#pbody${puppyIdx}_${value})" stroke="${p.ear}" stroke-width="1.2"/>
+
+    <!-- Tail -->
+    <path d="M${cx+bodyR*0.7},${bodyY} Q${cx+bodyR*1.2},${bodyY-bodyR*0.5} ${cx+bodyR*0.9},${bodyY-bodyR*0.9}"
+      stroke="${p.ear}" stroke-width="${w*0.055}" fill="none" stroke-linecap="round"/>
+
+    <!-- Left ear -->
+    <ellipse cx="${cx - headR*0.7}" cy="${headY - headR*0.6}"
+      rx="${earW}" ry="${earH}" fill="${p.ear}" transform="rotate(-20,${cx - headR*0.7},${headY - headR*0.6})"/>
+    <!-- Right ear -->
+    <ellipse cx="${cx + headR*0.7}" cy="${headY - headR*0.6}"
+      rx="${earW}" ry="${earH}" fill="${p.ear}" transform="rotate(20,${cx + headR*0.7},${headY - headR*0.6})"/>
+
+    <!-- Head -->
+    <circle cx="${cx}" cy="${headY}" r="${headR}"
+      fill="url(#phead${puppyIdx}_${value})" stroke="${p.ear}" stroke-width="1.2"/>
+
+    <!-- Snout -->
+    <ellipse cx="${cx}" cy="${headY + headR*0.45}" rx="${headR*0.52}" ry="${headR*0.32}" fill="white" opacity="0.85"/>
+    <!-- Nose -->
+    <ellipse cx="${cx}" cy="${headY + headR*0.32}" rx="${headR*0.18}" ry="${headR*0.13}" fill="#333"/>
+    <!-- Smile -->
+    <path d="M${cx - headR*0.22},${headY + headR*0.52} Q${cx},${headY + headR*0.68} ${cx + headR*0.22},${headY + headR*0.52}"
+      stroke="#555" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+    <!-- Eyes -->
+    <circle cx="${cx - headR*0.34}" cy="${headY - headR*0.08}" r="${headR*0.14}" fill="#222"/>
+    <circle cx="${cx + headR*0.34}" cy="${headY - headR*0.08}" r="${headR*0.14}" fill="#222"/>
+    <circle cx="${cx - headR*0.3}"  cy="${headY - headR*0.12}" r="${headR*0.05}" fill="white"/>
+    <circle cx="${cx + headR*0.3}"  cy="${headY - headR*0.12}" r="${headR*0.05}" fill="white"/>
+
+    <!-- Helmet/hat -->
+    <ellipse cx="${cx}" cy="${headY - headR*0.55}" rx="${headR*0.85}" ry="${headR*0.28}"
+      fill="${p.helmet}"/>
+    <rect x="${cx - headR*0.62}" y="${headY - headR*0.95}" width="${headR*1.24}" height="${headR*0.5}"
+      rx="${headR*0.18}" fill="${p.helmet}"/>
+    <!-- Helmet badge -->
+    <circle cx="${cx}" cy="${headY - headR*0.75}" r="${headR*0.18}" fill="${p.badge}" opacity="0.9"/>
+
+    <!-- Paws -->
+    <ellipse cx="${cx - bodyR*0.5}" cy="${bodyY + bodyR*0.72}" rx="${w*0.1}" ry="${w*0.07}"
+      fill="${p.ear}" stroke="${p.body}" stroke-width="0.8"/>
+    <ellipse cx="${cx + bodyR*0.5}" cy="${bodyY + bodyR*0.72}" rx="${w*0.1}" ry="${w*0.07}"
+      fill="${p.ear}" stroke="${p.body}" stroke-width="0.8"/>
+
+    <!-- Number badge -->
+    <circle cx="${cx + bodyR*0.82}" cy="${bodyY - bodyR*0.75}" r="${headR*0.52}" fill="white" stroke="${p.helmet}" stroke-width="2"/>
+    <text x="${cx + bodyR*0.82}" y="${bodyY - bodyR*0.75 + headR*0.18}"
+      text-anchor="middle" font-family="Baloo2,cursive" font-size="${headR*0.7}px"
+      font-weight="900" fill="${p.helmet}">${value}</text>
+  </svg>`;
+}
+
 // ── SUMA GLOBOS ─────────────────────────────────────────
 const SG_COLORS = [
   ['#FF6B6B','#CC2222'],['#5BB8F5','#1A7EC8'],['#7AC74F','#3A8C1A'],
@@ -2498,9 +4493,9 @@ const SG_COLORS = [
 
 // Each level: hits needed to complete, max number, coins reward
 const SG_LEVELS = [
-  { hits:10, max:10,  coins:3,  label:'Nivel 1 — hasta 10',  badge:'🥉' },
-  { hits:12, max:15,  coins:4,  label:'Nivel 2 — hasta 15',  badge:'🥈' },
-  { hits:15, max:20,  coins:5,  label:'Nivel 3 — hasta 20',  badge:'🥇' },
+  { hits:8,  max:6,  coins:3,  label:'Nivel 1 — suma hasta 6',   badge:'🥉' },
+  { hits:10, max:10, coins:4,  label:'Nivel 2 — suma hasta 10',  badge:'🥈' },
+  { hits:12, max:15, coins:5,  label:'Nivel 3 — suma hasta 15',  badge:'🥇' },
 ];
 
 let sg = {
@@ -2590,7 +4585,7 @@ function clearSgTimers() {
 }
 
 function clearSgBalloons() {
-  document.getElementById('sg-arena').querySelectorAll('.balloon-wrap').forEach(b => b.remove());
+  document.getElementById('sg-arena').querySelectorAll('.balloon-wrap,.puppy-wrap').forEach(b => b.remove());
   sg.selected = [];
 }
 
@@ -2599,14 +4594,16 @@ function sgLevelCfg() { return SG_LEVELS[Math.min(sg.level,3) - 1]; }
 function newSgRound() {
   const cfg = sgLevelCfg();
   const max = cfg.max;
-  const a = rnd(1, Math.floor(max / 2));
-  const b = rnd(1, max - a);
+  // Keep both numbers small and visible — max 5 each at level 1
+  const maxA = Math.min(Math.floor(max / 2), sg.level === 1 ? 3 : 5);
+  const a = rnd(1, maxA);
+  const b = rnd(1, Math.min(max - a, sg.level === 1 ? 3 : max - a));
   sg.target = a + b;
   sg.pair = [a, b];
   sg.selected = [];
-  document.getElementById('sg-target').textContent = sg.target;
-  document.getElementById('sg-level-badge').textContent = cfg.label;
-  document.getElementById('sg-selected').textContent = '—';
+  if (gei('sg-target'))     gei('sg-target').textContent     = sg.target;
+  if (gei('sg-level-badge')) gei('sg-level-badge').textContent = cfg.label;
+  if (gei('sg-selected'))   gei('sg-selected').textContent    = '— + ? = ' + (sg.target || '?');
   updateSgHits();
   clearSgBalloons();
   spawnSgRoundBalloons(a, b, max);
@@ -2614,17 +4611,18 @@ function newSgRound() {
 
 function updateSgHits() {
   const cfg = sgLevelCfg();
-  document.getElementById('sg-hits').textContent = sg.hitsThisLevel + '/' + cfg.hits;
+  if (gei('sg-hits')) gei('sg-hits').textContent = sg.hitsThisLevel + '/' + cfg.hits;
 }
 
 function spawnSgRoundBalloons(a, b, max) {
   const vals = [a, b];
-  const extras = rnd(2 + sg.level, 3 + sg.level); // more distractors at higher levels
+  // Only 1 distractor at level 1, 2 at level 2, 2 at level 3 — keep it calm
+  const extras = sg.level === 1 ? 1 : 2;
   for (let i = 0; i < extras; i++) {
     let v, tries = 0;
     do {
       v = rnd(1, max); tries++;
-    } while (tries < 25 && (vals.includes(v) || v + a === sg.target || v + b === sg.target));
+    } while (tries < 30 && (vals.includes(v) || v + a === sg.target || v + b === sg.target));
     vals.push(v);
   }
   // shuffle
@@ -2632,22 +4630,31 @@ function spawnSgRoundBalloons(a, b, max) {
     const j = Math.floor(Math.random()*(i+1));
     [vals[i],vals[j]] = [vals[j],vals[i]];
   }
-  const duration = Math.max(6, 13 - sg.level * 1.5);
+  // Much slower: 14s level 1, 12s level 2, 10s level 3
+  const duration = sg.level === 1 ? 14 : sg.level === 2 ? 12 : 10;
   vals.forEach((v, idx) => {
-    setTimeout(() => { if (sg.running) spawnSgBalloon(v, duration); }, idx * 550);
+    // Stagger more — one at a time with 1.2s gap so screen is never crowded
+    setTimeout(() => { if (sg.running) spawnSgBalloon(v, duration); }, idx * 1200);
   });
   scheduleSgExtra();
 }
 
 function scheduleSgExtra() {
   clearSgTimers();
-  const delay = Math.max(1800, 4500 - sg.level * 600);
+  // Very infrequent extras — one every 8-10 seconds max
+  const delay = sg.level === 1 ? 10000 : 8000;
   sg.intervalId = setTimeout(() => {
     if (!sg.running) return;
-    const max = sgLevelCfg().max;
-    let v, tries = 0;
-    do { v = rnd(1, max); tries++; } while (tries < 15 && (v === sg.pair[0] || v === sg.pair[1]));
-    spawnSgBalloon(v, Math.max(6, 13 - sg.level * 1.5));
+    // Count current puppies on screen — don't add if already 4+
+    const arena = document.getElementById('sg-arena');
+    const onScreen = arena ? arena.querySelectorAll('.puppy-wrap,.balloon-wrap').length : 0;
+    if (onScreen < 4) {
+      const max = sgLevelCfg().max;
+      let v, tries = 0;
+      do { v = rnd(1, max); tries++; } while (tries < 15 && (v === sg.pair[0] || v === sg.pair[1]));
+      const dur = sg.level === 1 ? 14 : sg.level === 2 ? 12 : 10;
+      spawnSgBalloon(v, dur);
+    }
     scheduleSgExtra();
   }, delay);
 }
@@ -2655,17 +4662,16 @@ function scheduleSgExtra() {
 function spawnSgBalloon(value, duration) {
   const arena = document.getElementById('sg-arena');
   const arenaW = arena.offsetWidth || 360;
-  const size = Math.min(110, Math.max(88, arenaW * 0.23));
-  const colorPair = SG_COLORS[rnd(0, SG_COLORS.length-1)];
+  const size = Math.min(105, Math.max(82, arenaW * 0.22));
+  const puppyIdx = rnd(0, PUPPIES.length - 1);
   const left = getSpawnLeft('sg-arena', arenaW, size);
   const dur = duration || Math.max(6, 13 - sg.level * 1.5);
 
   const wrap = document.createElement('div');
-  wrap.className = 'balloon-wrap';
+  wrap.className = 'puppy-wrap';
   wrap.style.cssText = 'left:' + left + 'px; animation-duration:' + dur + 's; bottom:-130px;';
   wrap.dataset.value = value;
-  wrap.innerHTML = makeBalloonSVG(value, colorPair, size) +
-    '<div class="balloon-string-line"></div>';
+  wrap.innerHTML = makePuppySVG(value, puppyIdx, size);
 
   wrap.addEventListener('click', () => onSgClick(wrap, value));
   wrap.addEventListener('animationend', () => onSgEscape(wrap, value));
@@ -2674,12 +4680,13 @@ function spawnSgBalloon(value, duration) {
 
 function onSgClick(el, value) {
   if (!sg.running || el.classList.contains('popping') || el.classList.contains('sg-chosen')) return;
+  // works for both balloon-wrap and puppy-wrap
   value = parseInt(value);
 
   if (sg.selected.length === 0) {
     sg.selected.push({ el, value });
     el.classList.add('sg-chosen');
-    document.getElementById('sg-selected').textContent = value + ' + ?';
+    if (gei('sg-selected')) gei('sg-selected').textContent = value + ' + ? = ' + sg.target;
     return;
   }
 
@@ -2687,12 +4694,12 @@ function onSgClick(el, value) {
   if (first.el === el) {
     sg.selected = [];
     el.classList.remove('sg-chosen');
-    document.getElementById('sg-selected').textContent = '—';
+    if (gei('sg-selected')) gei('sg-selected').textContent = '— + ? = ' + sg.target;
     return;
   }
 
   const sum = first.value + value;
-  document.getElementById('sg-selected').textContent = first.value + ' + ' + value + ' = ' + sum;
+  if (gei('sg-selected')) gei('sg-selected').textContent = first.value + ' + ' + value + ' = ' + sum;
 
   if (sum === sg.target) {
     [first.el, el].forEach(b => {
@@ -2758,7 +4765,7 @@ function onSgEscape(el, value) {
   // If it was selected, deselect it
   sg.selected = sg.selected.filter(s => s.el !== el);
   if (document.getElementById('sg-selected'))
-    document.getElementById('sg-selected').textContent = sg.selected.length ? sg.selected[0].value + ' + ?' : '—';
+    if (gei('sg-selected')) gei('sg-selected').textContent = sg.selected.length ? sg.selected[0].value + ' + ? = ' + sg.target : '— + ? = ' + sg.target;
   el.remove();
   if (!isPair) return; // distractors just disappear — no penalty
   // Correct pair balloon escaped: just respawn it, NO life lost
@@ -2838,8 +4845,8 @@ function maxNum() { return gState.level === 1 ? 10 : gState.level === 2 ? 15 : 2
 
 function newGlobosRound() {
   gState.target = rnd(2, maxNum());
-  document.getElementById('globos-target').textContent = gState.target;
-  document.getElementById('globos-level-badge').textContent = 'Nivel ' + gState.level + ' — hasta ' + maxNum();
+  if (gei('globos-target'))     gei('globos-target').textContent     = gState.target;
+  if (gei('globos-level-badge')) gei('globos-level-badge').textContent = 'Nivel ' + gState.level + ' — hasta ' + maxNum();
 }
 
 function scheduleNextBalloon() {
@@ -3203,6 +5210,907 @@ function updateCohetesUI() {
 
 
 
+
+
+
+
+// ── MEMOTEST MATEMÁTICO ───────────────────────────────────
+// 3 levels, 4 pairs each, operation ↔ result matching
+
+const MEMO_LEVELS = [
+  { label:'Nivel 1 — Sumas fáciles', coins:3,
+    // Each pair has a UNIQUE result — no duplicates possible
+    pairs: [
+      {op:'1 + 2', res:3},
+      {op:'2 + 2', res:4},
+      {op:'2 + 3', res:5},
+      {op:'3 + 3', res:6},
+      {op:'3 + 4', res:7},
+      {op:'4 + 4', res:8},
+      {op:'4 + 5', res:9},
+      {op:'5 + 5', res:10},
+    ]
+  },
+  { label:'Nivel 2 — Restas', coins:4,
+    pairs: [
+      {op:'5 − 3',  res:2},
+      {op:'7 − 4',  res:3},
+      {op:'8 − 4',  res:4},
+      {op:'8 − 3',  res:5},
+      {op:'9 − 3',  res:6},
+      {op:'9 − 2',  res:7},
+      {op:'10 − 2', res:8},
+      {op:'12 − 3', res:9},
+    ]
+  },
+  { label:'Nivel 3 — Mixto difícil', coins:5,
+    pairs: [
+      {op:'5 + 6',  res:11},
+      {op:'6 + 6',  res:12},
+      {op:'6 + 7',  res:13},
+      {op:'7 + 7',  res:14},
+      {op:'8 + 7',  res:15},
+      {op:'9 + 7',  res:16},
+      {op:'9 + 8',  res:17},
+      {op:'9 + 9',  res:18},
+    ]
+  },
+];
+
+let memo = {
+  level: 1,
+  pairs: [],          // [{op, res, id}] — 4 pairs per game
+  cards: [],          // all 8 cards shuffled [{id, type:'op'|'res', text, pairId}]
+  flipped: [],        // indices of currently flipped (max 2)
+  matched: new Set(), // pairIds that are matched
+  tries: 0,
+  locked: false,      // prevent clicks while animating
+};
+
+function initMemotest() {
+  const ov = gei('memo-overlay');
+  if (ov) ov.classList.add('show');
+}
+
+function selectMemoLevel(n) {
+  memo.level = n;
+  document.querySelectorAll('.memo-level-btn').forEach((b,i) => {
+    b.classList.toggle('active', i+1 === n);
+  });
+  if (gei('memo-level-label')) gei('memo-level-label').textContent = MEMO_LEVELS[n-1].label;
+  startMemotest();
+}
+
+function startMemotest() {
+  const cfg = MEMO_LEVELS[Math.min(memo.level,3)-1];
+
+  // Pick 4 random pairs ensuring all results are unique
+  const shuffledPool = [...cfg.pairs].sort(() => Math.random() - 0.5);
+  const chosen = [];
+  const usedResults = new Set();
+  for (const p of shuffledPool) {
+    if (!usedResults.has(p.res)) {
+      usedResults.add(p.res);
+      chosen.push(p);
+    }
+    if (chosen.length === 4) break;
+  }
+  memo.pairs = chosen.map((p, i) => ({...p, id: i}));
+  memo.matched = new Set();
+  memo.tries   = 0;
+  memo.flipped = [];
+  memo.locked  = false;
+
+  // Build 8 cards: one op card + one res card per pair
+  const cards = [];
+  memo.pairs.forEach(p => {
+    cards.push({pairId: p.id, type: 'op',  text: p.op,        res: p.res});
+    cards.push({pairId: p.id, type: 'res', text: String(p.res), res: p.res});
+  });
+  memo.cards = cards.sort(() => Math.random() - 0.5);
+
+  const ov = gei('memo-overlay');
+  if (ov) ov.classList.remove('show');
+
+  updateMemoUI();
+  renderMemoGrid();
+
+  const fb = gei('memo-feedback');
+  if (fb) { fb.textContent = ''; fb.className = 'memo-feedback'; }
+}
+
+function updateMemoUI() {
+  const matched = memo.matched.size;
+  if (gei('memo-pairs-disp'))   gei('memo-pairs-disp').textContent   = matched + '/4';
+  if (gei('memo-tries-disp'))   gei('memo-tries-disp').textContent   = memo.tries;
+  if (gei('memo-status-pairs')) gei('memo-status-pairs').textContent = matched + ' de 4 pares encontrados';
+}
+
+function renderMemoGrid() {
+  const grid = gei('memo-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  memo.cards.forEach((card, idx) => {
+    const cardEl = document.createElement('div');
+    cardEl.className = 'memo-card';
+    cardEl.dataset.idx = idx;
+
+    cardEl.innerHTML =
+      '<div class="memo-card-inner">' +
+        // Back side (hidden)
+        '<div class="memo-card-back">🌟</div>' +
+        // Front side (revealed)
+        '<div class="memo-card-front type-' + card.type + '">' +
+          card.text +
+        '</div>' +
+      '</div>';
+
+    cardEl.addEventListener('click', () => onMemoCardClick(idx));
+    grid.appendChild(cardEl);
+  });
+}
+
+function onMemoCardClick(idx) {
+  if (memo.locked) return;
+  if (memo.flipped.includes(idx)) return;
+  if (memo.matched.has(memo.cards[idx].pairId)) return;
+
+  // Flip this card
+  const cardEl = grid_card(idx);
+  if (cardEl) cardEl.classList.add('flipped');
+  memo.flipped.push(idx);
+
+  // Play flip sound — soft click
+  playTone(600, 'sine', 0.07, 0, 0.08);
+  playTone(800, 'sine', 0.05, 0.06, 0.06);
+
+  if (memo.flipped.length === 2) {
+    memo.tries++;
+    memo.locked = true;
+    updateMemoUI();
+
+    const [i1, i2] = memo.flipped;
+    const c1 = memo.cards[i1];
+    const c2 = memo.cards[i2];
+    const isMatch = c1.pairId === c2.pairId;
+
+    setTimeout(() => {
+      if (isMatch) {
+        onMemoMatch(i1, i2, c1, c2);
+      } else {
+        onMemoMiss(i1, i2);
+      }
+    }, 900);
+  }
+}
+
+function onMemoMatch(i1, i2, c1, c2) {
+  memo.matched.add(c1.pairId);
+  memo.flipped = [];
+  memo.locked  = false;
+
+  // Mark as matched
+  const el1 = grid_card(i1);
+  const el2 = grid_card(i2);
+  if (el1) el1.classList.add('matched');
+  if (el2) el2.classList.add('matched');
+
+  const fb = gei('memo-feedback');
+  const opCard  = c1.type==='op' ? c1 : c2;
+  const resCard = c1.type==='res' ? c1 : c2;
+  if (fb) {
+    fb.innerHTML = '🎉 <strong>' + opCard.text + ' = ' + resCard.text + '</strong> ¡Muy bien!';
+    fb.className = 'memo-feedback correct';
+  }
+
+  // Big celebration: bigger sound + star burst on matched cards
+  playMemoMatchSound();
+  launchConfetti();
+
+  // Animate the matched cards with stars
+  [grid_card(i1), grid_card(i2)].forEach(el => {
+    if (!el) return;
+    const burst = document.createElement('div');
+    burst.textContent = '⭐';
+    burst.style.cssText = 'position:absolute;top:-12px;right:-10px;font-size:1.4rem;animation:contar-pop 0.4s ease both;pointer-events:none;z-index:5;';
+    el.style.position = 'relative';
+    el.appendChild(burst);
+    setTimeout(() => { if (burst.parentNode) burst.remove(); }, 1200);
+  });
+
+  updateMemoUI();
+
+  // Check if all matched
+  if (memo.matched.size === 4) {
+    setTimeout(onMemoComplete, 900);
+  }
+}
+
+function onMemoMiss(i1, i2) {
+  const el1 = grid_card(i1);
+  const el2 = grid_card(i2);
+
+  // Shake animation
+  if (el1) el1.classList.add('wrong-flip');
+  if (el2) el2.classList.add('wrong-flip');
+
+  const fb = gei('memo-feedback');
+  if (fb) {
+    fb.textContent = 'No hacen pareja… ¡intentá de nuevo! 😊';
+    fb.className = 'memo-feedback wrong';
+  }
+
+  playWrongSound();
+
+  setTimeout(() => {
+    // Flip back
+    if (el1) { el1.classList.remove('flipped', 'wrong-flip'); }
+    if (el2) { el2.classList.remove('flipped', 'wrong-flip'); }
+    memo.flipped = [];
+    memo.locked  = false;
+    if (fb) { fb.textContent = ''; fb.className = 'memo-feedback'; }
+  }, 600);
+}
+
+function onMemoComplete() {
+  const cfg = MEMO_LEVELS[Math.min(memo.level,3)-1];
+  // Stars based on tries (4 = perfect, 5-6 = 2 stars, 7+ = 1 star)
+  const stars = memo.tries <= 4 ? 3 : memo.tries <= 6 ? 2 : 1;
+  const starStr = '⭐'.repeat(stars) + '☆'.repeat(3-stars);
+  const bonus = stars === 3 ? 5 : stars === 2 ? 3 : 2;
+
+  updateCoins(bonus, null);
+  if (gei('coin-display')) gei('coin-display').textContent = coins;
+  if (gei('coins-big'))    gei('coins-big').textContent    = coins + ' 🪙';
+  showToast('🃏 ¡Completado! +' + bonus + ' 🪙');
+
+  const ov = gei('memo-overlay');
+  if (!ov) return;
+  ov.innerHTML =
+    '<div style="font-size:2.5rem;">' + starStr + '</div>' +
+    '<div class="overlay-title" style="color:white;">¡Completaste el memotest!</div>' +
+    '<div class="overlay-sub" style="color:rgba(255,255,255,0.88);">' +
+      'Lo lograste en ' + memo.tries + ' intentos' +
+    '</div>' +
+    '<div style="background:rgba(255,202,40,0.25);border:1.5px solid #FFCA28;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">' +
+      '🪙 +' + bonus + ' monedas' +
+    '</div>' +
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">' +
+      '<button class="play-btn" style="background:#FFCA28;color:#0D47A1;font-weight:800;" onclick="startMemotest()">Jugar de nuevo →</button>' +
+      (memo.level < 3
+        ? '<button class="play-btn" style="background:#43A047;" onclick="selectMemoLevel('+(memo.level+1)+')">Siguiente nivel →</button>'
+        : '') +
+    '</div>';
+  ov.classList.add('show');
+
+  launchConfetti();
+  playSuccessSound();
+}
+
+function grid_card(idx) {
+  const grid = gei('memo-grid');
+  if (!grid) return null;
+  return grid.querySelector('[data-idx="' + idx + '"]');
+}
+
+// ── CONTAR OBJETOS ────────────────────────────────────────
+const CONTAR_SETS = [
+  // emoji, theme name, theme color
+  { emoji:'⭐', name:'estrellas',  color:'#F9A825' },
+  { emoji:'🍎', name:'manzanas',   color:'#E53935' },
+  { emoji:'🐱', name:'gatitos',    color:'#FB8C00' },
+  { emoji:'🌸', name:'flores',     color:'#E91E63' },
+  { emoji:'🚗', name:'autitos',    color:'#1E88E5' },
+  { emoji:'🦋', name:'mariposas',  color:'#8E24AA' },
+  { emoji:'🐸', name:'ranitas',    color:'#43A047' },
+  { emoji:'🍕', name:'pizzas',     color:'#FF7043' },
+  { emoji:'🐶', name:'perritos',   color:'#795548' },
+  { emoji:'🍭', name:'chupetines', color:'#EC407A' },
+  { emoji:'🌈', name:'arcoiris',   color:'#00ACC1' },
+  { emoji:'🎈', name:'globos',     color:'#AB47BC' },
+];
+
+const CONTAR_LEVELS = [
+  { rounds:10, maxCount:5,  coins:3, label:'Nivel 1 — hasta 5',  opts:3 },
+  { rounds:10, maxCount:10, coins:4, label:'Nivel 2 — hasta 10', opts:3 },
+  { rounds:10, maxCount:15, coins:5, label:'Nivel 3 — hasta 15', opts:4 },
+];
+
+let ct = { level:1, hits:0, score:0, count:0, answered:false };
+
+function initContar() {
+  const ov = gei('contar-overlay');
+  if (ov) ov.classList.add('show');
+}
+
+function startContar() {
+  ct = { level:1, hits:0, score:0, count:0, answered:false };
+  const ov = gei('contar-overlay');
+  if (ov) ov.classList.remove('show');
+  updateContarUI();
+  nextContarProblem();
+}
+
+function updateContarUI() {
+  const cfg = CONTAR_LEVELS[Math.min(ct.level,3)-1];
+  if (gei('contar-level-label')) gei('contar-level-label').textContent = cfg.label;
+  if (gei('contar-hits-disp'))   gei('contar-hits-disp').textContent   = ct.hits+'/'+cfg.rounds;
+  if (gei('contar-score-disp'))  gei('contar-score-disp').textContent  = ct.score;
+  const pct = Math.min((ct.hits/cfg.rounds)*100,100);
+  if (gei('contar-prog-fill'))   gei('contar-prog-fill').style.width   = pct+'%';
+  if (gei('contar-prog-label'))  gei('contar-prog-label').textContent  = ct.hits+' / '+cfg.rounds;
+  const lit = ct.hits>=Math.floor(cfg.rounds*.75)?3:ct.hits>=Math.floor(cfg.rounds*.4)?2:ct.hits>=1?1:0;
+  if (gei('contar-stars')) gei('contar-stars').textContent = ['☆☆☆','⭐☆☆','⭐⭐☆','⭐⭐⭐'][lit];
+}
+
+function nextContarProblem() {
+  ct.answered = false;
+  const cfg = CONTAR_LEVELS[Math.min(ct.level,3)-1];
+  const set  = CONTAR_SETS[rnd(0, CONTAR_SETS.length-1)];
+  ct.count   = rnd(1, cfg.maxCount);
+
+  // Update question
+  const q = gei('contar-question');
+  if (q) q.innerHTML = '¿Cuántos <strong>' + set.name + '</strong> hay?';
+
+  // Render objects with staggered animation
+  const objsEl = gei('contar-objects');
+  if (objsEl) {
+    objsEl.innerHTML = '';
+    for (let i = 0; i < ct.count; i++) {
+      const span = document.createElement('span');
+      span.className = 'contar-obj';
+      span.textContent = set.emoji;
+      span.style.animationDelay = (i * 0.06) + 's';
+      // slight random rotation for natural feel
+      span.style.transform = 'rotate(' + (rnd(-8,8)) + 'deg)';
+      objsEl.appendChild(span);
+    }
+  }
+
+  // Build options
+  const optsEl = gei('contar-opts');
+  if (optsEl) {
+    optsEl.innerHTML = '';
+    const wrong = new Set([ct.count]);
+    while (wrong.size < cfg.opts) {
+      const w = ct.count + [-3,-2,-1,1,2,3][rnd(0,5)];
+      if (w > 0 && w !== ct.count) wrong.add(w);
+    }
+    const shuffled = [...wrong].sort(() => Math.random() - 0.5);
+    shuffled.forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = 'contar-opt';
+      btn.textContent = val;
+      btn.style.borderColor = set.color;
+      btn.onclick = () => onContarAnswer(btn, val, set);
+      optsEl.appendChild(btn);
+    });
+  }
+
+  // Clear feedback
+  const fb = gei('contar-feedback');
+  if (fb) { fb.textContent = ''; fb.className = 'contar-feedback'; }
+}
+
+function onContarAnswer(btn, val, set) {
+  if (ct.answered) return;
+  ct.answered = true;
+  document.querySelectorAll('.contar-opt').forEach(b => b.disabled = true);
+
+  const fb = gei('contar-feedback');
+
+  if (val === ct.count) {
+    btn.classList.add('correct');
+
+    // Bounce all objects
+    document.querySelectorAll('.contar-obj').forEach((obj, i) => {
+      setTimeout(() => obj.classList.add('celebrate'), i * 40);
+    });
+
+    // Confetti burst
+    launchConfetti();
+
+    // Play success sound
+    playSuccessSound();
+
+    if (fb) {
+      fb.textContent = '🎉 ¡Sí! Hay ' + ct.count + ' ' + set.name + '. ¡Muy bien!';
+      fb.className = 'contar-feedback correct';
+    }
+
+    ct.hits++;
+    ct.score += 10 + ct.level * 2;
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent = coins;
+    if (gei('coins-big'))    gei('coins-big').textContent    = coins + ' 🪙';
+    updateContarUI();
+
+    const cfg = CONTAR_LEVELS[Math.min(ct.level,3)-1];
+    if (ct.hits >= cfg.rounds) {
+      updateCoins(cfg.coins, null);
+      showToast('⭐ ¡Nivel ' + ct.level + ' completo! +' + cfg.coins + ' 🪙');
+      if (ct.level >= 3) {
+        ct.level = 3;
+        updateCoins(8, null);
+        setTimeout(showContarComplete, 1500);
+      } else {
+        ct.level++;
+        ct.hits = 0;
+        setTimeout(() => { updateContarUI(); nextContarProblem(); }, 1600);
+      }
+    } else {
+      setTimeout(nextContarProblem, 1500);
+    }
+
+  } else {
+    btn.classList.add('wrong');
+    // Show correct answer
+    document.querySelectorAll('.contar-opt').forEach(b => {
+      if (parseInt(b.textContent) === ct.count) b.classList.add('correct');
+    });
+    playWrongSound();
+    if (fb) {
+      fb.textContent = 'Son ' + ct.count + '… ¡Contá de nuevo la próxima! 😊';
+      fb.className = 'contar-feedback wrong';
+    }
+    updateContarUI();
+    setTimeout(nextContarProblem, 1600);
+  }
+}
+
+// ── Confetti ──────────────────────────────────────────────
+function launchConfetti() {
+  const arena = gei('contar-arena');
+  if (!arena) return;
+  const colors = ['#FFCA28','#E53935','#1E88E5','#43A047','#8E24AA','#FB8C00'];
+  for (let i = 0; i < 28; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText =
+      'left:' + rnd(10, 90) + '%;' +
+      'top:' + rnd(5, 40) + '%;' +
+      'background:' + colors[rnd(0, colors.length-1)] + ';' +
+      'width:' + rnd(6,12) + 'px;' +
+      'height:' + rnd(6,12) + 'px;' +
+      'animation-duration:' + (0.6 + Math.random() * 0.8) + 's;' +
+      'animation-delay:' + (Math.random() * 0.3) + 's;' +
+      'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
+    arena.appendChild(piece);
+    setTimeout(() => { if (piece.parentNode) piece.remove(); }, 1400);
+  }
+}
+
+// ── Sound effects (Web Audio API — no files needed) ───────
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  return audioCtx;
+}
+
+function playTone(freq, type, duration, delay, gainVal) {
+  const ctx = getAudioCtx();
+  if (!ctx) return;
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = type || 'sine';
+  osc.frequency.setValueAtTime(freq, ctx.currentTime + (delay||0));
+  gain.gain.setValueAtTime(gainVal||0.2, ctx.currentTime + (delay||0));
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (delay||0) + duration);
+  osc.start(ctx.currentTime + (delay||0));
+  osc.stop(ctx.currentTime + (delay||0) + duration);
+}
+
+function playSuccessSound() {
+  // Happy ascending arpeggio: C E G C
+  [[523,0],[659,0.12],[784,0.24],[1047,0.36]].forEach(([f,d]) => playTone(f,'sine',0.18,d,0.18));
+}
+
+function playWrongSound() {
+  // Low dull thud
+  playTone(200, 'triangle', 0.25, 0, 0.15);
+  playTone(150, 'triangle', 0.25, 0.1, 0.1);
+}
+
+function playMemoMatchSound() {
+  // Joyful 5-note fanfare: C-E-G-E-C high
+  [[523,0],[659,0.1],[784,0.2],[1047,0.32],[1319,0.44]].forEach(([f,d]) => playTone(f,'sine',0.22,d,0.22));
+  // add sparkle high note
+  playTone(1568, 'sine', 0.15, 0.55, 0.15);
+}
+
+function showContarComplete() {
+  const ov = gei('contar-overlay');
+  if (!ov) return;
+  ov.innerHTML =
+    '<div style="font-size:2.8rem;">🌟⭐🌟</div>' +
+    '<div class="overlay-title" style="color:white;">¡Campeona contando!</div>' +
+    '<div class="overlay-sub" style="color:rgba(255,255,255,0.9);">¡Terminaste los 3 niveles!</div>' +
+    '<div style="background:rgba(255,255,255,0.2);border:1.5px solid white;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 +8 monedas especiales</div>' +
+    '<button class="play-btn" style="background:#FFCA28;color:#5D4037;font-weight:800;" onclick="startContar()">Jugar de nuevo →</button>';
+  ov.classList.add('show');
+  launchConfetti();
+  playSuccessSound();
+}
+// ── SECUENCIAS ────────────────────────────────────────────
+// 3 levels: numbers → colors → shapes
+// 4 tiles per sequence, blank always last → super clear
+// 4 answer options, big and tappable
+
+const SQ_COLORS = [
+  {name:'rojo',    hex:'#E53935'},
+  {name:'azul',    hex:'#1E88E5'},
+  {name:'verde',   hex:'#43A047'},
+  {name:'amarillo',hex:'#F9A825'},
+  {name:'naranja', hex:'#FB8C00'},
+  {name:'violeta', hex:'#8E24AA'},
+];
+const SQ_SHAPES = [
+  {name:'círculo',   svg: c=>`<circle cx="30" cy="30" r="24" fill="${c}"/>`},
+  {name:'cuadrado',  svg: c=>`<rect x="6" y="6" width="48" height="48" rx="8" fill="${c}"/>`},
+  {name:'triángulo', svg: c=>`<polygon points="30,5 57,55 3,55" fill="${c}"/>`},
+  {name:'estrella',  svg: c=>`<polygon points="30,4 36,22 56,22 40,34 46,54 30,42 14,54 20,34 4,22 24,22" fill="${c}"/>`},
+  {name:'corazón',   svg: c=>`<path d="M30 50 C5 35 5 10 20 10 C25 10 30 15 30 15 C30 15 35 10 40 10 C55 10 55 35 30 50Z" fill="${c}"/>`},
+];
+const SQ_NUM_BG = ['#E53935','#1E88E5','#43A047','#F9A825'];
+
+// Levels: which type and how many rounds
+const SQ_LEVELS = [
+  {type:'number', rounds:8,  coins:3, label:'Nivel 1 — Números',  icon:'🔢'},
+  {type:'color',  rounds:8,  coins:4, label:'Nivel 2 — Colores',  icon:'🎨'},
+  {type:'shape',  rounds:8,  coins:5, label:'Nivel 3 — Figuras',  icon:'🔷'},
+];
+
+let sq = {level:1, hits:0, score:0, answer:'', dragVal:null, filled:false};
+let sqDragEl = null, sqClone = null;
+
+function initSecuencias() {
+  const ov = gei('seq-overlay');
+  if (ov) ov.style.display = 'flex';
+  updateSqUI();
+}
+
+function startSecuencias() {
+  sq = {level:1, hits:0, score:0, answer:'', dragVal:null, filled:false};
+  const ov = gei('seq-overlay');
+  if (ov) ov.style.display = 'none';
+  updateSqUI();
+  nextSqProblem();
+}
+
+function updateSqUI() {
+  const cfg = SQ_LEVELS[Math.min(sq.level,3)-1];
+  if (gei('seq-level-label')) gei('seq-level-label').textContent = cfg.label;
+  if (gei('seq-type-badge'))  gei('seq-type-badge').textContent  = cfg.icon + ' ' + cfg.label;
+  if (gei('seq-hits-disp'))   gei('seq-hits-disp').textContent   = sq.hits + '/' + cfg.rounds;
+  if (gei('seq-score-disp'))  gei('seq-score-disp').textContent  = sq.score;
+  const pct = Math.min((sq.hits/cfg.rounds)*100,100);
+  if (gei('seq-prog-fill'))   gei('seq-prog-fill').style.width   = pct + '%';
+  if (gei('seq-prog-label'))  gei('seq-prog-label').textContent  = sq.hits + ' / ' + cfg.rounds;
+  const lit = sq.hits>=Math.floor(cfg.rounds*.75)?3:sq.hits>=Math.floor(cfg.rounds*.4)?2:sq.hits>=1?1:0;
+  if (gei('seq-stars'))       gei('seq-stars').textContent       = ['☆☆☆','⭐☆☆','⭐⭐☆','⭐⭐⭐'][lit];
+}
+
+function nextSqProblem() {
+  sq.filled   = false;
+  sq.dragVal  = null;
+  sqDragEl    = null;
+  const fb = gei('seq-feedback');
+  if (fb) { fb.textContent = ''; fb.style.color = ''; }
+
+  const cfg = SQ_LEVELS[Math.min(sq.level,3)-1];
+  if      (cfg.type === 'number') buildSqNumber();
+  else if (cfg.type === 'color')  buildSqColor();
+  else                             buildSqShape();
+}
+
+// ── NUMBER sequence ───────────────────────────────────────
+function buildSqNumber() {
+  // step of 1, 2 or 5 — always start low so numbers are small
+  const steps = [1,2,2,2,5];
+  const step  = steps[rnd(0, steps.length-1)];
+  const start = rnd(1, 5);
+  // 4 tiles: 3 shown + 1 blank (always the 4th = last)
+  const seq = [start, start+step, start+step*2, start+step*3];
+  sq.answer  = String(seq[3]);
+
+  updateSqHint('🔢',
+    'Los números suben de ' + step + ' en ' + step + '.',
+    seq.slice(0,3).map((v,i)=>sqMiniNum(v,i)).join(sqMiniArr()) + sqMiniArr() + sqMiniBlank()
+  );
+
+  const row = gei('seq-row');
+  if (!row) return;
+  row.innerHTML = '';
+  seq.forEach((v, i) => {
+    if (i > 0) row.insertAdjacentHTML('beforeend', sqArrow());
+    if (i === 3) row.insertAdjacentHTML('beforeend', sqDropZone());
+    else row.insertAdjacentHTML('beforeend', sqNumTile(v, i));
+  });
+
+  // 4 options: correct + 3 wrong (±step variations)
+  const opts = new Set([seq[3]]);
+  const wrongs = [seq[3]-step, seq[3]+step, seq[3]+step*2, seq[3]-1, seq[3]+1];
+  for (const w of wrongs) { if (w > 0 && opts.size < 4) opts.add(w); }
+  while (opts.size < 4) opts.add(seq[3] + opts.size);
+  renderSqOpts([...opts].sort(()=>Math.random()-.5).map((v,i) =>
+    ({val: String(v), html: String(v), bg: SQ_NUM_BG[i%4]})
+  ));
+}
+
+// ── COLOR sequence ────────────────────────────────────────
+function buildSqColor() {
+  // Simple AB pattern: A B A B — blank is 4th (B)
+  const [cA, cB] = sqShuffle(SQ_COLORS).slice(0, 2);
+  const pat = [cA, cB, cA, cB]; // 4 tiles, blank = 4th
+  sq.answer   = pat[3].name;
+
+  updateSqHint('🎨',
+    'Dos colores que se turnan: ' + cA.name + ' → ' + cB.name + ' → ' + cA.name + ' → ?',
+    sqMiniColor(cA) + sqMiniArr() + sqMiniColor(cB) + sqMiniArr() + sqMiniColor(cA) + sqMiniArr() + sqMiniBlank()
+  );
+
+  const row = gei('seq-row');
+  if (!row) return;
+  row.innerHTML = '';
+  pat.forEach((c, i) => {
+    if (i > 0) row.insertAdjacentHTML('beforeend', sqArrow());
+    if (i === 3) row.insertAdjacentHTML('beforeend', sqDropZone());
+    else row.insertAdjacentHTML('beforeend', sqColorTile(c));
+  });
+
+  // 4 options: correct + 3 other colors
+  const others = sqShuffle(SQ_COLORS.filter(c => c.name !== cA.name && c.name !== cB.name)).slice(0, 2);
+  const pool = sqShuffle([pat[3], others[0], others[1], cA]); // cA as distractor
+  renderSqOpts(pool.map(c => ({
+    val:  c.name,
+    html: `<span style="font-size:0.75rem;font-weight:800;color:white;">${c.name}</span>`,
+    bg:   c.hex,
+  })));
+}
+
+// ── SHAPE sequence ────────────────────────────────────────
+function buildSqShape() {
+  // Simple AB pattern with shapes, one color
+  const [sA, sB] = sqShuffle(SQ_SHAPES).slice(0, 2);
+  const col = sqShuffle(SQ_COLORS)[0];
+  const pat = [sA, sB, sA, sB]; // 4 tiles, blank = 4th
+  sq.answer   = pat[3].name;
+
+  updateSqHint('🔷',
+    'Dos figuras que se turnan: ' + sA.name + ' → ' + sB.name + ' → ' + sA.name + ' → ?',
+    sqMiniShape(sA, col) + sqMiniArr() + sqMiniShape(sB, col) + sqMiniArr() + sqMiniShape(sA, col) + sqMiniArr() + sqMiniBlank()
+  );
+
+  const row = gei('seq-row');
+  if (!row) return;
+  row.innerHTML = '';
+  pat.forEach((s, i) => {
+    if (i > 0) row.insertAdjacentHTML('beforeend', sqArrow());
+    if (i === 3) row.insertAdjacentHTML('beforeend', sqDropZone());
+    else row.insertAdjacentHTML('beforeend', sqShapeTile(s, col));
+  });
+
+  // 4 options: correct + 3 other shapes
+  const others = sqShuffle(SQ_SHAPES.filter(s => s.name !== sA.name && s.name !== sB.name)).slice(0, 2);
+  const pool = sqShuffle([pat[3], others[0], others[1], sA]);
+  renderSqOpts(pool.map(s => ({
+    val:  s.name,
+    html: `<svg width="44" height="44" viewBox="0 0 60 60">${s.svg(col.hex)}</svg>`,
+    bg:   'white',
+    border: col.hex,
+  })));
+}
+
+// ── Render helpers ────────────────────────────────────────
+function sqShuffle(arr) { return [...arr].sort(()=>Math.random()-.5); }
+
+function sqNumTile(v, i) {
+  const bg = SQ_NUM_BG[i % SQ_NUM_BG.length];
+  return `<div style="width:72px;height:72px;border-radius:16px;background:${bg};display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:2rem;font-weight:800;color:white;border:3px solid rgba(0,0,0,0.08);box-shadow:0 4px 10px rgba(0,0,0,0.15);flex-shrink:0;">${v}</div>`;
+}
+function sqColorTile(c) {
+  return `<div style="width:72px;height:72px;border-radius:16px;background:${c.hex};display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:800;color:white;border:3px solid rgba(0,0,0,0.08);box-shadow:0 4px 10px rgba(0,0,0,0.15);flex-shrink:0;text-align:center;padding:4px;">${c.name}</div>`;
+}
+function sqShapeTile(s, col) {
+  return `<div style="width:72px;height:72px;border-radius:16px;background:white;display:flex;align-items:center;justify-content:center;border:3px solid ${col.hex};box-shadow:0 4px 10px rgba(0,0,0,0.12);flex-shrink:0;"><svg width="48" height="48" viewBox="0 0 60 60">${s.svg(col.hex)}</svg></div>`;
+}
+function sqArrow() {
+  return `<span style="font-size:1.6rem;color:#9C27B0;opacity:0.4;flex-shrink:0;">→</span>`;
+}
+function sqDropZone() {
+  return `<div id="seq-drop" ondragover="event.preventDefault();this.style.background='rgba(156,39,176,0.2)';" ondragleave="this.style.background='rgba(255,255,255,0.6)';" ondrop="onSqDrop(event)" style="width:72px;height:72px;border-radius:16px;border:3.5px dashed #9C27B0;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#CE93D8;flex-shrink:0;cursor:pointer;transition:all 0.15s;" onclick="onSqDropClick()">❓</div>`;
+}
+
+function renderSqOpts(pool) {
+  const el = gei('seq-options');
+  if (!el) return;
+  el.innerHTML = '';
+  pool.forEach(item => {
+    const border = item.border ? `border:3px solid ${item.border};` : 'border:3px solid rgba(0,0,0,0.08);';
+    const btn = document.createElement('div');
+    btn.className = 'seq-opt';
+    btn.dataset.value = item.val;
+    btn.draggable = true;
+    btn.style.cssText = `width:76px;height:76px;border-radius:16px;background:${item.bg};${border}display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-size:1.8rem;font-weight:800;color:white;box-shadow:0 4px 12px rgba(0,0,0,0.18);cursor:pointer;flex-shrink:0;transition:transform 0.12s;`;
+    btn.innerHTML = item.html;
+    btn.addEventListener('click',    () => onSqOptClick(btn));
+    btn.addEventListener('dragstart', e => { sqDragEl=btn; sq.dragVal=btn.dataset.value; e.dataTransfer.effectAllowed='move'; btn.style.opacity='0.4'; });
+    btn.addEventListener('dragend',  () => btn.style.opacity='');
+    btn.addEventListener('touchstart', sqTS, {passive:false});
+    btn.addEventListener('touchmove',  sqTM, {passive:false});
+    btn.addEventListener('touchend',   sqTE, {passive:false});
+    el.appendChild(btn);
+  });
+}
+
+// ── Click to place (most important for TDL kids on tablets) ──
+let sqSelectedOpt = null;
+function onSqOptClick(btn) {
+  if (sq.filled) return;
+  // First tap → highlight; second tap on same → deselect; different → place
+  if (sqSelectedOpt === btn) {
+    btn.style.transform = '';
+    btn.style.boxShadow = '';
+    sqSelectedOpt = null;
+    sq.dragVal = null;
+    return;
+  }
+  if (sqSelectedOpt) { sqSelectedOpt.style.transform=''; sqSelectedOpt.style.boxShadow=''; }
+  sqSelectedOpt = btn;
+  sq.dragVal = btn.dataset.value;
+  btn.style.transform = 'scale(1.12) translateY(-4px)';
+  btn.style.boxShadow = '0 8px 20px rgba(156,39,176,0.4)';
+  // Auto-fill drop zone after short delay so kid can see which is selected
+  setTimeout(() => { if (!sq.filled && sq.dragVal) checkSqAnswer(sq.dragVal); }, 300);
+}
+
+function onSqDropClick() {
+  if (sq.dragVal) checkSqAnswer(sq.dragVal);
+}
+function onSqDrop(e) {
+  e.preventDefault();
+  const drop = gei('seq-drop');
+  if (drop) drop.style.background = 'rgba(255,255,255,0.6)';
+  if (sq.dragVal) checkSqAnswer(sq.dragVal);
+}
+
+// ── Touch drag ────────────────────────────────────────────
+function sqTS(e) {
+  e.preventDefault();
+  const opt = e.currentTarget;
+  sqDragEl = opt; sq.dragVal = opt.dataset.value;
+  sqClone = opt.cloneNode(true);
+  sqClone.style.cssText += 'position:fixed;opacity:0.85;pointer-events:none;z-index:9999;transform:scale(1.1);';
+  document.body.appendChild(sqClone);
+  sqMoveClone(e.touches[0]);
+  opt.style.opacity = '0.4';
+}
+function sqTM(e) {
+  e.preventDefault();
+  if (!sqClone) return;
+  sqMoveClone(e.touches[0]);
+  const drop = gei('seq-drop');
+  if (drop) {
+    const r=drop.getBoundingClientRect(), t=e.touches[0];
+    const over=t.clientX>=r.left&&t.clientX<=r.right&&t.clientY>=r.top&&t.clientY<=r.bottom;
+    drop.style.background = over ? 'rgba(156,39,176,0.2)' : 'rgba(255,255,255,0.6)';
+  }
+}
+function sqTE(e) {
+  e.preventDefault();
+  if (sqClone) { sqClone.remove(); sqClone=null; }
+  if (sqDragEl) sqDragEl.style.opacity='';
+  const drop = gei('seq-drop');
+  if (drop && drop.style.background.includes('0.2')) {
+    drop.style.background='rgba(255,255,255,0.6)';
+    if (sq.dragVal) checkSqAnswer(sq.dragVal);
+  }
+  sqDragEl=null;
+}
+function sqMoveClone(t) {
+  if (!sqClone) return;
+  sqClone.style.left=(t.clientX-sqClone.offsetWidth/2)+'px';
+  sqClone.style.top =(t.clientY-sqClone.offsetHeight/2)+'px';
+}
+
+// ── Answer check ──────────────────────────────────────────
+function checkSqAnswer(val) {
+  if (sq.filled) return;
+  sq.filled = true;
+  if (sqSelectedOpt) { sqSelectedOpt.style.transform=''; sqSelectedOpt.style.boxShadow=''; sqSelectedOpt=null; }
+
+  const drop = gei('seq-drop');
+  const fb   = gei('seq-feedback');
+  const correct = String(val) === String(sq.answer);
+  const draggedOpt = document.querySelector('.seq-opt[data-value="'+val+'"]');
+
+  // Fill the drop zone
+  if (drop && draggedOpt) {
+    drop.style.cssText = draggedOpt.style.cssText + 'border-style:solid;border-color:'+(correct?'#43A047':'#D84040')+';cursor:default;';
+    drop.innerHTML = draggedOpt.innerHTML;
+    drop.removeAttribute('ondragover'); drop.removeAttribute('ondragleave'); drop.removeAttribute('ondrop');
+  }
+  document.querySelectorAll('.seq-opt').forEach(b => b.style.pointerEvents='none');
+
+  if (correct) {
+    if (draggedOpt) draggedOpt.style.opacity='0.3';
+    if (fb) { fb.textContent='🎉 ¡Muy bien! ¡Encontraste el patrón!'; fb.style.color='#1B5E20'; }
+    sq.hits++; sq.score += 10 + sq.level*2;
+    updateCoins(2, null);
+    if (gei('coin-display')) gei('coin-display').textContent=coins;
+    if (gei('coins-big'))    gei('coins-big').textContent=coins+' 🪙';
+    updateSqUI();
+
+    const cfg = SQ_LEVELS[Math.min(sq.level,3)-1];
+    if (sq.hits >= cfg.rounds) {
+      updateCoins(cfg.coins, null);
+      showToast('🔢 ¡Nivel '+sq.level+' completo! +'+cfg.coins+' 🪙');
+      if (sq.level >= 3) {
+        sq.level=3; updateCoins(8,null);
+        setTimeout(showSqComplete, 1200);
+      } else {
+        sq.level++; sq.hits=0;
+        setTimeout(()=>{ updateSqUI(); nextSqProblem(); }, 1500);
+      }
+    } else {
+      setTimeout(nextSqProblem, 1300);
+    }
+  } else {
+    if (fb) { fb.textContent='Esa no es… mirá el patrón de nuevo 🤔'; fb.style.color='#D85A30'; }
+    sq.filled=false;
+    setTimeout(()=>{
+      if (drop) {
+        drop.style.cssText='width:72px;height:72px;border-radius:16px;border:3.5px dashed #9C27B0;background:rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;font-size:2rem;color:#CE93D8;flex-shrink:0;cursor:pointer;transition:all 0.15s;';
+        drop.innerHTML='❓';
+        drop.setAttribute('ondragover',"event.preventDefault();this.style.background='rgba(156,39,176,0.2)';");
+        drop.setAttribute('ondragleave',"this.style.background='rgba(255,255,255,0.6)';");
+        drop.setAttribute('ondrop','onSqDrop(event)');
+      }
+      document.querySelectorAll('.seq-opt').forEach(b=>b.style.pointerEvents='');
+      if (fb) { fb.textContent=''; fb.style.color=''; }
+    }, 1000);
+  }
+}
+
+function showSqComplete() {
+  const ov = gei('seq-overlay');
+  if (!ov) return;
+  ov.innerHTML =
+    '<div style="font-size:2.5rem;">🌟🔢🎨🔷</div>'+
+    '<div class="overlay-title" style="color:white;">¡Completaste los 3 niveles!</div>'+
+    '<div class="overlay-sub" style="color:rgba(255,255,255,0.85);">¡Sos una campeona de los patrones!</div>'+
+    '<div style="background:rgba(255,255,255,0.2);border:1.5px solid white;border-radius:12px;padding:8px 20px;font-size:0.9rem;font-weight:700;color:white;">🪙 +8 monedas especiales</div>'+
+    '<button class="play-btn" style="background:#9C27B0;" onclick="startSecuencias()">Jugar de nuevo →</button>';
+  ov.style.display='flex';
+}
+
+// ── Hint panel ────────────────────────────────────────────
+function updateSqHint(icon, text, demoHTML) {
+  if (gei('seq-hint-icon')) gei('seq-hint-icon').textContent = icon;
+  if (gei('seq-hint-text')) gei('seq-hint-text').textContent = text;
+  if (gei('seq-hint-demo')) gei('seq-hint-demo').innerHTML   = demoHTML;
+}
+function sqMiniNum(v,i) {
+  return `<div style="width:28px;height:28px;border-radius:7px;background:${SQ_NUM_BG[i%4]};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;color:white;flex-shrink:0;">${v}</div>`;
+}
+function sqMiniColor(c) {
+  return `<div style="width:28px;height:28px;border-radius:7px;background:${c.hex};flex-shrink:0;"></div>`;
+}
+function sqMiniShape(s,c) {
+  return `<div style="width:28px;height:28px;border-radius:7px;background:white;border:2px solid ${c.hex};display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 60 60">${s.svg(c.hex)}</svg></div>`;
+}
+function sqMiniArr() {
+  return `<span style="font-size:0.7rem;color:#9C27B0;opacity:0.6;">→</span>`;
+}
+function sqMiniBlank() {
+  return `<div style="width:28px;height:28px;border-radius:7px;border:2px dashed #9C27B0;display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:#CE93D8;flex-shrink:0;">?</div>`;
+}
 
 // ── TIENDA ────────────────────────────────────────────────
 // Argentine money: coins and bills
@@ -4007,12 +6915,155 @@ function showGranjaComplete() {
     '</div>';
 }
 
+
+// ── LECTURA POR VOZ (Web Speech API) ─────────────────────
+// Each screen registers its instruction getter
+// vozLeer() reads the current screen's instruction aloud
+
+let vozCurrentScreen = 'conteo';
+let vozUtterance = null;
+let vozSpeaking  = false;
+
+// Map each screen to a function that returns the text to read
+const VOZ_TEXTS = {
+  conteo: () => {
+    const n = gei('count-num') ? gei('count-num').textContent : '';
+    return 'Usá los botones más y menos para contar. El número actual es ' + n + '.';
+  },
+  suma: () => {
+    const a = gei('suma2-eqA') ? gei('suma2-eqA').textContent : '';
+    const b = gei('suma2-eqB') ? gei('suma2-eqB').textContent : '';
+    return '¿Cuánto es ' + a + ' más ' + b + '? Tocá los objetos para contarlos y elegí el número total.';
+  },
+  resta: () => {
+    const a = gei('resta2-eqA') ? gei('resta2-eqA').textContent : '';
+    const b = gei('resta2-eqB') ? gei('resta2-eqB').textContent : '';
+    return 'Tenemos ' + a + '. Sacá ' + b + ' tocándolos. ¿Cuántos quedan? Elegí el número.';
+  },
+  comparar: () => {
+    const a = gei('cmp2-numA') ? gei('cmp2-numA').textContent : '';
+    const b = gei('cmp2-numB') ? gei('cmp2-numB').textContent : '';
+    const menos = (typeof cmp2 !== 'undefined' && cmp2.target === 'menos');
+    const cual = menos ? 'el que tiene MENOS' : 'el que tiene MÁS';
+    return 'Mirá las dos torres, ' + a + ' y ' + b + '. Tocá ' + cual + '. El cocodrilo siempre se come al número más grande. Si son iguales, tocá Son iguales.';
+  },
+  'suma-globos': () => {
+    const t = gei('sg-target') ? gei('sg-target').textContent : '';
+    return 'El objetivo es ' + t + '. Tocá un perrito, después tocá otro. Los dos números juntos tienen que sumar ' + t + '.';
+  },
+  cohetes: () => {
+    const p = gei('cohetes-problem') ? gei('cohetes-problem').textContent : '';
+    return '¿Cuánto es ' + p.replace('=','? ') + ' Elegí la respuesta correcta antes de que el reloj llegue a cero.';
+  },
+  granja: () => {
+    const lbl = gei('granja-q') ? gei('granja-q').textContent : '';
+    return lbl + ' Contá los grupos de animales y elegí el número total.';
+  },
+  conejos: () => {
+    const t = gei('conejos-title') ? gei('conejos-title').textContent : '';
+    return t + ' Elegí cuántas zanahorias le toca a cada conejo.';
+  },
+  tienda: () => {
+    const phase = gei('tienda-phase1') && gei('tienda-phase1').classList.contains('active') ? 1 : 2;
+    if (phase === 1) return 'Tocá los productos que querés comprar. Cuando tengas dos o más, tocá el botón para ir a pagar.';
+    return 'Tocá los billetes y monedas para pagar el total. Cuando llegues al monto correcto, confirmá el pago.';
+  },
+  secuencias: () => {
+    const hint = gei('seq-hint-text') ? gei('seq-hint-text').textContent : '';
+    return hint + ' Tocá la ficha correcta para completar el patrón.';
+  },
+  contar: () => {
+    const q = gei('contar-question') ? gei('contar-question').textContent : '';
+    return q + ' Contá los objetos uno por uno y tocá el número correcto.';
+  },
+  memotest: () => 'Memotest matemático. Tocá una carta azul para darla vuelta. Después buscá la carta que tenga el número que corresponde a la operación. Hay cuatro pares para encontrar.',
+  premios: () => {
+    const coins = gei('coin-display') ? gei('coin-display').textContent : '0';
+    return 'Tenés ' + coins + ' monedas. Tocá Canjear en el premio que querés.';
+  },
+};
+
+function vozLeer(textoEspecifico) {
+  if (!window.speechSynthesis) {
+    if (gei('voz-text')) gei('voz-text').textContent = 'Tu navegador no soporta lectura por voz 😔';
+    return;
+  }
+
+  vozDetener();
+
+  const texto = textoEspecifico || (VOZ_TEXTS[vozCurrentScreen] ? VOZ_TEXTS[vozCurrentScreen]() : 'Elegí un juego del menú de arriba.');
+
+  if (gei('voz-text')) gei('voz-text').textContent = '🔊 ' + texto;
+
+  vozUtterance = new SpeechSynthesisUtterance(texto);
+  vozUtterance.lang  = 'es-AR';
+  vozUtterance.rate  = 0.82;   // slower — better for TDL
+  vozUtterance.pitch = 1.05;
+  vozUtterance.volume = 1;
+
+  // Try to get a Spanish voice
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang.startsWith('es')) ||
+                  voices.find(v => v.lang.startsWith('en'));
+  if (esVoice) vozUtterance.voice = esVoice;
+
+  vozUtterance.onstart = () => {
+    vozSpeaking = true;
+    const btn = gei('voz-main-btn');
+    if (btn) btn.classList.add('speaking');
+    const stop = gei('voz-stop-btn');
+    if (stop) stop.classList.add('show');
+  };
+  vozUtterance.onend = vozUtterance.onerror = () => {
+    vozSpeaking = false;
+    const btn = gei('voz-main-btn');
+    if (btn) btn.classList.remove('speaking');
+    const stop = gei('voz-stop-btn');
+    if (stop) stop.classList.remove('show');
+  };
+
+  window.speechSynthesis.speak(vozUtterance);
+}
+
+function vozDetener() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  vozSpeaking = false;
+  const btn = gei('voz-main-btn');
+  if (btn) btn.classList.remove('speaking');
+  const stop = gei('voz-stop-btn');
+  if (stop) stop.classList.remove('show');
+}
+
+// Update current screen when navigating
+const _origGoToScreen = goToScreen;
+// We patch goToScreen after it's defined — do it at end of script
+function vozSetScreen(name) {
+  vozCurrentScreen = name;
+  // Auto-read instruction when entering a new screen (after short delay)
+  setTimeout(() => {
+    if (VOZ_TEXTS[name]) {
+      const txt = VOZ_TEXTS[name]();
+      if (gei('voz-text')) gei('voz-text').textContent = '👆 Tocá 🔊 para escuchar: ' + txt.slice(0, 60) + (txt.length > 60 ? '…' : '');
+    }
+  }, 400);
+}
+
 // Only init things that are safe before any screen is visited
 renderPrizes();
 // Pre-generate values so first navigation is instant
 sumaA = rnd(1,9); sumaB = rnd(1, 10-sumaA);
 restaA = rnd(3,10); restaB = rnd(1, restaA-1);
-cmpA = rnd(1,15); cmpB = rnd(1,15);
 </script>
+
+<!-- Global Voice Bar -->
+<div id="voz-bar">
+  <button class="voz-btn" id="voz-main-btn" onclick="vozLeer()">
+    <span class="voz-btn-icon">🔊</span>
+    <span>Escuchar</span>
+  </button>
+  <div id="voz-text">Tocá 🔊 para escuchar la instrucción</div>
+  <button id="voz-stop-btn" onclick="vozDetener()">⏹ Parar</button>
+</div>
+
 </body>
 </html>

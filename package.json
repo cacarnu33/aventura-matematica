@@ -1,0 +1,18 @@
+{
+  "name": "las-aventuras-de-verita",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Juegos de matemática para una nena con TDL y posible dislexia",
+  "scripts": {
+    "dev": "node scripts/serve.mjs src 5173",
+    "build": "node scripts/build.mjs",
+    "preview": "npm run build && node scripts/serve.mjs dist 4173",
+    "check": "tsc -p .",
+    "test": "npm run build && playwright test",
+    "verificar": "npm run check && npm test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "typescript": "^7.0.2"
+  }
+}

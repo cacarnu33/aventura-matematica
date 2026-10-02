@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Las Aventuras de Verita</title>
+<meta name="description" content="Juegos de matemática con apoyo visual y lectura en voz alta">
+<meta name="theme-color" content="#1D9E75">
+<!-- App instalable -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Verita">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <button class="home-btn" onclick="goToScreen('inicio')">🏠 Inicio</button>
+    <h1>Las Aventuras de <span>Verita</span> ✨</h1>
+    <div class="header-juego" id="header-juego"></div>
+  </div>
+  <div class="header-right">
+  <button class="gift-btn" onclick="goToScreen('premios')" aria-label="Premios">🎁</button>
+  <div class="coin-pill" onclick="goToScreen('premios')">
+    <span class="coin-icon">🪙</span>
+    <div>
+      <div class="coin-val" id="coin-display">0</div>
+      <div class="coin-lbl">monedas</div>
+    </div>
+  </div>
+  </div>
+</header>
+
+<div class="toast" id="toast"></div>
+
+<main>
+
+  <!-- INICIO: elegir juego -->
+  <div class="screen active" id="screen-inicio">
+    <div class="home-hola">¿A qué jugamos hoy? 😊</div>
+    <div class="home-grupo">
+      <div class="home-grupo-titulo">🔢 Contar</div>
+      <div class="home-tiles">
+        <button class="home-tile" style="--c:#EF9A9A; --cbg:#FFEBEE;" onclick="goToScreen('conteo')"><span class="icon">🍎</span>Conteo</button>
+        <button class="home-tile" style="--c:#FFCA28; --cbg:#FFF8E1;" onclick="goToScreen('contar')"><span class="icon">⭐</span>Contar</button>
+        <button class="home-tile" style="--c:#BA68C8; --cbg:#F3E5F5;" onclick="goToScreen('secuencias')"><span class="icon">🔢</span>Patrones</button>
+      </div>
+    </div>
+    <div class="home-grupo">
+      <div class="home-grupo-titulo">➕ Sumar y restar</div>
+      <div class="home-tiles">
+        <button class="home-tile" style="--c:#66BB6A; --cbg:#E8F5E9;" onclick="goToScreen('suma')"><span class="icon">➕</span>Suma</button>
+        <button class="home-tile" style="--c:#FF8A65; --cbg:#FBE9E7;" onclick="goToScreen('resta')"><span class="icon">➖</span>Resta</button>
+        <button class="home-tile" style="--c:#F06292; --cbg:#FCE4EC;" onclick="goToScreen('suma-globos')"><span class="icon">🎈</span>Globos</button>
+        <button class="home-tile" style="--c:#7986CB; --cbg:#E8EAF6;" onclick="goToScreen('cohetes')"><span class="icon">🚀</span>Cohetes</button>
+        <button class="home-tile" style="--c:#4DB6AC; --cbg:#E0F2F1;" onclick="goToScreen('comparar')"><span class="icon">🐊</span>Más o menos</button>
+      </div>
+    </div>
+    <div class="home-grupo">
+      <div class="home-grupo-titulo">✖️ Más juegos</div>
+      <div class="home-tiles">
+        <button class="home-tile" style="--c:#9CCC65; --cbg:#F1F8E9;" onclick="goToScreen('granja')"><span class="icon">🐔</span>Granja</button>
+        <button class="home-tile" style="--c:#FFB74D; --cbg:#FFF3E0;" onclick="goToScreen('conejos')"><span class="icon">🐰</span>Conejos</button>
+        <button class="home-tile" style="--c:#4FC3F7; --cbg:#E1F5FE;" onclick="goToScreen('tienda')"><span class="icon">🛒</span>Tienda</button>
+        <button class="home-tile" style="--c:#64B5F6; --cbg:#E3F2FD;" onclick="goToScreen('memotest')"><span class="icon">🃏</span>Memo</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEO -->
+  <div class="screen" id="screen-conteo">
+    <div class="card">
+      <div class="section-label">Elegí un objeto</div>
+      <div class="emoji-row">
+        <span class="emoji-opt selected" onclick="setEmoji(this,'🍎')">🍎</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'⭐')">⭐</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🐱')">🐱</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🌸')">🌸</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🚗')">🚗</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🦋')">🦋</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🐸')">🐸</span>
+        <span class="emoji-opt" onclick="setEmoji(this,'🍕')">🍕</span>
+      </div>
+      <div class="count-center">
+        <span class="display-num" id="count-num">0</span>
+        <div class="objects-grid" id="objects-grid"></div>
+        <div class="count-btns">
+          <button class="big-btn btn-minus" onclick="changeCount(-1)">−</button>
+          <button class="big-btn btn-plus" onclick="changeCount(1)">+</button>
+        </div>
+        <div style="margin-top:12px; font-size:0.8rem; color:var(--text-light); font-weight:600;">Llegá a 5, 10, 15 o 20 y ganás una moneda 🪙</div>
+        <div id="conteo-earn" style="min-height:32px; margin-top:8px; text-align:center;"></div>
+      </div>
+    </div>
+    <div class="neighbor-row">
+      <div class="neighbor-card">
+        <div class="neighbor-label">Número anterior</div>
+        <div class="neighbor-num" id="prev-num">—</div>
+      </div>
+      <div class="neighbor-card next">
+        <div class="neighbor-label">Número siguiente</div>
+        <div class="neighbor-num" id="next-num">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMA -->
+  <div class="screen" id="screen-suma">
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">➕ Sumamos juntas</div>
+          <div class="level-badge" id="suma2-level-label">Nivel 1 — con dibujitos</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="suma2-hits-disp">0/5</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="suma2-score-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="suma2-arena" id="suma2-arena">
+
+      <!-- Nivel 1: dos grupos de dibujitos -->
+      <div id="suma2-dibujos">
+        <div class="suma2-groups">
+          <div class="suma2-group" id="suma2-groupA"></div>
+          <div class="suma2-plus">➕</div>
+          <div class="suma2-group" id="suma2-groupB"></div>
+        </div>
+      </div>
+
+      <!-- Nivel 3: problemita corto (se lee en voz alta) -->
+      <div id="suma2-problema" style="display:none;">
+        <div class="suma2-prob">
+          <div class="suma2-prob-emoji" id="suma2-prob-emoji">🧸</div>
+          <div class="suma2-prob-text" id="suma2-prob-text"></div>
+          <button class="suma2-prob-voz" onclick="vozLeer(suma2.problem)" aria-label="Escuchar el problema">🔊</button>
+        </div>
+      </div>
+
+      <!-- Equation display -->
+      <div class="suma2-equation" id="suma2-equation">
+        <span class="suma2-eq-num" id="suma2-eqA">3</span>
+        <span class="suma2-eq-op">+</span>
+        <span class="suma2-eq-num" id="suma2-eqB">2</span>
+        <span class="suma2-eq-op">=</span>
+        <span class="suma2-eq-q">?</span>
+      </div>
+
+      <!-- Nivel 2: recta numérica de apoyo -->
+      <div id="suma2-recta" style="display:none;">
+        <div class="suma2-recta-line" id="suma2-recta-line"></div>
+      </div>
+
+      <!-- Count helper -->
+      <div class="suma2-counthint" id="suma2-counthint">👆 Tocá los objetos para contarlos juntos</div>
+
+      <!-- Answer options -->
+      <div class="suma2-opts" id="suma2-opts"></div>
+
+      <div class="suma2-overlay show" id="suma2-overlay">
+        <div style="font-size:2.5rem;">🍎➕⭐</div>
+        <div class="overlay-title">¡Sumamos juntas!</div>
+        <button class="play-btn" onclick="startSuma2(1)">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="suma2-feedback" id="suma2-feedback"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="suma2-prog-label">0 / 5</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="suma2-prog-fill" style="height:100%; background:var(--green); border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="suma2-stars">☆☆☆</span>
+    </div>
+
+    <div id="suma2-tip" style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.9rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Contá los dos grupos juntos y elegí el número.
+    </div>
+  </div>
+
+  <!-- RESTA -->
+  <div class="screen" id="screen-resta">
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">➖ Restamos juntas</div>
+          <div class="level-badge" id="resta2-level-label">Nivel 1 — con dibujitos</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="resta2-hits-disp">0/5</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="resta2-score-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resta2-arena" id="resta2-arena">
+
+      <!-- Nivel 1: un grupo — tocar para sacar -->
+      <div id="resta2-dibujos">
+        <div class="resta2-grouptitle" id="resta2-grouptitle">Tenemos estos:</div>
+        <div class="resta2-group" id="resta2-group"></div>
+      </div>
+
+      <!-- Nivel 3: problemita corto (se lee en voz alta) -->
+      <div id="resta2-problema" style="display:none;">
+        <div class="suma2-prob" style="border-color:#FFAB91;">
+          <div class="suma2-prob-emoji" id="resta2-prob-emoji">🧸</div>
+          <div class="suma2-prob-text" id="resta2-prob-text"></div>
+          <button class="suma2-prob-voz" onclick="vozLeer(resta2.problem)" aria-label="Escuchar el problema">🔊</button>
+        </div>
+      </div>
+
+      <!-- Equation -->
+      <div class="resta2-equation" id="resta2-equation">
+        <span class="resta2-eq-num" id="resta2-eqA">5</span>
+        <span class="resta2-eq-op">−</span>
+        <span class="resta2-eq-num" id="resta2-eqB">2</span>
+        <span class="resta2-eq-op">=</span>
+        <span class="resta2-eq-q" id="resta2-eqQ">?</span>
+      </div>
+
+      <!-- Nivel 2: recta numérica de apoyo -->
+      <div id="resta2-recta" style="display:none;">
+        <div class="suma2-recta-line" id="resta2-recta-line"></div>
+      </div>
+
+      <!-- Instruction to remove / hop -->
+      <div class="resta2-removehint" id="resta2-removehint">👆 Sacá (tocá) los que se van</div>
+
+      <!-- Answer options -->
+      <div class="resta2-opts" id="resta2-opts"></div>
+
+      <div class="resta2-overlay show" id="resta2-overlay">
+        <div style="font-size:2.5rem;">🍎➖🍎</div>
+        <div class="overlay-title">¡Restamos juntas!</div>
+        <button class="play-btn" style="background:#D85A30;" onclick="startResta2(1)">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="resta2-feedback" id="resta2-feedback"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="resta2-prog-label">0 / 5</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="resta2-prog-fill" style="height:100%; background:#D85A30; border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="resta2-stars">☆☆☆</span>
+    </div>
+
+    <div id="resta2-tip" style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.9rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Tocá los que se van y contá los que quedan.
+    </div>
+  </div>
+
+  <!-- COMPARAR — El cocodrilo glotón -->
+  <div class="screen" id="screen-comparar">
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">⚖️ ¿Cuál es más?</div>
+          <div class="level-badge" id="cmp2-level-label">Nivel 1 — hasta 9</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="cmp2-hits-disp">0/5</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="cmp2-score-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmp2-arena" id="cmp2-arena">
+      <div class="cmp2-hint" id="cmp2-hint">👆 Tocá el que tiene MÁS</div>
+
+      <div class="cmp2-row">
+        <button class="cmp2-box" id="cmp2-boxA" onclick="onCmp2Pick('A')">
+          <div class="cmp2-tower" id="cmp2-towerA"></div>
+          <div class="cmp2-num" id="cmp2-numA">7</div>
+        </button>
+
+        <div class="cmp2-croc" id="cmp2-croc"></div>
+
+        <button class="cmp2-box" id="cmp2-boxB" onclick="onCmp2Pick('B')">
+          <div class="cmp2-tower" id="cmp2-towerB"></div>
+          <div class="cmp2-num" id="cmp2-numB">4</div>
+        </button>
+      </div>
+
+      <button class="cmp2-equal-btn" id="cmp2-equal" onclick="onCmp2Pick('=')">🟰 Son iguales</button>
+
+      <div class="cmp2-statement" id="cmp2-statement">❔</div>
+
+      <div class="cmp2-overlay show" id="cmp2-overlay">
+        <div style="font-size:2.6rem;">🐊⚖️</div>
+        <div class="overlay-title">El cocodrilo glotón</div>
+        <div class="overlay-sub">El cocodrilo siempre se come al número más grande.<br>Tocá el que tiene MÁS.</div>
+        <button class="play-btn" onclick="startCmp2(1)">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="cmp2-feedback" id="cmp2-feedback"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="cmp2-prog-label">0 / 5</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="cmp2-prog-fill" style="height:100%; background:var(--green); border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="cmp2-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      🐊 La boca del cocodrilo siempre se abre hacia el número MÁS grande. ¡Esa boca es el signo &gt; o &lt;!
+    </div>
+  </div>
+
+  <!-- SUMA GLOBOS -->
+  <div class="screen" id="screen-suma-globos">
+
+    <!-- Progress steps -->
+    <div class="sg-progress-row">
+      <div class="sg-step" id="sg-step-1">
+        <div class="sg-step-circle">1</div>
+        <div class="sg-step-label">Fácil<br><small>hasta 6</small></div>
+      </div>
+      <div class="sg-step-line" id="sg-line-1"></div>
+      <div class="sg-step" id="sg-step-2">
+        <div class="sg-step-circle">2</div>
+        <div class="sg-step-label">Medio<br><small>hasta 10</small></div>
+      </div>
+      <div class="sg-step-line" id="sg-line-2"></div>
+      <div class="sg-step" id="sg-step-3">
+        <div class="sg-step-circle">3</div>
+        <div class="sg-step-label">Difícil<br><small>hasta 15</small></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div class="globos-header">
+        <div>
+          <div class="section-label">Suma de globos</div>
+          <div class="level-badge" id="sg-level-badge">Nivel 1 — suma hasta 6</div>
+        </div>
+        <div class="globos-target">
+          <div class="globos-target-label">¿Cuáles suman?</div>
+          <div class="globos-target-num" id="sg-target">?</div>
+        </div>
+      </div>
+      <div class="globos-stats">
+        <div class="stat-pill">
+          <div class="stat-pill-label">Nivel</div>
+          <div class="stat-pill-val" id="sg-lives">🥉</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Aciertos</div>
+          <div class="stat-pill-val" id="sg-hits">0/5</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-label">Elegiste</div>
+          <div class="stat-pill-val" id="sg-selected" style="font-size:1rem;">— + ? = <span id='sg-target-inline'></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sg-arena">
+      <div class="globos-overlay show" id="sg-overlay">
+        <div class="overlay-emoji">🎈➕🎈</div>
+        <div class="overlay-title">¡Suma de Globos!</div>
+        <div class="overlay-sub">Tocá DOS globos que juntos sumen el número objetivo</div>
+        <div style="font-size:0.82rem; color:var(--text-mid); margin-top:-4px;">Hay 3 niveles — ¡completá los 3 para ganar el gran premio!</div>
+        <button class="play-btn" onclick="startSumaGlobos()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 <strong>Paso 1:</strong> Tocá un perrito. <strong>Paso 2:</strong> Tocá otro que juntos sumen el número de arriba. ¡Sin apuro, van despacio!
+    </div>
+  </div>
+
+  <!-- COHETES -->
+  <div class="screen" id="screen-cohetes">
+    <div class="card" style="padding:0.9rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🚀 Cohetes — Resta</div>
+          <div class="level-badge" id="cohetes-level-label">Nivel 1 — resta hasta 10</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Vamos</div>
+            <div class="stat-pill-val" id="cohetes-lives-disp">🚀 0/5</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="cohetes-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cohetes-arena">
+      <!-- stars injected by JS -->
+
+      <!-- Stats overlay top-left -->
+      <div class="cohetes-stats" id="cohetes-stats-overlay" style="display:none;">
+        <div class="cohetes-stat-pill" id="cohetes-lives-arena">🚀 0/5</div>
+        <div class="cohetes-stat-pill" id="cohetes-score-arena">⭐ 0</div>
+      </div>
+
+      <!-- Problem -->
+      <div class="cohetes-problem" id="cohetes-problem" style="display:none;">12 − 5 = ?</div>
+
+      <!-- Timer -->
+      <div class="timer-wrap" id="cohetes-timer-wrap" style="display:none;">
+        <svg class="timer-ring" width="42" height="42" viewBox="0 0 42 42">
+          <circle class="timer-ring-bg" cx="21" cy="21" r="18"/>
+          <circle class="timer-ring-fill" id="timer-fill" cx="21" cy="21" r="18"/>
+        </svg>
+        <div class="timer-num" id="timer-num">8</div>
+      </div>
+
+      <!-- Level dots -->
+      <div class="cohetes-level-dots" id="cohetes-dots" style="display:none;">
+        <div class="level-dot" id="cdot-1"></div>
+        <div class="level-dot" id="cdot-2"></div>
+        <div class="level-dot" id="cdot-3"></div>
+      </div>
+
+      <!-- Rocket -->
+      <div class="rocket-wrap" id="rocket-wrap" style="display:none;">
+        <svg class="rocket-svg" width="60" height="90" viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="rktBody" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#C0C8E8"/>
+              <stop offset="50%" stop-color="#FFFFFF"/>
+              <stop offset="100%" stop-color="#8A96C0"/>
+            </linearGradient>
+            <linearGradient id="rktNose" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FF6B6B"/>
+              <stop offset="100%" stop-color="#CC2222"/>
+            </linearGradient>
+          </defs>
+          <!-- Body -->
+          <rect x="20" y="28" width="20" height="42" rx="3" fill="url(#rktBody)"/>
+          <!-- Nose -->
+          <path d="M30 4 L44 30 L16 30 Z" fill="url(#rktNose)"/>
+          <!-- Window -->
+          <circle cx="30" cy="42" r="7" fill="#5BB8F5" stroke="white" stroke-width="1.5"/>
+          <circle cx="30" cy="42" r="4" fill="#2299E8" opacity="0.7"/>
+          <!-- Fins -->
+          <path d="M20 58 L10 72 L20 68 Z" fill="#FF9F6B"/>
+          <path d="M40 58 L50 72 L40 68 Z" fill="#FF9F6B"/>
+          <!-- Exhaust nozzle -->
+          <rect x="24" y="70" width="12" height="6" rx="2" fill="#888"/>
+        </svg>
+        <!-- Flame -->
+        <svg class="rocket-flame" width="24" height="32" viewBox="0 0 24 32">
+          <ellipse cx="12" cy="10" rx="7" ry="12" fill="#EF9F27" opacity="0.9"/>
+          <ellipse cx="12" cy="14" rx="4" ry="8"  fill="#FFF176" opacity="0.8"/>
+        </svg>
+      </div>
+
+      <!-- Answer options -->
+      <div class="cohetes-options" id="cohetes-options" style="display:none;"></div>
+
+      <!-- Overlay -->
+      <div class="cohetes-overlay show" id="cohetes-overlay">
+        <div class="overlay-emoji">🚀</div>
+        <div class="overlay-title">¡Juego de Cohetes!</div>
+        <div class="overlay-sub">Elegí la respuesta correcta antes de que el cohete explote</div>
+        <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:-4px;">3 niveles — restas hasta 20</div>
+        <button class="cohetes-play-btn" onclick="startCohetes()">¡Despegar! 🚀</button>
+      </div>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600;">
+      💡 Tocá la respuesta correcta antes de que el reloj llegue a cero. ¡Cada acierto sube el cohete!
+    </div>
+  </div>
+
+  <!-- GRANJA MÁGICA -->
+  <div class="screen" id="screen-granja">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🐔 Granja Mágica — Multiplicación</div>
+          <div class="level-badge" id="granja-tabla-label">Tabla del 2</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Aciertos</div>
+            <div class="stat-pill-val" id="granja-hits-disp">0/5</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="granja-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla selector -->
+    <div class="tabla-row">
+      <button class="tabla-pill active" id="tab-2" onclick="selectTabla(2)">× 2</button>
+      <button class="tabla-pill"        id="tab-3" onclick="selectTabla(3)">× 3</button>
+      <button class="tabla-pill"        id="tab-4" onclick="selectTabla(4)">× 4</button>
+      <button class="tabla-pill"        id="tab-5" onclick="selectTabla(5)">× 5</button>
+    </div>
+
+    <!-- Arena -->
+    <div id="granja-arena">
+      <!-- decorations injected by JS -->
+
+      <div class="granja-question">
+        <span class="granja-question-text" id="granja-q">¿Cuántos animales hay en total?</span>
+      </div>
+
+      <div class="granja-groups" id="granja-groups"></div>
+
+      <div class="granja-opts" id="granja-opts"></div>
+
+      <div class="granja-overlay show" id="granja-overlay">
+        <div class="overlay-emoji">🐔🐄🐑🐖</div>
+        <div class="overlay-title">¡Granja Mágica!</div>
+        <div class="overlay-sub">Contá los animales y elegí el total correcto</div>
+        <button class="play-btn" style="background:var(--green);" onclick="startGranja()">¡Entrar a la granja! →</button>
+      </div>
+    </div>
+
+    <!-- Feedback + progress -->
+    <div class="granja-feedback" id="granja-feedback"></div>
+
+    <div class="granja-progress">
+      <span class="granja-prog-label" id="granja-prog-label">0 / 5</span>
+      <div class="granja-prog-bar">
+        <div class="granja-prog-fill" id="granja-prog-fill" style="width:0%"></div>
+      </div>
+      <div class="granja-stars" id="granja-stars">
+        <span class="granja-star" id="gstar-1">★</span>
+        <span class="granja-star" id="gstar-2">★</span>
+        <span class="granja-star" id="gstar-3">★</span>
+      </div>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Mirá los grupos de animales — cada cerco tiene la misma cantidad. ¡Contá todos juntos!
+    </div>
+  </div>
+
+  <!-- CONEJOS -->
+  <div class="screen" id="screen-conejos">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🐰 Conejos — División</div>
+          <div class="level-badge" id="conejos-level-label">Nivel 1 — dividir entre 2 y 3</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Aciertos</div>
+            <div class="stat-pill-val" id="conejos-hits-disp">0/5</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="conejos-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="conejos-arena">
+      <div class="conejos-grass"></div>
+
+      <div class="conejos-title" id="conejos-title">Tenés 🥕 para repartir entre 🐰</div>
+
+      <!-- Zanahorias totales -->
+      <div class="zanahorias-row" id="zanahorias-row"></div>
+
+      <!-- Conejos -->
+      <div class="conejos-row" id="conejos-row"></div>
+
+      <!-- Opciones -->
+      <div class="conejos-opts" id="conejos-opts"></div>
+
+      <div class="conejos-overlay show" id="conejos-overlay">
+        <div style="font-size:2.5rem;">🐰🥕🐰</div>
+        <div class="overlay-title">¡Conejos y Zanahorias!</div>
+        <div class="overlay-sub">Repartí las zanahorias entre los conejos por igual</div>
+        <button class="play-btn" style="background:#4CAF50;" onclick="startConejos()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="conejos-feedback" id="conejos-feedback"></div>
+
+    <div class="conejos-progress">
+      <span style="font-size: 0.85rem; font-weight:700; color:var(--text-light);" id="conejos-prog-label">0 / 5</span>
+      <div class="conejos-prog-bar">
+        <div class="conejos-prog-fill" id="conejos-prog-fill" style="width:0%"></div>
+      </div>
+      <span style="font-size: 0.85rem; font-weight:700; color:var(--text-light);" id="conejos-stars">⭐⭐⭐</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Contá las zanahorias y los conejos — ¡elegí cuántas le toca a cada uno!
+    </div>
+  </div>
+
+  <!-- TIENDA -->
+  <div class="screen" id="screen-tienda">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🛒 La Tiendita — Sumar y Pagar</div>
+          <div class="level-badge" id="tienda-level-label">Nivel 1 — precios simples</div>
+        </div>
+        <div class="tienda-stats">
+          <div class="stat-pill">
+            <div class="stat-pill-label">Compras</div>
+            <div class="stat-pill-val" id="tienda-hits-disp">0/4</div>
+          </div>
+          <div class="stat-pill">
+            <div class="stat-pill-label">Puntos</div>
+            <div class="stat-pill-val" id="tienda-score-disp">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tienda-scene">
+      <div class="tienda-overlay" id="tienda-overlay"></div>
+
+      <!-- PHASE 1: suma de precios -->
+      <div class="tienda-phase active" id="tienda-phase1">
+        <div class="tienda-phase-header">
+          <div class="tienda-phase-num">1</div>
+          ¡Elegí lo que querés comprar!
+          <span id="tienda-estante" style="margin-left:auto; background:white; border:2px solid #FFAB40; border-radius:999px; padding:2px 12px; font-weight:700; color:#BF360C;"></span>
+        </div>
+
+        <!-- Shelf with products -->
+        <div class="tienda-shelf" id="tienda-shelf"></div>
+
+        <!-- Cart -->
+        <div class="tienda-cart">
+          <div class="tienda-cart-title">🛒 Tu carrito (tocá para agregar, tocá de nuevo para sacar)</div>
+          <div class="tienda-cart-items" id="tienda-cart-items">
+            <span style="font-size:0.82rem; color:var(--text-light); font-weight:600;">Elegí productos del estante</span>
+          </div>
+        </div>
+
+        <!-- Total question -->
+        <div class="tienda-total-row">
+          <div class="tienda-total-label">💰 Total a pagar:</div>
+          <div class="tienda-total-val" id="tienda-total-disp">$0</div>
+        </div>
+
+        <button class="tienda-confirm-btn" id="tienda-pay-btn" onclick="goToPhase2()" disabled>
+          ¡Ir a pagar! →
+        </button>
+      </div>
+
+      <!-- PHASE 2: pagar con billetes y monedas -->
+      <div class="tienda-phase" id="tienda-phase2">
+        <div class="tienda-phase-header">
+          <div class="tienda-phase-num">2</div>
+          <span>¡Pagá con billetes y monedas! Total: <span id="tienda-total-p2" style="color:#BF360C; font-family:var(--font-num); font-size:1.5rem; font-weight:700;">$0</span></span>
+        </div>
+
+        <!-- Money available -->
+        <div class="money-zone">
+          <div class="money-zone-title">💵 Tocá para agregar al pago</div>
+          <div class="money-bills-row" id="money-bills-row"></div>
+        </div>
+
+        <!-- Wallet -->
+        <div style="font-size: 0.85rem; font-weight:800; color:var(--text-light); letter-spacing:0.05em; margin-bottom:5px;">
+          Tu pago (tocá para devolver)
+        </div>
+        <div class="wallet-zone" id="wallet-zone">
+          <span class="wallet-empty">Tocá un billete o moneda para pagarlo</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:0.85rem; font-weight:700; color:var(--text-mid);">Estás pagando:</span>
+          <span style="font-family:var(--font-num); font-size:1.4rem; font-weight:800; color:var(--green-dark);" id="wallet-total">$0</span>
+        </div>
+
+        <button class="tienda-confirm-btn" id="tienda-confirm-btn" onclick="confirmPayment()" disabled>
+          ✓ ¡Confirmar pago!
+        </button>
+
+        <button onclick="backToPhase1()" style="width:100%;padding:8px;border-radius:999px;font-size:0.85rem;font-weight:700;border:2px solid var(--border);background:var(--bg);color:var(--text-mid);cursor:pointer;margin-top:6px;">
+          ← Cambiar productos
+        </button>
+      </div>
+
+      <!-- PHASE 3: vuelto question -->
+      <div class="tienda-phase" id="tienda-phase3">
+        <div class="tienda-phase-header">
+          <div class="tienda-phase-num" style="background:var(--green);">3</div>
+          ¿Cuánto de vuelto recibís?
+        </div>
+
+        <div style="background:#E8F5E9; border:2px solid #A5D6A7; border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:1rem; text-align:center;">
+          <div style="font-size:0.85rem; font-weight:700; color:#2E7D32; margin-bottom:6px;">Tu compra costó</div>
+          <div style="font-family:var(--font-num); font-size:2rem; font-weight:800; color:#1B5E20;" id="vuelto-compra">$0</div>
+          <div style="font-size:0.85rem; font-weight:700; color:#2E7D32; margin:8px 0 6px;">Pagaste</div>
+          <div style="font-family:var(--font-num); font-size:2rem; font-weight:800; color:#1B5E20;" id="vuelto-pago">$0</div>
+          <div style="font-size:1rem; font-weight:800; color:#388E3C; margin-top:8px;">¿Cuánto te tienen que dar de vuelto?</div>
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:1rem;" id="vuelto-opts"></div>
+
+        <div class="tienda-feedback" id="vuelto-feedback"></div>
+      </div>
+
+    </div><!-- /tienda-scene -->
+
+    <div class="tienda-feedback" id="tienda-feedback"></div>
+
+    <div class="tienda-score-bar">
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="tienda-prog-label">0 / 4</span>
+      <div class="tienda-prog-bar">
+        <div class="tienda-prog-fill" id="tienda-prog-fill" style="width:0%"></div>
+      </div>
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="tienda-stars">☆☆☆</span>
+    </div>
+
+  </div>
+
+  <!-- SECUENCIAS -->
+  <div class="screen" id="screen-secuencias">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🔢 Patrones y Secuencias</div>
+          <div class="level-badge" id="seq-level-label">Nivel 1 — patrones simples</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="seq-hits-disp">0/5</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="seq-score-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#F3E5F5,#E8EAF6); border:2px solid #CE93D8; border-radius:var(--radius); padding:1.25rem 1rem 1.5rem; margin-bottom:0.75rem; position:relative; min-height:360px;" id="seq-arena">
+
+      <!-- Type badge -->
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap;">
+        <div class="level-badge" id="seq-type-badge" style="background:white; color:#6A1B9A; border-color:#CE93D8;">🔢 Números</div>
+        <div class="level-badge" id="seq-diff-badge" style="background:rgba(255,255,255,0.7); color:#6A1B9A;">+2 cada vez</div>
+      </div>
+
+      <!-- Hint box -->
+      <div style="background:rgba(255,255,255,0.82); border:2px solid rgba(156,39,176,0.25); border-radius:12px; padding:10px 14px; margin-bottom:1rem; display:flex; align-items:center; gap:10px;">
+        <div id="seq-hint-icon" style="font-size:1.8rem; flex-shrink:0;">🔢</div>
+        <div style="flex:1;">
+          <div id="seq-hint-text" style="font-size:0.85rem; font-weight:700; color:#4A148C; line-height:1.4;">Mirá los números y encontrá cuál falta.</div>
+          <div id="seq-hint-demo" style="display:flex; gap:5px; align-items:center; margin-top:6px; flex-wrap:wrap;"></div>
+        </div>
+      </div>
+
+      <!-- Drag instruction -->
+      <div style="text-align:center; font-size:0.82rem; font-weight:700; color:#7B1FA2; background:rgba(255,255,255,0.5); border-radius:10px; padding:5px 12px; margin-bottom:0.85rem;">
+        👆 Tocá una ficha de abajo y arrastrálla al espacio con ❓
+      </div>
+
+      <!-- Sequence row -->
+      <div id="seq-row" style="display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap; margin-bottom:1.25rem; min-height:80px;"></div>
+
+      <!-- Answer options -->
+      <div id="seq-options" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;"></div>
+
+      <!-- Overlay -->
+      <div id="seq-overlay" style="display:flex; position:absolute; inset:0; background:rgba(74,20,140,0.88); border-radius:var(--radius); flex-direction:column; align-items:center; justify-content:center; gap:12px; z-index:10;">
+        <div style="font-size:2.5rem;">🔢🎨🔷</div>
+        <div class="overlay-title" style="color:white;">¡Patrones Mágicos!</div>
+        <div class="overlay-sub" style="color:rgba(255,255,255,0.85);">Encontrá la ficha que falta y arrastrálla al espacio vacío</div>
+        <button class="play-btn" style="background:#9C27B0;" onclick="startSecuencias()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div id="seq-feedback" style="text-align:center; font-size:1rem; font-weight:700; min-height:28px; margin-top:0.25rem;"></div>
+
+    <div style="display:flex; align-items:center; gap:8px; margin-top:0.75rem;">
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="seq-prog-label">0 / 5</span>
+      <div style="flex:1; height:10px; background:var(--bg); border:1.5px solid var(--border); border-radius:999px; overflow:hidden;">
+        <div id="seq-prog-fill" style="height:100%; background:#9C27B0; border-radius:999px; width:0%; transition:width 0.4s;"></div>
+      </div>
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="seq-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Mirá el patrón con cuidado — ¡encontrá la ficha que falta y arrastrálla al espacio con ❓!
+    </div>
+  </div>
+
+  <!-- CONTAR OBJETOS -->
+  <div class="screen" id="screen-contar">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">⭐ Contar Objetos</div>
+          <div class="level-badge" id="contar-level-label">Nivel 1 — hasta 5</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Aciertos</div><div class="stat-pill-val" id="contar-hits-disp">0/5</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Puntos</div><div class="stat-pill-val" id="contar-score-disp">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contar-arena" id="contar-arena">
+
+      <div class="contar-question" id="contar-question">¿Cuántos hay?</div>
+
+      <div class="contar-objects" id="contar-objects"></div>
+
+      <div class="contar-opts" id="contar-opts"></div>
+
+      <div class="contar-overlay" id="contar-overlay">
+        <div style="font-size:3rem;">⭐🌟⭐</div>
+        <div class="overlay-title" style="color:white; font-size:1.6rem;">¡Contar Objetos!</div>
+        <div class="overlay-sub" style="color:rgba(255,255,255,0.9);">Mirá los objetos y elegí el número correcto</div>
+        <button class="play-btn" style="background:#FFCA28; color:#5D4037; font-weight:800;" onclick="startContar()">¡Empezar! →</button>
+      </div>
+    </div>
+
+    <div class="contar-feedback" id="contar-feedback"></div>
+
+    <div class="contar-progress">
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="contar-prog-label">0 / 5</span>
+      <div class="contar-prog-bar"><div class="contar-prog-fill" id="contar-prog-fill" style="width:0%"></div></div>
+      <span style="font-size: 0.85rem;font-weight:700;color:var(--text-light);" id="contar-stars">☆☆☆</span>
+    </div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 Contá los objetos uno por uno y tocá el número correcto.
+    </div>
+  </div>
+
+  <!-- MEMOTEST -->
+  <div class="screen" id="screen-memotest">
+
+    <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div>
+          <div class="section-label">🃏 Memotest Matemático</div>
+          <div class="level-badge" id="memo-level-label">Nivel 1 — sumas fáciles</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div class="stat-pill"><div class="stat-pill-label">Pares</div><div class="stat-pill-val" id="memo-pairs-disp">0/4</div></div>
+          <div class="stat-pill"><div class="stat-pill-label">Intentos</div><div class="stat-pill-val" id="memo-tries-disp">0</div></div>
+          <button class="memo-restart-btn" onclick="startMemotest()" aria-label="Reiniciar"><span>🔄</span>Reiniciar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level selector -->
+    <div class="memo-level-row">
+      <button class="memo-level-btn active" id="mlvl-1" onclick="selectMemoLevel(1)">➕ Nivel 1</button>
+      <button class="memo-level-btn"        id="mlvl-2" onclick="selectMemoLevel(2)">➖ Nivel 2</button>
+      <button class="memo-level-btn"        id="mlvl-3" onclick="selectMemoLevel(3)">🧮 Nivel 3</button>
+    </div>
+
+    <div class="memo-arena" id="memo-arena">
+
+      <div class="memo-grid" id="memo-grid"></div>
+
+      <div class="memo-overlay show" id="memo-overlay">
+        <div style="font-size:2.2rem; margin-bottom:2px;">🃏🧮🃏</div>
+        <div class="overlay-title" style="color:white; font-size:1.5rem;">¡Memotest Matemático!</div>
+
+        <!-- Pictographic step-by-step instructions -->
+        <div style="background:rgba(255,255,255,0.12); border:1.5px solid rgba(255,255,255,0.25); border-radius:16px; padding:12px 16px; max-width:320px; width:100%;">
+
+          <!-- Step 1 -->
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <div style="width:32px; height:32px; border-radius:50%; background:#FFCA28; color:#0D47A1; font-family:var(--font-num); font-size:1.1rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div class="memo-mini-back" style="width:42px; height:42px; border-radius:10px; flex-shrink:0;"></div>
+              <span style="font-size: 0.85rem; font-weight:700; color:white;">Tocá una carta azul → se da vuelta</span>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <div style="width:32px; height:32px; border-radius:50%; background:#FFCA28; color:#0D47A1; font-family:var(--font-num); font-size:1.1rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div style="width:42px; height:42px; border-radius:10px; background:#E3F2FD; border:2px solid #1565C0; display:flex; align-items:center; justify-content:center; font-family:var(--font-num); font-size:0.9rem; font-weight:800; color:#0D47A1; flex-shrink:0;">4+3</div>
+              <span style="font-size:1.2rem;">→</span>
+              <div style="width:42px; height:42px; border-radius:10px; background:#E8F5E9; border:2px solid #43A047; display:flex; align-items:center; justify-content:center; font-family:var(--font-num); font-size:1.3rem; font-weight:800; color:#1B5E20; flex-shrink:0;">7</div>
+              <span style="font-size: 0.85rem; font-weight:700; color:white;">Buscá la carta con el resultado</span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:32px; height:32px; border-radius:50%; background:#FFCA28; color:#0D47A1; font-family:var(--font-num); font-size:1.1rem; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div style="width:42px; height:42px; border-radius:10px; background:#E8F5E9; border:2px solid #43A047; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">✅</div>
+              <span style="font-size: 0.85rem; font-weight:700; color:white;">¡Par encontrado! Las dos cartas se quedan dadas vuelta</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size: 0.85rem; color:rgba(255,255,255,0.7); text-align:center;">
+          Hay 4 pares para encontrar — ¡podés hacerlo!
+        </div>
+        <button class="play-btn" style="background:#FFCA28; color:#0D47A1; font-weight:800; font-size:1rem; padding:13px 36px;" onclick="startMemotest()">¡Jugar! 🃏</button>
+      </div>
+    </div>
+
+    <div class="memo-feedback" id="memo-feedback"></div>
+
+    <div style="background:var(--surface); border:2px solid var(--border); border-radius:var(--radius-sm); padding:0.75rem 1rem; font-size:0.82rem; color:var(--text-mid); font-weight:600; margin-top:0.75rem;">
+      💡 <strong>Paso 1</strong> tocá una carta azul → <strong>Paso 2</strong> buscá la carta que le hace pareja → <strong>Paso 3</strong> ¡par encontrado! ✅
+    </div>
+  </div>
+
+  <!-- PREMIOS -->
+  <div class="screen" id="screen-premios">
+    <div class="card progress-section">
+      <div class="section-label">Tus monedas</div>
+      <div class="coins-header">
+        <span>Total acumulado</span>
+        <strong id="coins-big">0 🪙</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-labels">
+        <span>0</span>
+        <span id="next-prize-label">Próximo: 5 🪙</span>
+        <span>25</span>
+      </div>
+    </div>
+
+    <div class="section-label">Tienda de premios</div>
+    <div class="prizes-grid" id="prizes-grid"></div>
+
+    <div class="history-section">
+      <div class="section-label">Historial de canjes</div>
+      <div id="history-list">
+        <div style="font-size:0.85rem; color:var(--text-light); text-align:center; padding:1.5rem 0; font-weight:600;">Todavía no canjeaste ningún premio</div>
+      </div>
+    </div>
+
+    <!-- Para adultos: empezar de cero -->
+    <div style="text-align:center; margin-top:2rem;">
+      <button class="progreso-borrar-btn" onclick="progresoBorrar()">🗑 Borrar progreso guardado</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- SCRIPTS (el build los junta en uno solo) -->
+<script src="js/01-base.js"></script>
+<script src="js/02-misiones.js"></script>
+<script src="js/03-suma.js"></script>
+<script src="js/04-resta.js"></script>
+<script src="js/05-comparar.js"></script>
+<script src="js/06-globos-comun.js"></script>
+<script src="js/07-suma-globos.js"></script>
+<script src="js/09-cohetes.js"></script>
+<script src="js/10-memotest.js"></script>
+<script src="js/11-contar.js"></script>
+<script src="js/12-efectos.js"></script>
+<script src="js/13-patrones.js"></script>
+<script src="js/14-tienda.js"></script>
+<script src="js/15-conejos.js"></script>
+<script src="js/16-granja.js"></script>
+<script src="js/17-voz.js"></script>
+<script src="js/18-progreso.js"></script>
+<script src="js/99-arranque.js"></script>
+<!-- /SCRIPTS -->
+
+<!-- Global Voice Bar -->
+<div id="voz-bar">
+  <button class="voz-btn" id="voz-main-btn" onclick="vozLeer()">
+    <span class="voz-btn-icon">🔊</span>
+    <span>Escuchar</span>
+  </button>
+  <div id="voz-text">Tocá 🔊 para escuchar la instrucción</div>
+  <button id="voz-stop-btn" onclick="vozDetener()">⏹ Parar</button>
+</div>
+
+</body>
+</html>

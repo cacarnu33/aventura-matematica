@@ -1,5 +1,5 @@
 // Service worker: guarda la app en el dispositivo para que funcione sin internet.
-// El build reemplaza __VERSION__ en cada publicación; al cambiar, se borra lo viejo.
+// El build pone la versión en CACHE en cada publicación; al cambiar, se borra lo viejo.
 const CACHE = 'verita-__VERSION__';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 

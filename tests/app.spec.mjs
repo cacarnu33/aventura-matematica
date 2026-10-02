@@ -253,6 +253,10 @@ test.describe('app instalable', () => {
     for (const icon of manifest.icons) expect((await page.request.get('/' + icon.src)).status(), icon.src).toBe(200);
     const sw = await page.evaluate(async () => (await navigator.serviceWorker.ready).active?.state);
     expect(sw).toBe('activated');
+    // El build tiene que poner la versión real (si no, las copias viejas nunca se borran)
+    const swCodigo = await (await page.request.get('/sw.js')).text();
+    expect(swCodigo).not.toContain('__VERSION__');
+    expect(swCodigo).toMatch(/const CACHE = 'verita-\d{12}';/);
   });
 
   test('funciona sin internet después de la primera visita', async ({ page, context }) => {

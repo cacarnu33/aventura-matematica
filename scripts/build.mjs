@@ -41,7 +41,7 @@ const PUB = path.join(ROOT, 'public');
 if (fs.existsSync(PUB)) {
   for (const f of fs.readdirSync(PUB)) {
     let content = fs.readFileSync(path.join(PUB, f));
-    if (f === 'sw.js') content = Buffer.from(content.toString('utf8').replace('__VERSION__', version));
+    if (f === 'sw.js') content = Buffer.from(content.toString('utf8').replaceAll('__VERSION__', version));
     fs.writeFileSync(path.join(DIST, f), content);
   }
 }
